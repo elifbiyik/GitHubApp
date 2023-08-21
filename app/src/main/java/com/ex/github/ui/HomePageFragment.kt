@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.HomePageAdapter
 import com.ex.github.ViewModel.HomePageViewModel
 import com.ex.github.R
+import com.ex.github.User
 import com.ex.github.databinding.FragmentHomePageBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +52,7 @@ class HomePageFragment : Fragment() {
             Log.d("xx", list.toString())
 
             adapter = HomePageAdapter(list) {
+
                 var fragment = DetailFragment()
                 var bundle = Bundle()
                 bundle.putString("login", it.login)
@@ -78,7 +80,9 @@ class HomePageFragment : Fragment() {
         return binding.root
     }
 
+
     fun replace(fragment: Fragment) {
+
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.constraint, fragment)
             .addToBackStack(null)
@@ -102,7 +106,7 @@ class HomePageFragment : Fragment() {
         })
     }
 
-    fun searchText (p0 : String) {
+    fun searchText(p0: String) {
         lifecycleScope.launch {
             viewModel.filterUsers(p0)
             viewModel.filteredUsersMutableLiveData.observe(viewLifecycleOwner, Observer {
@@ -114,13 +118,14 @@ class HomePageFragment : Fragment() {
                 }
             })
 
-           viewModel.filterRepositories(p0)
+            viewModel.filterRepositories(p0)
             viewModel.filteredUsersMutableLiveData.observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty()) {
                     adapter.list = it
                     adapter.notifyDataSetChanged()
                 } else {
-                    Toast.makeText(requireContext(), "Not Found Repository ", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Not Found Repository ", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
         }

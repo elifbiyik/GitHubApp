@@ -11,13 +11,13 @@ import javax.inject.Inject
 @HiltViewModel
 class PageFollowersViewModel @Inject constructor(var repository: PageFollowersRepository) : ViewModel() {
 
-    var currentUserRepositoryMutableLiveData = MutableLiveData<List<User>> ()
+    var currentUserFollowersMutableLiveData = MutableLiveData<List<User>> ()
 
     suspend fun getShowUserFollowers(currentUser : String): List<User> {
-        var userRepository = repository.getShowUserFollowers(currentUser)
-        Log.d("xxxxxxx", userRepository.toString())
-        currentUserRepositoryMutableLiveData.value = userRepository
+        var userFollowers = repository.getShowUserFollowers(currentUser)
+        Log.d("xxxxxxx", userFollowers.toString())
+        currentUserFollowersMutableLiveData.value = userFollowers
 
-        return userRepository
+        return userFollowers
     }
 }

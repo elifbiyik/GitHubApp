@@ -17,6 +17,9 @@ import javax.inject.Singleton
 object AppModuleAppModule {
 
 
+
+
+
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
@@ -24,7 +27,11 @@ object AppModuleAppModule {
     }
 
 
-  /*  @Provides
+
+
+/*
+
+    @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
@@ -35,7 +42,10 @@ object AppModuleAppModule {
                 chain.proceed(request)
             }
             .build()
-    }*/
+    }
+*/
+
+
 
 
 

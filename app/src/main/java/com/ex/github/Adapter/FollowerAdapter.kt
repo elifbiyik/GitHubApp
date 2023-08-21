@@ -11,10 +11,10 @@ class FollowerAdapter(var list : List<User?> ) : RecyclerView.Adapter<FollowerAd
 
     inner class ViewHolder (var binding : FragmentPageFollowersItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(userDetailList: User?) {
+        fun bind(followeList: User?) {
 
             with(binding) {
-                follower = userDetailList
+                follower = followeList
                 executePendingBindings()
             }
         }

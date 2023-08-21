@@ -18,9 +18,10 @@ import com.ex.github.ViewModel.PageFollowersViewModel
 import com.ex.github.databinding.FragmentPageFollowersBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 @AndroidEntryPoint
-class PageFollowersFragment : Fragment() {
+class PageFollowersFragment() : Fragment() {
 
     private lateinit var binding: FragmentPageFollowersBinding
     private val viewModel: PageFollowersViewModel by viewModels()
@@ -38,32 +39,51 @@ class PageFollowersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_page_followers, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_page_followers, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        lifecycleScope.launch {
-            var currentUser = arguments?.getString("login")
-            var list = currentUser?.let { viewModel.getShowUserFollowers(it) }
 
-            if (list != null) {
-                Log.d("xxxx", list.toString())
+            val currentUser = arguments?.getString("login")
 
-                adapter = FollowerAdapter(list)
-                binding.recyclerview.adapter = adapter
-                binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
+            lifecycleScope.launch {
+                var list = currentUser?.let { viewModel.getShowUserFollowers(it) }
 
-                viewModel.currentUserRepositoryMutableLiveData.observe(
-                    viewLifecycleOwner,
-                    Observer {
-                        if (it.isNotEmpty()) {
-                            binding.progressBar.visibility = View.GONE
-                            adapter.list = it
-                            adapter.notifyDataSetChanged()
-                        }
-                    })
+                Log.d("xxxxcurrentUser", currentUser.toString())
+
+
+                if (list != null) {
+                    Log.d("xxxx", list.toString())
+
+                    adapter = FollowerAdapter(list)
+                    binding.recyclerview.adapter = adapter
+                    binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
+
+                    viewModel.currentUserFollowersMutableLiveData.observe(
+                        viewLifecycleOwner,
+                        Observer {
+                            if (it.isNotEmpty()) {
+                                //                        binding.progressBar.visibility = View.GONE
+                                adapter.list = it
+                                adapter.notifyDataSetChanged()
+                            }
+                        })
+                }
             }
 
-        }
+
+
+
         return binding.root
     }
+    /*
+        companion object {
+            fun newInstance(login: String): PageFollowersFragment {
+                val fragment = PageFollowersFragment()
+                val bundle = Bundle()
+                bundle.putString("login", login)
+                fragment.arguments = bundle
+                return fragment
+            }
+        }*/
 }

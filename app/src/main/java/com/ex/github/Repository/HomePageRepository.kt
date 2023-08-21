@@ -16,8 +16,4 @@ class HomePageRepository @Inject constructor(var apiServise: ApiServise) {
     suspend fun getAllRepositories (): List<Repositories> {
         return apiServise.getAllRepositories()
     }
-
-
-
-
 }
