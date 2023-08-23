@@ -2,6 +2,8 @@ package com.ex.github.di
 
 import com.ex.github.Api.ApiServise
 import com.ex.github.Api.CONSTANT
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,37 +20,28 @@ object AppModuleAppModule {
 
 
 
+        @Provides
+        @Singleton
+        fun provideOkHttpClient(): OkHttpClient {
+            return OkHttpClient.Builder().build()
+        }
 
+    /*
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().build()
-    }
+        @Provides
+        @Singleton
+        fun provideOkHttpClient(): OkHttpClient {
+            return OkHttpClient.Builder()
+                .addInterceptor { chain ->
+                    val request = chain.request().newBuilder()
+                        .addHeader("Authorization", CONSTANT.TOKEN)
+                        .build()
+                    chain.proceed(request)
+                }
+                .build()
+        }
 
-
-
-
-/*
-
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Authorization", CONSTANT.TOKEN)
-                    .build()
-                chain.proceed(request)
-            }
-            .build()
-    }
 */
-
-
-
-
-
 
     @Provides
     @Singleton
@@ -67,6 +60,18 @@ object AppModuleAppModule {
     }
 
 
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideFirebaseDatabase(): FirebaseDatabase {
+        return FirebaseDatabase.getInstance()
+    }
 
 
 

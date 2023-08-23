@@ -32,7 +32,6 @@
                 android:layout_marginTop="8dp"
                 android:text="@{following.login}"
                 android:gravity="start"
-                android:textColor="@color/material_dynamic_neutral10"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.38"
@@ -41,6 +40,9 @@
                 tools:ignore="MissingConstraints" />
 
 
+<!--
+            android:textColor="@color/material_dynamic_neutral10"
+-->
 
 
             <TextView
@@ -48,7 +50,6 @@
                 android:layout_width="246dp"
                 android:layout_height="24dp"
                 android:gravity="start"
-                android:textColor="@android:color/holo_blue_dark"
                 android:textSize="12sp"
                 android:text="@{following.html_url}"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
@@ -57,6 +58,12 @@
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
                 app:layout_constraintVertical_bias="0.875" />
+
+<!--
+            android:textColor="@android:color/holo_blue_dark"
+-->
+
+
 
             <ImageView
                 android:id="@+id/imageView"

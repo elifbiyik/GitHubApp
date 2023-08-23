@@ -13,18 +13,20 @@
         tools:context=".ui.HomePageFragment">
 
 
+
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/search"
             app:layout_constraintBottom_toTopOf="@+id/recyclerview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:queryHint="Search"
             tools:ignore="MissingConstraints" />
+
+<!--        android:background="@drawable/search"-->
 
 
         <androidx.recyclerview.widget.RecyclerView

@@ -15,10 +15,15 @@ class PageRepositoryViewModel @Inject constructor(var repository: PageRepository
     var currentUserRepositoryMutableLiveData = MutableLiveData<List<Repositories>>()
 
     suspend fun getShowUserRepository (currentUser : String ): List<Repositories> {
-
         var response = repository.getShowUserRepository(currentUser)
         Log.d("xxxxxxx", response.toString())
         currentUserRepositoryMutableLiveData.value = response
         return response
+    }
+
+
+
+    suspend fun addFavoriteRepository (login : String, repositoryName : String) {
+        repository.addFavoriteRepository(login, repositoryName)
     }
 }

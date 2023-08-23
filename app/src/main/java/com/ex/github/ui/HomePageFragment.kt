@@ -57,6 +57,7 @@ class HomePageFragment : Fragment() {
                 var bundle = Bundle()
                 bundle.putString("login", it.login)
                 bundle.putString("image", it.avatar_url)
+                bundle.putString("htmlUrl", it.html_url)
                 fragment.arguments = bundle
                 replace(fragment)
             }
@@ -88,6 +89,7 @@ class HomePageFragment : Fragment() {
             .addToBackStack(null)
             .commit()
     }
+
 
     fun searchView() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,

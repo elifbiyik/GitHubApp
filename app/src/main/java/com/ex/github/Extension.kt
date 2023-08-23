@@ -1,6 +1,7 @@
 package com.ex.github
 
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 
@@ -16,6 +17,11 @@ fun ImageView.ImageLoad(url: String) {
 @BindingAdapter("android:imageUrl")  // XML'de bu isimle kullanıcaz
 fun downloadImage(view: ImageView, url: String) {
     view.ImageLoad(url)
+}
+
+
+fun ImageView.Color(colorful: Int) {
+    setColorFilter(ContextCompat.getColor(context,colorful))
 }
 
 
