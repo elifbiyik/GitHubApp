@@ -16,6 +16,7 @@ import com.ex.github.Adapter.FavoriteUserAdapter
 import com.ex.github.R
 import com.ex.github.ViewModel.FavoriteUserViewModel
 import com.ex.github.databinding.FragmentFavoriteUserBinding
+import com.ex.github.databinding.FragmentFavoriteUserItemBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 class FavoriteUserFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteUserBinding
+    private lateinit var bindingItem: FragmentFavoriteUserItemBinding
     private val viewModel: FavoriteUserViewModel by viewModels()
     private lateinit var adapter: FavoriteUserAdapter
 
@@ -40,14 +42,29 @@ class FavoriteUserFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite_user, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        bindingItem = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite_user_item, container, false)
+
+
         lifecycleScope.launch {
+            binding.progressBar.visibility = View.VISIBLE
+
             var currentUser = "mojombo"  //Login yaptıktan sonra loginden al
             var list = viewModel.showFavoriteUser(currentUser, requireContext())
             Log.d("xxxxFavListFav", list.toString())
 
-            adapter = FavoriteUserAdapter(list){
+
+
+            adapter = FavoriteUserAdapter(list){ it ->
+
+                var favUser = it.login.toString() //bindingItem.tvName.text.toString()
+                //tıklanan user
+                var fragment = UserNote()
+                var bundle = Bundle()
+                bundle.putString("favUser", favUser)
+                fragment.arguments = bundle
+
                 requireActivity(). supportFragmentManager.beginTransaction()
-                    .replace(R.id.constraint, UserNote())
+                    .replace(R.id.constraint, fragment)
                     .addToBackStack(null)
                     .commit()
             }
@@ -58,6 +75,7 @@ class FavoriteUserFragment : Fragment() {
                 if (it.isNotEmpty()) {
                     adapter.list = it
                     adapter.notifyDataSetChanged()
+                    binding.progressBar.visibility = View.GONE
                 } else {
                     Toast.makeText(requireContext(), "Unsuccesfull", Toast.LENGTH_SHORT).show()
                 }

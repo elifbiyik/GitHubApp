@@ -1,32 +1,40 @@
 package com.ex.github.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
+import com.ex.github.Adapter.AllCommentAdapter
+import com.ex.github.Adapter.MyCommentAdapter
+import com.ex.github.Adapter.ViewPagerCommentAdapter
 import com.ex.github.R
+import com.ex.github.ViewModel.AllCommentViewModel
+import com.ex.github.databinding.FragmentAllCommentBinding
+import com.ex.github.databinding.FragmentUserNoteBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AllCommentFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class AllCommentFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding: FragmentAllCommentBinding
+    private val viewModel: AllCommentViewModel by viewModels()
+    private lateinit var adapter : AllCommentAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
         }
     }
 
@@ -34,27 +42,35 @@ class AllCommentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_comment, container, false)
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AllComment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AllCommentFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_all_comment, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+
+
+        val favUser = arguments?.getString("favUser").toString()
+
+
+        lifecycleScope.launch {
+            var currentUser = "mojombo"
+            var list = viewModel.getAllComment(currentUser, favUser)
+            Log.d("xxxxFirebaseListAllCommentFrag", list.toString())
+
+            adapter = AllCommentAdapter(list)
+            binding.recyclerview.adapter = adapter
+            binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
+
+
+            viewModel.currentUserAllCommentMutableLiveData.observe(viewLifecycleOwner, Observer {
+                if (it.isNotEmpty()) {
+                    adapter.list = it
+                    adapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
                 }
-            }
+            })
+
+        }
+
+        return binding.root
     }
 }

@@ -26,19 +26,19 @@ object AppModuleAppModule {
             return OkHttpClient.Builder().build()
         }
 
-  */
-    @Provides
-        @Singleton
-        fun provideOkHttpClient(): OkHttpClient {
-            return OkHttpClient.Builder()
-                .addInterceptor { chain ->
-                    val request = chain.request().newBuilder()
-                        .addHeader("Authorization", CONSTANT.TOKEN)
-                        .build()
-                    chain.proceed(request)
-                }
-                .build()
-        }
+    */
+      @Provides
+          @Singleton
+          fun provideOkHttpClient(): OkHttpClient {
+              return OkHttpClient.Builder()
+                  .addInterceptor { chain ->
+                      val request = chain.request().newBuilder()
+                          .addHeader("Authorization", CONSTANT.TOKEN)
+                          .build()
+                      chain.proceed(request)
+                  }
+                  .build()
+          }
 
 
 

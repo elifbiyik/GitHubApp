@@ -90,8 +90,8 @@ class DetailRepository @Inject constructor(
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         for (i in snapshot.children) {
-                            var favUser = i.child("login").getValue(String::class.java)!!
-                            userList.add(favUser)
+                            var favoriteUser = i.child("login").getValue(String::class.java)!!
+                            userList.add(favoriteUser)
                         }
                     }
                     if (userList.contains(favUser)) {
@@ -99,7 +99,6 @@ class DetailRepository @Inject constructor(
                         isValid = false
                     } else {
                         val favUsers = User(favUser, html_url = favHtml, avatar_url = favAvatar)
-             //           val key = databaseReferenceUser.push().key!!
                         databaseReferenceUser.child(login).child(favUser).setValue(favUsers)
                         isValid = true
                     }

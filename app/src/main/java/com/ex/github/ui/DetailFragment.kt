@@ -67,33 +67,33 @@ class DetailFragment @Inject constructor() : Fragment() {
         viewPager = binding.viewPager
         viewPager.adapter = adapter
 
-        val backgroundColor = ContextCompat.getColor(requireContext(), R.color.background)
-        val blackColor = ContextCompat.getColor(requireContext(), R.color.black)
+        val red = ContextCompat.getColor(requireContext(), R.color.red)
+        val black = ContextCompat.getColor(requireContext(), R.color.black)
 
-        binding.tvTitleFollower.setTextColor(backgroundColor)
-        binding.tvTitleFollowing.setTextColor(blackColor)
-        binding.tvTitleRepository.setTextColor(blackColor)
+        binding.tvTitleFollower.setTextColor(red)
+        binding.tvTitleFollowing.setTextColor(black)
+        binding.tvTitleRepository.setTextColor(black)
 
         binding.llFollowers.setOnClickListener {
-            binding.tvTitleFollower.setTextColor(backgroundColor)
-            binding.tvTitleFollowing.setTextColor(blackColor)
-            binding.tvTitleRepository.setTextColor(blackColor)
+            binding.tvTitleFollower.setTextColor(red)
+            binding.tvTitleFollowing.setTextColor(black)
+            binding.tvTitleRepository.setTextColor(black)
 
             viewPager.currentItem = 0
         }
 
         binding.llFollowing.setOnClickListener {
-            binding.tvTitleFollower.setTextColor(blackColor)
-            binding.tvTitleFollowing.setTextColor(backgroundColor)
-            binding.tvTitleRepository.setTextColor(blackColor)
+            binding.tvTitleFollower.setTextColor(black)
+            binding.tvTitleFollowing.setTextColor(red)
+            binding.tvTitleRepository.setTextColor(black)
 
             viewPager.currentItem = 1
         }
 
         binding.llRepository.setOnClickListener {
-            binding.tvTitleFollower.setTextColor(blackColor)
-            binding.tvTitleFollowing.setTextColor(blackColor)
-            binding.tvTitleRepository.setTextColor(backgroundColor)
+            binding.tvTitleFollower.setTextColor(black)
+            binding.tvTitleFollowing.setTextColor(black)
+            binding.tvTitleRepository.setTextColor(red)
 
             viewPager.currentItem = 2
         }
@@ -102,21 +102,7 @@ class DetailFragment @Inject constructor() : Fragment() {
         //        viewPager.currentItem = 3
 //        }
 
-        /*   binding.ivFav.setOnClickListener {
 
-               lifecycleScope.launch {
-                   var currentUser = "mojombo" // Login yaptıktan sonra loginden al
-                   binding.ivFav.Color(R.color.background)
-                   viewModel.addFavoriteUser(
-                       currentUser,
-                       name.toString(),
-                       htmlUrl.toString(),
-                       avatarUrl.toString(),
-                       requireContext()
-                   )
-               }
-           }
-   */
 
         lifecycleScope.launch {
             var currentUser = "mojombo" // Login yaptıktan sonra loginden al
@@ -127,7 +113,7 @@ class DetailFragment @Inject constructor() : Fragment() {
             Log.d("xxxListFavUsersDetail", listFavUsers.toString())
 
             if (listFavUsers.contains(name)) {
-                binding.ivFav.Color(R.color.background)
+                binding.ivFav.Color(R.color.red)
             } else {
                 binding.ivFav.Color(R.color.black)
             }
@@ -139,7 +125,7 @@ class DetailFragment @Inject constructor() : Fragment() {
                         requireContext()
                     )
                     if (!listFavUsers.contains(name)) {
-                        binding.ivFav.Color(R.color.background)
+                        binding.ivFav.Color(R.color.red)
                         viewModel.addFavoriteUser(
                             currentUser,
                             name.toString(),
