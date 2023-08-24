@@ -25,10 +25,11 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
         login: String,
         favUser: String,
         favHtml: String,
+        favAvatar: String,
         context: Context
     ): Boolean {
 
-        var x = repository.addFavoriteUser(login, favUser, favHtml, context)
+        var x = repository.addFavoriteUser(login, favUser, favHtml, favAvatar, context)
         Log.d("xxxVM", x.toString())
         return x
     }
@@ -37,17 +38,13 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
         login: String,
         context: Context
     ): ArrayList<String> {
-
-        var x = repository.showFavoriteUser(login, context)
-        Log.d("xxxVM", x.toString())
-        return x
+        return repository.showFavoriteUser(login, context)
     }
 
     suspend fun removeFavoriteUser(
         login: String,
         favUser: String,
     ) {
-
         var x = repository.removeFavoriteUser(login, favUser)
         Log.d("xxxVM", x.toString())
     }

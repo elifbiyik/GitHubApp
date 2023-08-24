@@ -2,7 +2,7 @@ package com.ex.github.Api
 
 object CONSTANT {
 
-    const val TOKEN = "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"
+    const val TOKEN = "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"
     const val BASE_URL = "https://api.github.com"
 
     const val ALL_USERS = "/users"

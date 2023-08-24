@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="following"
+            name="favUsers"
             type="com.ex.github.User" />
     </data>
 
@@ -23,17 +23,16 @@
             android:layout_height="match_parent"
             android:padding="15dp">
 
-
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
-                android:text="@{following.login}"
                 android:gravity="start"
-                android:textSize="16sp"
+                android:text="@{favUsers.login}"
                 android:textColor="@color/material_dynamic_neutral10"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.38"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -47,7 +46,7 @@
                 android:layout_height="24dp"
                 android:gravity="start"
                 android:textSize="12sp"
-                android:text="@{following.html_url}"
+                android:text="@{favUsers.url}"
                 android:textColor="@android:color/holo_blue_dark"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="@+id/tv_name"
@@ -56,12 +55,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
                 app:layout_constraintVertical_bias="0.875" />
 
-
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:imageUrl="@{following.avatar_url}"
+                android:imageUrl="@{favUsers.avatar_url}"
+                android:src="@drawable/ic_launcher_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

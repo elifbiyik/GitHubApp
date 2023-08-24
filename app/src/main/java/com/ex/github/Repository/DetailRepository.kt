@@ -77,6 +77,7 @@ class DetailRepository @Inject constructor(
         login: String,
         favUser: String,
         favHtml: String,
+        favAvatar: String,
         context: Context
     ): Boolean {
         try {
@@ -97,7 +98,7 @@ class DetailRepository @Inject constructor(
                         Toast.makeText(context, "You can't", Toast.LENGTH_SHORT).show()
                         isValid = false
                     } else {
-                        val favUsers = User(favUser, html_url = favHtml)
+                        val favUsers = User(favUser, html_url = favHtml, avatar_url = favAvatar)
              //           val key = databaseReferenceUser.push().key!!
                         databaseReferenceUser.child(login).child(favUser).setValue(favUsers)
                         isValid = true
@@ -122,8 +123,6 @@ class DetailRepository @Inject constructor(
         login: String,
         favUser: String
     ) {
-
-
         database.getReference("User/${login}").child(favUser).removeValue()
     }
 

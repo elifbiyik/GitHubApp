@@ -19,16 +19,15 @@ import javax.inject.Singleton
 object AppModuleAppModule {
 
 
-
+/*
         @Provides
         @Singleton
         fun provideOkHttpClient(): OkHttpClient {
             return OkHttpClient.Builder().build()
         }
 
-    /*
-
-        @Provides
+  */
+    @Provides
         @Singleton
         fun provideOkHttpClient(): OkHttpClient {
             return OkHttpClient.Builder()
@@ -41,7 +40,7 @@ object AppModuleAppModule {
                 .build()
         }
 
-*/
+
 
     @Provides
     @Singleton
@@ -59,26 +58,15 @@ object AppModuleAppModule {
         return retrofit.create(ApiServise::class.java)
     }
 
-
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
 
-
     @Provides
     @Singleton
     fun provideFirebaseDatabase(): FirebaseDatabase {
         return FirebaseDatabase.getInstance()
     }
-
-
-
-
-
-
-
-
-
 }

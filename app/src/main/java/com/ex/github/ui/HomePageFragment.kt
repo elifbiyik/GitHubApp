@@ -58,6 +58,7 @@ class HomePageFragment : Fragment() {
                 bundle.putString("login", it.login)
                 bundle.putString("image", it.avatar_url)
                 bundle.putString("htmlUrl", it.html_url)
+                bundle.putString("avatarUrl", it.avatar_url)
                 fragment.arguments = bundle
                 replace(fragment)
             }
@@ -77,6 +78,15 @@ class HomePageFragment : Fragment() {
         }
 
         searchView()
+
+
+        binding.ivFavorite.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.constraint, FavoriteUserFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
 
         return binding.root
     }

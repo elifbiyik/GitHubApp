@@ -48,6 +48,7 @@ class DetailFragment @Inject constructor() : Fragment() {
         var name = arguments?.getString("login")
         var image = arguments?.getString("image")
         var htmlUrl = arguments?.getString("htmlUrl")
+        var avatarUrl = arguments?.getString("avatarUrl")
 
 
         with(binding) {
@@ -101,6 +102,21 @@ class DetailFragment @Inject constructor() : Fragment() {
         //        viewPager.currentItem = 3
 //        }
 
+        /*   binding.ivFav.setOnClickListener {
+
+               lifecycleScope.launch {
+                   var currentUser = "mojombo" // Login yaptıktan sonra loginden al
+                   binding.ivFav.Color(R.color.background)
+                   viewModel.addFavoriteUser(
+                       currentUser,
+                       name.toString(),
+                       htmlUrl.toString(),
+                       avatarUrl.toString(),
+                       requireContext()
+                   )
+               }
+           }
+   */
 
         lifecycleScope.launch {
             var currentUser = "mojombo" // Login yaptıktan sonra loginden al
@@ -108,12 +124,13 @@ class DetailFragment @Inject constructor() : Fragment() {
                 currentUser,
                 requireContext()
             )
+            Log.d("xxxListFavUsersDetail", listFavUsers.toString())
+
             if (listFavUsers.contains(name)) {
                 binding.ivFav.Color(R.color.background)
             } else {
                 binding.ivFav.Color(R.color.black)
             }
-
             binding.ivFav.setOnClickListener {
                 lifecycleScope.launch {
                     var currentUser = "mojombo" // Login yaptıktan sonra loginden al
@@ -127,6 +144,7 @@ class DetailFragment @Inject constructor() : Fragment() {
                             currentUser,
                             name.toString(),
                             htmlUrl.toString(),
+                            avatarUrl.toString(),
                             requireContext()
                         )
                     } else {
@@ -139,7 +157,6 @@ class DetailFragment @Inject constructor() : Fragment() {
                 }
             }
         }
-
         return binding.root
     }
 }
