@@ -28,8 +28,8 @@ class MyCommentRepository @Inject constructor(private var database: FirebaseData
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             for (i in snapshot.children) {
-                                val comment = i.child("comment").getValue(String::class.java)!!
-                                val commentToUser = i.child("commentToUser").getValue(String::class.java)!!
+                                val comment = i.child("comment").getValue(String::class.java)
+                                val commentToUser = i.child("commentToUser").getValue(String::class.java)
 
                                 if (commentToFavUser.equals(commentToUser)) {
                                     commentList.add(Comment(login, commentToUser, comment))

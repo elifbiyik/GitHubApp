@@ -85,14 +85,12 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabAllComment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="My Comment"
                     tools:ignore="MissingConstraints" />
 
                 <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabMyComment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="All Comment"

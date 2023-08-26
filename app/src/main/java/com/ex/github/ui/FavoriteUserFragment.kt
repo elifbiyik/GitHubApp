@@ -49,7 +49,7 @@ class FavoriteUserFragment : Fragment() {
 
 
 
-            adapter = FavoriteUserAdapter(list){ it ->
+            adapter = FavoriteUserAdapter(list){
 
                 var favUser = it.login.toString() //bindingItem.tvName.text.toString()
                 //tıklanan user

@@ -21,7 +21,9 @@ class UserNoteRepository @Inject constructor(private var database: FirebaseDatab
     ): Boolean {
         try {
             val userComment = Comment(login, commentToUser, comment)
-            databaseReferenceComment.child(login).child(commentToUser).setValue(userComment)
+            // var key = databaseReferenceCustomer.push().getKey()
+            databaseReferenceComment.child(login).child(commentToUser)//.child(key)
+                .setValue(userComment)
             return true
         } catch (e: Exception) {
             Log.d("Hata", e.message.toString())

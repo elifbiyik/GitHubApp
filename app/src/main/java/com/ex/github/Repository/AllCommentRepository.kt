@@ -28,10 +28,10 @@ class AllCommentRepository @Inject constructor(private var database: FirebaseDat
                         if (snapshot.exists()) {
                             for (i in snapshot.children) {
                                 for (j in i.children) {
-                                    val comment = j.child("comment").getValue(String::class.java)!!
+                                    val comment = j.child("comment").getValue(String::class.java)
                                     val commentToUser =
-                                        j.child("commentToUser").getValue(String::class.java)!!
-                                    val login = j.child("login").getValue(String::class.java)!!
+                                        j.child("commentToUser").getValue(String::class.java)
+                                    val login = j.child("login").getValue(String::class.java)
 
                                     if(commentToUser == commentToFavUser) {
                                         commentAllList.add(Comment(login, commentToUser, comment))
