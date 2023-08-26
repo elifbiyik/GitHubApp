@@ -3,6 +3,7 @@ package com.ex.github.Adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ex.github.ImageLoad
 import com.ex.github.User
 import com.ex.github.databinding.FragmentPageFollowingItemBinding
 
@@ -13,8 +14,10 @@ class FollowingAdapter(var list : List<User> ) : RecyclerView.Adapter<FollowingA
 
         fun bind(followingList: User) {
             with(binding) {
-                following = followingList
-                executePendingBindings()
+                tvName.text = followingList.login
+                tvLogin.text = followingList.html_url
+                binding.imageView.ImageLoad(followingList.avatar_url.toString())
+
             }
         }
     }

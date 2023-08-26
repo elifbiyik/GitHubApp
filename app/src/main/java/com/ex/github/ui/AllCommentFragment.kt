@@ -7,19 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.ex.github.Adapter.AllCommentAdapter
-import com.ex.github.Adapter.MyCommentAdapter
-import com.ex.github.Adapter.ViewPagerCommentAdapter
 import com.ex.github.R
 import com.ex.github.ViewModel.AllCommentViewModel
 import com.ex.github.databinding.FragmentAllCommentBinding
-import com.ex.github.databinding.FragmentUserNoteBinding
+import com.ex.github.databinding.FragmentHomePageBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -43,8 +39,7 @@ class AllCommentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_all_comment, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding = FragmentAllCommentBinding.inflate(inflater, container, false)
 
 
         val favUser = arguments?.getString("favUser").toString()

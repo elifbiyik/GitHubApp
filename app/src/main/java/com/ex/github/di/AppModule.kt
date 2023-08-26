@@ -20,13 +20,14 @@ object AppModuleAppModule {
 
 
 /*
+
         @Provides
         @Singleton
         fun provideOkHttpClient(): OkHttpClient {
             return OkHttpClient.Builder().build()
         }
 
-    */
+*/
       @Provides
           @Singleton
           fun provideOkHttpClient(): OkHttpClient {

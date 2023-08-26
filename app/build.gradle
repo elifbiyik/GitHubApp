@@ -4,7 +4,6 @@ plugins {
     id 'kotlin-android'
     id("com.google.dagger.hilt.android")
     id 'kotlin-kapt'
-//    id("com.android.application")
     id("com.google.gms.google-services")
 }
 
@@ -12,7 +11,7 @@ android {
     namespace 'com.ex.github'
     compileSdk 33
 
-    dataBinding {
+    viewBinding {
         enabled = true
     }
 
@@ -40,7 +39,9 @@ android {
         jvmTarget = '17'
     }
     buildFeatures {
-        viewBinding true
+        viewBinding{
+            enabled=true
+        }
     }
 }
 

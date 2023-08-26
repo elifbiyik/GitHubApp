@@ -1,22 +1,24 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="comment"
-            type="com.ex.github.Comment" />
-    </data>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginBottom="8dp"
         android:elevation="10dp"
         android:orientation="vertical"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -31,7 +33,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:gravity="start"
-                android:text="@{comment.comment}"
+                android:text="comment"
                 android:textColor="@color/material_dynamic_neutral10"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +50,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="start"
-                android:text="@{comment.login}"
+                android:text="login"
                 android:textColor="#AA85EC"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -57,8 +59,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

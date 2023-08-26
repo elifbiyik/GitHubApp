@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -17,6 +16,7 @@ import com.ex.github.Color
 import com.ex.github.ImageLoad
 import com.ex.github.R
 import com.ex.github.ViewModel.DetailViewModel
+import com.ex.github.databinding.FragmentAllCommentBinding
 import com.ex.github.databinding.FragmentDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -42,103 +42,106 @@ class DetailFragment @Inject constructor() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding = FragmentDetailBinding.inflate(inflater, container, false)
 
         var name = arguments?.getString("login")
         var image = arguments?.getString("image")
         var htmlUrl = arguments?.getString("htmlUrl")
         var avatarUrl = arguments?.getString("avatarUrl")
 
-
-        with(binding) {
-            tvName.text = name
-            image?.let { imageUser.ImageLoad(it) }
-        }
-
         lifecycleScope.launch {
             name?.let {
-                var currentUser = viewModel.getShowUser(it)
-                binding.user = currentUser
+                with(binding) {
+                    var currentUser = viewModel.getShowUser(it)
+                    tvName.text = currentUser.name
+                    tvLogin.text = currentUser.login
+                    tvUrl.text = currentUser.html_url
+                    tvFollowers.text = currentUser.followers
+                    tvFollowing.text = currentUser.following
+                    tvRepository.text = currentUser.public_repos
+                    image?.let {
+                        imageUser.ImageLoad(it)
+                    }
+                }
             }
-        }
 
-        adapter = ViewPagerAdapter(childFragmentManager, lifecycle, name.toString())
-        viewPager = binding.viewPager
-        viewPager.adapter = adapter
 
-        val red = ContextCompat.getColor(requireContext(), R.color.red)
-        val black = ContextCompat.getColor(requireContext(), R.color.black)
+            adapter = ViewPagerAdapter(childFragmentManager, lifecycle, name.toString())
+            viewPager = binding.viewPager
+            viewPager.adapter = adapter
 
-        binding.tvTitleFollower.setTextColor(red)
-        binding.tvTitleFollowing.setTextColor(black)
-        binding.tvTitleRepository.setTextColor(black)
+            val red = ContextCompat.getColor(requireContext(), R.color.red)
+            val black = ContextCompat.getColor(requireContext(), R.color.black)
 
-        binding.llFollowers.setOnClickListener {
             binding.tvTitleFollower.setTextColor(red)
             binding.tvTitleFollowing.setTextColor(black)
             binding.tvTitleRepository.setTextColor(black)
 
-            viewPager.currentItem = 0
-        }
+            binding.llFollowers.setOnClickListener {
+                binding.tvTitleFollower.setTextColor(red)
+                binding.tvTitleFollowing.setTextColor(black)
+                binding.tvTitleRepository.setTextColor(black)
 
-        binding.llFollowing.setOnClickListener {
-            binding.tvTitleFollower.setTextColor(black)
-            binding.tvTitleFollowing.setTextColor(red)
-            binding.tvTitleRepository.setTextColor(black)
+                viewPager.currentItem = 0
+            }
 
-            viewPager.currentItem = 1
-        }
+            binding.llFollowing.setOnClickListener {
+                binding.tvTitleFollower.setTextColor(black)
+                binding.tvTitleFollowing.setTextColor(red)
+                binding.tvTitleRepository.setTextColor(black)
 
-        binding.llRepository.setOnClickListener {
-            binding.tvTitleFollower.setTextColor(black)
-            binding.tvTitleFollowing.setTextColor(black)
-            binding.tvTitleRepository.setTextColor(red)
+                viewPager.currentItem = 1
+            }
 
-            viewPager.currentItem = 2
-        }
+            binding.llRepository.setOnClickListener {
+                binding.tvTitleFollower.setTextColor(black)
+                binding.tvTitleFollowing.setTextColor(black)
+                binding.tvTitleRepository.setTextColor(red)
 
-        //     binding.llGists.setOnClickListener {
-        //        viewPager.currentItem = 3
+                viewPager.currentItem = 2
+            }
+
+            //     binding.llGists.setOnClickListener {
+            //        viewPager.currentItem = 3
 //        }
 
 
+            lifecycleScope.launch {
+                var currentUser = "mojombo" // Login yaptıktan sonra loginden al
+                var listFavUsers = viewModel.showFavoriteUser(
+                    currentUser,
+                    requireContext()
+                )
+                Log.d("xxxListFavUsersDetail", listFavUsers.toString())
 
-        lifecycleScope.launch {
-            var currentUser = "mojombo" // Login yaptıktan sonra loginden al
-            var listFavUsers = viewModel.showFavoriteUser(
-                currentUser,
-                requireContext()
-            )
-            Log.d("xxxListFavUsersDetail", listFavUsers.toString())
-
-            if (listFavUsers.contains(name)) {
-                binding.ivFav.Color(R.color.red)
-            } else {
-                binding.ivFav.Color(R.color.black)
-            }
-            binding.ivFav.setOnClickListener {
-                lifecycleScope.launch {
-                    var currentUser = "mojombo" // Login yaptıktan sonra loginden al
-                    var listFavUsers = viewModel.showFavoriteUser(
-                        currentUser,
-                        requireContext()
-                    )
-                    if (!listFavUsers.contains(name)) {
-                        binding.ivFav.Color(R.color.red)
-                        viewModel.addFavoriteUser(
+                if (listFavUsers.contains(name)) {
+                    binding.ivFav.Color(R.color.red)
+                } else {
+                    binding.ivFav.Color(R.color.black)
+                }
+                binding.ivFav.setOnClickListener {
+                    lifecycleScope.launch {
+                        var currentUser = "mojombo" // Login yaptıktan sonra loginden al
+                        var listFavUsers = viewModel.showFavoriteUser(
                             currentUser,
-                            name.toString(),
-                            htmlUrl.toString(),
-                            avatarUrl.toString(),
                             requireContext()
                         )
-                    } else {
-                        binding.ivFav.Color(R.color.black)
-                        viewModel.removeFavoriteUser(
-                            currentUser,
-                            name.toString()
-                        )
+                        if (!listFavUsers.contains(name)) {
+                            binding.ivFav.Color(R.color.red)
+                            viewModel.addFavoriteUser(
+                                currentUser,
+                                name.toString(),
+                                htmlUrl.toString(),
+                                avatarUrl.toString(),
+                                requireContext()
+                            )
+                        } else {
+                            binding.ivFav.Color(R.color.black)
+                            viewModel.removeFavoriteUser(
+                                currentUser,
+                                name.toString()
+                            )
+                        }
                     }
                 }
             }

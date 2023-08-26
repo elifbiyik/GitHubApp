@@ -1,22 +1,22 @@
 package com.ex.github.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ex.github.Adapter.FollowerAdapter
 import com.ex.github.Adapter.RepositoryAdapter
 import com.ex.github.Color
 import com.ex.github.R
+import com.ex.github.Repositories
 import com.ex.github.ViewModel.PageRepositoryViewModel
 import com.ex.github.databinding.FragmentPageRepositoryBinding
 import com.ex.github.databinding.FragmentPageRepositoryItemBinding
@@ -43,19 +43,25 @@ class PageRepositoryFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_page_repository, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding = FragmentPageRepositoryBinding.inflate(inflater, container, false)
+        bindingItem = FragmentPageRepositoryItemBinding.inflate(inflater, container, false)
 
-        bindingItem = DataBindingUtil.inflate(inflater, R.layout.fragment_page_repository_item, container, false)
-
-
+        val login = "mojombo"
         val currentUser = arguments?.getString("login")
         lifecycleScope.launch {
             var list = currentUser?.let { viewModel.getShowUserRepository(it) }
             if (list != null) {
                 Log.d("xxxx", list.toString())
 
-                adapter = RepositoryAdapter(list)
+
+
+
+                adapter = RepositoryAdapter(list) { it, it1 ->
+                    // Yıldıza tıklandığında ;
+                    Toast.makeText(context, "Click", Toast.LENGTH_LONG).show()
+                    isFavorite(it, login, currentUser.toString(), it1.name)
+                }
+
                 binding.recyclerview.adapter = adapter
                 binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
@@ -69,27 +75,22 @@ class PageRepositoryFragment() : Fragment() {
                     })
             }
         }
+        return binding.root
+    }
 
+    fun isFavorite(imageView: ImageView, login: String, currentUser: String, name: String) {
 
-        bindingItem.constraintLayout.setOnClickListener {
-
-            Toast.makeText(context, "Click", Toast.LENGTH_LONG).show()
-
-            bindingItem.ivStar.Color(R.color.yellow)
-            var repositoryName = bindingItem.tvName.text.toString()
-
-            lifecycleScope.launch {
-                viewModel.addFavoriteRepository(currentUser.toString(), repositoryName )
-                bindingItem.tvStar.text = bindingItem.tvStar.text
+        lifecycleScope.launch {
+            var list = viewModel.getAllList(login)
+            var item = Repositories(name, currentUser, null, null, null, null)
+            if (list.contains(item)) {
+                imageView.Color(R.color.black)
+                viewModel.deleteFavoriteRepository(login, name)
+            } else {
+                imageView.Color(R.color.yellow)
+                viewModel.addFavoriteRepository(login, currentUser, name)
             }
         }
 
-
-
-
-
-
-
-        return binding.root
     }
 }

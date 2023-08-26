@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.HomePageAdapter
 import com.ex.github.ViewModel.HomePageViewModel
 import com.ex.github.R
-import com.ex.github.User
 import com.ex.github.databinding.FragmentHomePageBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -42,8 +40,7 @@ class HomePageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_page, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding = FragmentHomePageBinding.inflate(inflater, container, false)
 
         lifecycleScope.launch(Dispatchers.Main) {
             binding.progressBar.visibility = View.VISIBLE
@@ -53,13 +50,15 @@ class HomePageFragment : Fragment() {
 
             adapter = HomePageAdapter(list) {
 
-                var fragment = DetailFragment()
-                var bundle = Bundle()
-                bundle.putString("login", it.login)
-                bundle.putString("image", it.avatar_url)
-                bundle.putString("htmlUrl", it.html_url)
-                bundle.putString("avatarUrl", it.avatar_url)
-                fragment.arguments = bundle
+                val fragment = DetailFragment().apply {
+                    val bundle = Bundle().apply {
+                        putString("login", it.login)
+                        putString("image", it.avatar_url)
+                        putString("htmlUrl", it.html_url)
+                        putString("avatarUrl", it.avatar_url)
+                    }
+                    arguments = bundle
+                }
                 replace(fragment)
             }
 
@@ -81,10 +80,7 @@ class HomePageFragment : Fragment() {
 
 
         binding.ivFavorite.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.constraint, FavoriteUserFragment())
-                .addToBackStack(null)
-                .commit()
+            replace(FavoriteUserFragment())
         }
 
 
@@ -120,7 +116,10 @@ class HomePageFragment : Fragment() {
 
     fun searchText(p0: String) {
         lifecycleScope.launch {
+
             viewModel.filterUsers(p0)
+            viewModel.filterRepositories(p0)
+
             viewModel.filteredUsersMutableLiveData.observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty()) {
                     adapter.list = it
@@ -130,7 +129,6 @@ class HomePageFragment : Fragment() {
                 }
             })
 
-            viewModel.filterRepositories(p0)
             viewModel.filteredUsersMutableLiveData.observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty()) {
                     adapter.list = it

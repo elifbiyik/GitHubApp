@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +15,6 @@ import com.ex.github.Adapter.FavoriteUserAdapter
 import com.ex.github.R
 import com.ex.github.ViewModel.FavoriteUserViewModel
 import com.ex.github.databinding.FragmentFavoriteUserBinding
-import com.ex.github.databinding.FragmentFavoriteUserItemBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,7 +23,6 @@ import kotlinx.coroutines.launch
 class FavoriteUserFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteUserBinding
-    private lateinit var bindingItem: FragmentFavoriteUserItemBinding
     private val viewModel: FavoriteUserViewModel by viewModels()
     private lateinit var adapter: FavoriteUserAdapter
 
@@ -39,10 +36,8 @@ class FavoriteUserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite_user, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding = FragmentFavoriteUserBinding.inflate(inflater, container, false)
 
-        bindingItem = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite_user_item, container, false)
 
 
         lifecycleScope.launch {

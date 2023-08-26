@@ -14,8 +14,6 @@ class GistsAdapter(var list : List<User?> ) : RecyclerView.Adapter<GistsAdapter.
         fun bind(gistsList: User?) {
 
             with(binding) {
-                gists = gistsList
-                executePendingBindings()
             }
         }
     }

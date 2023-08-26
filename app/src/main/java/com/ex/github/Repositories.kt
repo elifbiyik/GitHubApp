@@ -2,6 +2,7 @@ package com.ex.github
 
 data class Repositories (
     var name : String,
+    var repoIsWhose : String?,
     var language : String?,
     var stargazers_count : String?,
     var watchers_count : Int?,

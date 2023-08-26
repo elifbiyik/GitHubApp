@@ -13,8 +13,7 @@ class MyCommentAdapter(var list : List<Comment>) : RecyclerView.Adapter<MyCommen
 
         fun bind(comments : Comment) {
             with(binding) {
-                comment = comments
-                executePendingBindings()
+                tvName.text = comments.comment
             }
         }
     }

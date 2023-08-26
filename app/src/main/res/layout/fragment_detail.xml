@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="user"
-            type="com.ex.github.User" />
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
-    </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
@@ -65,7 +60,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="@{user.name}"
                             android:textColor="@color/material_dynamic_neutral10"
                             android:textSize="18sp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +73,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="14dp"
-                            android:text="@{user.login}"
+
                             android:textColor="@color/material_dynamic_neutral10"
                             android:textSize="14sp"
                             app:layout_constraintEnd_toEndOf="@+id/tvName"
@@ -91,7 +85,7 @@
                             android:id="@+id/tvUrl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{user.html_url}"
+
                             android:textAlignment="center"
                             android:textColor="@android:color/holo_blue_dark"
                             android:textSize="12sp"
@@ -153,7 +147,7 @@
                                     android:id="@+id/tvFollowers"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{user.followers}"
+
                                     android:textColor="@android:color/black"
                                     android:textSize="15sp"
                                     android:textStyle="bold" />
@@ -180,7 +174,7 @@
                                     android:id="@+id/tvFollowing"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{user.following}"
+
                                     android:textColor="@android:color/black"
                                     android:textSize="15sp"
                                     android:textStyle="bold" />
@@ -208,7 +202,7 @@
                                     android:id="@+id/tvRepository"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{user.public_repos}"
+
                                     android:textColor="@android:color/black"
                                     android:textSize="15sp"
                                     android:textStyle="bold"
@@ -235,7 +229,7 @@
                                        android:id="@+id/tvGists"
                                        android:layout_width="wrap_content"
                                        android:layout_height="wrap_content"
-                                       android:text="@{user.public_gists}"
+
                                        android:textColor="@android:color/black"
                                        android:textSize="15sp"
                                        android:textStyle="bold"
@@ -260,7 +254,7 @@
 
         </androidx.viewpager2.widget.ViewPager2>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <!--

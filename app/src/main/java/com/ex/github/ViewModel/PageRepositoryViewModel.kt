@@ -23,7 +23,17 @@ class PageRepositoryViewModel @Inject constructor(var repository: PageRepository
 
 
 
-    suspend fun addFavoriteRepository (login : String, repositoryName : String) {
-        repository.addFavoriteRepository(login, repositoryName)
+    suspend fun addFavoriteRepository (login : String, user: String, repositoryName : String) {
+        repository.addFavoriteRepository(login,user, repositoryName)
     }
+
+    suspend fun deleteFavoriteRepository (login : String, repositoryName: String) {
+        repository.deleteFavoriteRepository(login,repositoryName)
+    }
+
+    suspend fun getAllList(login: String) : ArrayList<Repositories> {
+        return repository.getAllList(login)
+    }
+
+
 }

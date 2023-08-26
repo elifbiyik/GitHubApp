@@ -7,13 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.FollowingAdapter
-import com.ex.github.R
 import com.ex.github.ViewModel.PageFollowingViewModel
 import com.ex.github.databinding.FragmentPageFollowingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,10 +37,9 @@ class PageFollowingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_page_following, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding = FragmentPageFollowingBinding.inflate(inflater, container, false)
 
-      //  binding.tvFollowing.text = "Following"
+        //  binding.tvFollowing.text = "Following"
 
 
                 lifecycleScope.launch {

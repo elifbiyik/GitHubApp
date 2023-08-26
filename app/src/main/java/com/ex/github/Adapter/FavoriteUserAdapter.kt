@@ -3,6 +3,7 @@ package com.ex.github.Adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ex.github.ImageLoad
 import com.ex.github.User
 import com.ex.github.databinding.FragmentFavoriteUserItemBinding
 
@@ -15,9 +16,10 @@ class FavoriteUserAdapter(var list: List<User>, private val onClick : (User) -> 
 
         fun bind(favUsersList: User) {
             with(binding) {
-                favUsers = favUsersList
+                tvName.text = favUsersList.login
+               tvLogin.text = favUsersList.html_url
+                binding.imageView.ImageLoad(favUsersList.avatar_url.toString())
                 root.setOnClickListener {onClick(favUsersList) }
-                executePendingBindings()
             }
         }
     }
