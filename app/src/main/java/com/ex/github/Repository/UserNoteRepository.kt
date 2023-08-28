@@ -15,17 +15,17 @@ class UserNoteRepository @Inject constructor(private var database: FirebaseDatab
 
 
     suspend fun addNote(
-        login: String,
+        loginUser: String,
         noteToUserOrRepository : String,
         note: String,
         isUserOrRepository : String
     ): Boolean {             // var key = databaseReferenceNote.push().getKey()
         try {
-            val userNote = Note(login, noteToUserOrRepository, note)
+            val userNote = Note(loginUser, noteToUserOrRepository, note)
             if (isUserOrRepository == "User") {
-                databaseReferenceNote.child("User").child(login).child(noteToUserOrRepository).setValue(userNote)
+                databaseReferenceNote.child("User").child(loginUser).child(noteToUserOrRepository).setValue(userNote)
             } else if (isUserOrRepository == "Repository") {
-                databaseReferenceNote.child("Repository").child(login).child(noteToUserOrRepository).setValue(userNote)
+                databaseReferenceNote.child("Repository").child(loginUser).child(noteToUserOrRepository).setValue(userNote)
             }
             return true
         } catch (e: Exception) {

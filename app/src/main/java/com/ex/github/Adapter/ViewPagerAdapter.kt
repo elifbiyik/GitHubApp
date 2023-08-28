@@ -10,7 +10,7 @@ import com.ex.github.ui.PageFollowingFragment
 import com.ex.github.ui.PageRepositoryFragment
 
 
-class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val currentUser : String) :
+class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val clickedUserLogin : String) :
     FragmentStateAdapter(fm, lifecycle) {
 //class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
@@ -22,21 +22,21 @@ class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val currentUse
             0 -> {
                 val fragment = PageFollowersFragment()
                 val bundle = Bundle()
-                bundle.putString("login", currentUser)
+                bundle.putString("clickedUserLogin", clickedUserLogin)
                 fragment.arguments = bundle
                 fragment
             }
             1 -> {
                 val fragment = PageFollowingFragment()
                 val bundle = Bundle()
-                bundle.putString("login", currentUser)
+                bundle.putString("clickedUserLogin", clickedUserLogin)
                 fragment.arguments = bundle
                 fragment
             }
             2 -> {
                 val fragment = PageRepositoryFragment()
                 val bundle = Bundle()
-                bundle.putString("login", currentUser)
+                bundle.putString("clickedUserLogin", clickedUserLogin)
                 fragment.arguments = bundle
                 fragment
             }

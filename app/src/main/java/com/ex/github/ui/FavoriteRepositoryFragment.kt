@@ -38,16 +38,15 @@ class FavoriteRepositoryFragment : Fragment() {
 
         binding = FragmentFavoriteRepositoryBinding.inflate(inflater, container, false)
 
-        var currentUser = "mojombo"
+        var loginUser = "mojombo"
         lifecycleScope.launch {
-            var list = viewModel.getAllList(currentUser)
+            var list = viewModel.getAllList(loginUser)
 
             adapter = FavoriteRepositoryAdapter(list){
-                var favRepo = it.name
-                //tıklanan Repo
+                var clickedFavRepo = it.name
                 var fragment = UserNoteFragment()
                 var bundle = Bundle()
-                bundle.putString("favRepo", favRepo)
+                bundle.putString("clickedFavRepo", clickedFavRepo)
                 fragment.arguments = bundle
 
                 requireActivity(). supportFragmentManager.beginTransaction()
@@ -55,12 +54,8 @@ class FavoriteRepositoryFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
-
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
-
-
-
 
             viewModel.currentFavoriteRepositoryMutableLiveData.observe(viewLifecycleOwner, Observer {
                 adapter.list = it

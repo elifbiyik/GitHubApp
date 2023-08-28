@@ -43,13 +43,12 @@ class DetailFragment @Inject constructor() : Fragment() {
 
         binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-        var name = arguments?.getString("login")
-        var image = arguments?.getString("image")
-        var htmlUrl = arguments?.getString("htmlUrl")
-        var avatarUrl = arguments?.getString("avatarUrl")
+        var clickedUserLogin = arguments?.getString("clickedUserLogin")
+        var clickedUserHtmlUrl = arguments?.getString("clickedUserHtmlUrl")
+        var clickedUserAvatarUrl = arguments?.getString("clickedUserAvatarUrl")
 
         lifecycleScope.launch {
-            name?.let {
+            clickedUserLogin?.let {
                 with(binding) {
                     var currentUser = viewModel.getShowUser(it)
                     tvName.text = currentUser.name
@@ -58,14 +57,14 @@ class DetailFragment @Inject constructor() : Fragment() {
                     tvFollowers.text = currentUser.followers
                     tvFollowing.text = currentUser.following
                     tvRepository.text = currentUser.public_repos
-                    image?.let {
+                    clickedUserAvatarUrl?.let {
                         imageUser.ImageLoad(it)
                     }
                 }
             }
 
 
-            adapter = ViewPagerAdapter(childFragmentManager, lifecycle, name.toString())
+            adapter = ViewPagerAdapter(childFragmentManager, lifecycle, clickedUserLogin.toString())
             viewPager = binding.viewPager
             viewPager.adapter = adapter
 
@@ -107,38 +106,37 @@ class DetailFragment @Inject constructor() : Fragment() {
 
             lifecycleScope.launch {
                 // Kullanıcının  fav olup olmadığına bakılır. (kalp rengi için)
-                var currentUser = "mojombo" // Login yaptıktan sonra loginden al
+                var loginUser = "mojombo" // Login yaptıktan sonra loginden al
                 var listFavUsers = viewModel.showFavoriteUser(
-                    currentUser,
+                    loginUser,
                     requireContext()
                 )
 
-                if (listFavUsers.contains(name)) {
+                if (listFavUsers.contains(clickedUserLogin)) {
                     binding.ivFav.Color(R.color.red)
                 } else {
                     binding.ivFav.Color(R.color.black)
                 }
                 binding.ivFav.setOnClickListener {
                     lifecycleScope.launch {
-                        var currentUser = "mojombo" // Login yaptıktan sonra loginden al
                         var listFavUsers = viewModel.showFavoriteUser(
-                            currentUser,
+                            loginUser,
                             requireContext()
                         )
-                        if (!listFavUsers.contains(name)) {
+                        if (!listFavUsers.contains(clickedUserLogin)) {
                             binding.ivFav.Color(R.color.red)
                             viewModel.addFavoriteUser(
-                                currentUser,
-                                name.toString(),
-                                htmlUrl.toString(),
-                                avatarUrl.toString(),
+                                loginUser,
+                                clickedUserLogin.toString(),
+                                clickedUserHtmlUrl.toString(),
+                                clickedUserAvatarUrl.toString(),
                                 requireContext()
                             )
                         } else {
                             binding.ivFav.Color(R.color.black)
                             viewModel.removeFavoriteUser(
-                                currentUser,
-                                name.toString()
+                                loginUser,
+                                clickedUserLogin.toString()
                             )
                         }
                     }

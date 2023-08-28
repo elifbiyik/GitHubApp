@@ -13,10 +13,9 @@ class PageFollowingViewModel @Inject constructor(var repository: PageFollowingRe
 
     var currentUserFollowingMutableLiveData = MutableLiveData<List<User>>()
 
-    suspend fun getShowUserFollowing (currentUser : String ): List<User> {
+    suspend fun getShowUserFollowing (clickedUserLogin : String ): List<User> {
 
-        var response = repository.getShowUserFollowing(currentUser)
-        Log.d("xxxxxxx", response.toString())
+        var response = repository.getShowUserFollowing(clickedUserLogin)
         currentUserFollowingMutableLiveData.value = response
         return response
     }

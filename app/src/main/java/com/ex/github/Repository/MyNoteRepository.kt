@@ -17,15 +17,15 @@ import kotlin.coroutines.suspendCoroutine
 class MyNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
 
-    suspend fun getMyNote(login: String, noteToFavUser: String, isUserOrRepo: String): ArrayList<Note> {
+    suspend fun getMyNote(loginUser: String, noteToFavUser: String, isUserOrRepo: String): ArrayList<Note> {
         return suspendCoroutine { continuation ->
             try {
                 val noteList: ArrayList<Note> = ArrayList()
                 val databaseReference: DatabaseReference?
                 if (isUserOrRepo == "User") {
-                    databaseReference = database.getReference("Note/User/${login}")
+                    databaseReference = database.getReference("Note/User/${loginUser}")
                 } else if (isUserOrRepo == "Repository") {
-                    databaseReference = database.getReference("Note/Repository/${login}")
+                    databaseReference = database.getReference("Note/Repository/${loginUser}")
                 }else {
                     // Eğer isUserOrRepo ne "User" ne de "Repository" değilse, hata durumu
                     continuation.resumeWithException(IllegalArgumentException("Invalid value for isUserOrRepo"))
@@ -40,7 +40,7 @@ class MyNoteRepository @Inject constructor(private var database: FirebaseDatabas
                                 val noteToUserOrRepository = i.child("noteToUserOrRepository").getValue(String::class.java)
 
                                 if (noteToFavUser.equals(noteToUserOrRepository)) {
-                                    noteList.add(Note(login, noteToUserOrRepository, note))
+                                    noteList.add(Note(loginUser, noteToUserOrRepository, note))
                                 }
 // Login = mojombo
 // noteToFavUser = ivey

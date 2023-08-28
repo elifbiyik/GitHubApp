@@ -27,34 +27,34 @@ class PageRepositoryRepository @Inject constructor(
         database.getReference("Repository")
 
 
-    suspend fun getShowUserRepository(currentUser: String): List<Repositories> {
-        return apiServise.getShowUserRepository(currentUser)
+    suspend fun getShowUserRepository(clickedUserLogin: String): List<Repositories> {
+        return apiServise.getShowUserRepository(clickedUserLogin)
     }
 
 
-    suspend fun addFavoriteRepository(login: String, user: String, repositoryName: String) {
+    suspend fun addFavoriteRepository(loginUser: String, clickedUserLogin: String, repositoryName: String) {
         try {
-            val repository = Repositories(repositoryName, user, null, null, null, null)
-            databaseReferenceRepository.child(login).child(repositoryName).setValue(repository)
+            val repository = Repositories(repositoryName, clickedUserLogin, null, null, null, null)
+            databaseReferenceRepository.child(loginUser).child(repositoryName).setValue(repository)
         } catch (e: Exception) {
             Log.d("Hata", e.message.toString())
         }
     }
 
-    suspend fun deleteFavoriteRepository(login: String, repositoryName: String) {
+    suspend fun deleteFavoriteRepository(loginUser: String, repositoryName: String) {
         try {
-            databaseReferenceRepository.child(login).child(repositoryName).removeValue()
+            databaseReferenceRepository.child(loginUser).child(repositoryName).removeValue()
         } catch (e: Exception) {
             Log.d("Hata", e.message.toString())
         }
     }
 
-    suspend fun getAllList(login: String) : ArrayList<Repositories> {
+    suspend fun getAllList(loginUser: String) : ArrayList<Repositories> {
 
         return suspendCoroutine { continuation ->
             try { // Giriş yapan kullanıcının bütün favoritelerini alıyor.
                 val favRepoList: ArrayList<Repositories> = ArrayList()
-                var favRepo = databaseReferenceRepository.child(login)
+                var favRepo = databaseReferenceRepository.child(loginUser)
 
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")

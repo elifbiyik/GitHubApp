@@ -39,12 +39,10 @@ class PageFollowingFragment : Fragment() {
 
         binding = FragmentPageFollowingBinding.inflate(inflater, container, false)
 
-        var currentUser = arguments?.getString("login")
+        var clickedUserLogin = arguments?.getString("clickedUserLogin")
+
                 lifecycleScope.launch {
-
-                    var list = currentUser?.let { viewModel.getShowUserFollowing(it) }
-                    Log.d("xxxxcurrentUser2", currentUser.toString())
-
+                    var list = clickedUserLogin?.let { viewModel.getShowUserFollowing(it) }
                     if (list != null) {
                         adapter = FollowingAdapter(list)
                         binding.recyclerview.adapter = adapter
@@ -54,7 +52,6 @@ class PageFollowingFragment : Fragment() {
                             viewLifecycleOwner,
                             Observer {
                                 if (it.isNotEmpty()) {
-                                    //                        binding.progressBar.visibility = View.GONE
                                     adapter.list = it
                                     adapter.notifyDataSetChanged()
                                 }

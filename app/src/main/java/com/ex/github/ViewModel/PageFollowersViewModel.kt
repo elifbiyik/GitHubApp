@@ -13,9 +13,8 @@ class PageFollowersViewModel @Inject constructor(var repository: PageFollowersRe
 
     var currentUserFollowersMutableLiveData = MutableLiveData<List<User>> ()
 
-    suspend fun getShowUserFollowers(currentUser : String): List<User> {
-        var userFollowers = repository.getShowUserFollowers(currentUser)
-        Log.d("xxxxxxx", userFollowers.toString())
+    suspend fun getShowUserFollowers(clickedUserLogin : String): List<User> {
+        var userFollowers = repository.getShowUserFollowers(clickedUserLogin)
         currentUserFollowersMutableLiveData.value = userFollowers
 
         return userFollowers

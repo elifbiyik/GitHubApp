@@ -16,7 +16,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class AllNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
-    suspend fun getAllNote(login: String, noteToFavUser: String, isUserOrRepository: String): ArrayList<Note> {
+    suspend fun getAllNote(noteToFavUser: String, isUserOrRepository: String): ArrayList<Note> {
         return suspendCoroutine { continuation ->
             try {
                 val noteAllList: ArrayList<Note> = ArrayList()

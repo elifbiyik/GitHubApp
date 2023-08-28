@@ -18,12 +18,12 @@ class FavoriteRepositoryRepository @Inject constructor(var database: FirebaseDat
         database.getReference("Repository")
 
 
-    suspend fun getAllList(login: String): ArrayList<Repositories> {
+    suspend fun getAllList(loginUser: String): ArrayList<Repositories> {
 
         return suspendCoroutine { continuation ->
             try { // Giriş yapan kullanıcının bütün favoritelerini alıyor.
                 val favRepoList: ArrayList<Repositories> = ArrayList()
-                var favRepo = databaseReferenceRepository.child(login)
+                var favRepo = databaseReferenceRepository.child(loginUser)
 
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")

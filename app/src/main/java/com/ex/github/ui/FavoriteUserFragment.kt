@@ -42,15 +42,14 @@ class FavoriteUserFragment : Fragment() {
         lifecycleScope.launch {
             binding.progressBar.visibility = View.VISIBLE
 
-            var currentUser = "mojombo"  //Login yaptıktan sonra loginden al
-            var list = viewModel.showFavoriteUser(currentUser, requireContext())
+            var loginUser = "mojombo"  //Login yaptıktan sonra loginden al
+            var list = viewModel.showFavoriteUser(loginUser, requireContext())
 
             adapter = FavoriteUserAdapter(list){
-                var favUser = it.login.toString() //bindingItem.tvName.text.toString()
-                //tıklanan user
+                var clickedFavUser = it.login.toString()
                 var fragment = UserNoteFragment()
                 var bundle = Bundle()
-                bundle.putString("favUser", favUser)
+                bundle.putString("clickedFavUser", clickedFavUser)
                 fragment.arguments = bundle
 
                 requireActivity(). supportFragmentManager.beginTransaction()

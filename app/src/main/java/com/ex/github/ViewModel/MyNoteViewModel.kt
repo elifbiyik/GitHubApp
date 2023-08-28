@@ -12,8 +12,8 @@ class MyNoteViewModel @Inject constructor(var repository: MyNoteRepository) : Vi
 
     var currentUserMyNoteMutableLiveData = MutableLiveData<List<Note>>()
 
-    suspend fun getMyNote(login: String, noteToFavUser: String, isUserOrRepo : String): ArrayList<Note> {
-        var list = repository.getMyNote(login, noteToFavUser, isUserOrRepo)
+    suspend fun getMyNote(loginUser: String, noteToFavUser: String, isUserOrRepo : String): ArrayList<Note> {
+        var list = repository.getMyNote(loginUser, noteToFavUser, isUserOrRepo)
         currentUserMyNoteMutableLiveData.value = list
         return list
     }

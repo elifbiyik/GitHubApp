@@ -24,7 +24,6 @@ class AllNoteFragment : Fragment() {
     private val viewModel: AllNoteViewModel by viewModels()
     private lateinit var adapter : AllNoteAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,19 +38,14 @@ class AllNoteFragment : Fragment() {
 
         binding = FragmentAllNoteBinding.inflate(inflater, container, false)
 
-
         val favorite = arguments?.getString("favorite").toString()
         val isUserOrRepository = arguments?.getString("isUserOrRepository").toString()
 
-
         lifecycleScope.launch {
-            var currentUser = "mojombo"
-            var list = viewModel.getAllNote(currentUser, favorite, isUserOrRepository)
-
+            var list = viewModel.getAllNote(favorite, isUserOrRepository)
             adapter = AllNoteAdapter(list)
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
-
 
             viewModel.currentUserAllNoteMutableLiveData.observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty()) {
@@ -61,9 +55,7 @@ class AllNoteFragment : Fragment() {
                     Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
                 }
             })
-
         }
-
         return binding.root
     }
 }

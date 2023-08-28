@@ -39,14 +39,12 @@ class PageFollowersFragment() : Fragment() {
 
         binding = FragmentPageFollowersBinding.inflate(inflater, container, false)
 
-        val currentUser = arguments?.getString("login")
+        val clickedUserLogin = arguments?.getString("clickedUserLogin")
 
             lifecycleScope.launch {
-                var list = currentUser?.let { viewModel.getShowUserFollowers(it) }
+                var list = clickedUserLogin?.let { viewModel.getShowUserFollowers(it) }
 
                 if (list != null) {
-                    Log.d("xxxx", list.toString())
-
                     adapter = FollowerAdapter(list)
                     binding.recyclerview.adapter = adapter
                     binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
@@ -61,20 +59,6 @@ class PageFollowersFragment() : Fragment() {
                         })
                 }
             }
-
-
-
-
         return binding.root
     }
-    /*
-        companion object {
-            fun newInstance(login: String): PageFollowersFragment {
-                val fragment = PageFollowersFragment()
-                val bundle = Bundle()
-                bundle.putString("login", login)
-                fragment.arguments = bundle
-                return fragment
-            }
-        }*/
 }

@@ -38,17 +38,17 @@ class UserNoteFragment : Fragment() {
         binding = FragmentUserNoteBinding.inflate(inflater, container, false)
 
         // Eğer ?: "" yazılmazsa ; favUser != null' is always 'true' oluyor. Repository için binding.textView.text = null oluyor
-        var favUser = arguments?.getString("favUser") ?: ""
+        var clickedFavUser = arguments?.getString("clickedFavUser") ?: ""
         // Tıklanan user
-        var favRepo = arguments?.getString("favRepo") ?: ""
+        var clickedFavRepo = arguments?.getString("clickedFavRepo") ?: ""
         // Tıklanan user
 
-        if (favUser.isNotEmpty()) {
-            binding.textView.text = favUser
-            noteListPager(favUser, "User")
-        } else if (favRepo.isNotEmpty()) {
-            binding.textView.text = favRepo
-            noteListPager(favRepo, "Repository")
+        if (clickedFavUser.isNotEmpty()) {
+            binding.textView.text = clickedFavUser
+            noteListPager(clickedFavUser, "User")
+        } else if (clickedFavRepo.isNotEmpty()) {
+            binding.textView.text = clickedFavRepo
+            noteListPager(clickedFavRepo, "Repository")
         } else {
             binding.textView.text = ""
         }
@@ -57,7 +57,7 @@ class UserNoteFragment : Fragment() {
         // TODO(butonu if else'lerin içine alsam ?? Firebasede Note/FavRepository ve Note/FavUser için)????
         // TODO(Repository'i ekleyince current User null dönüyor)
         binding.btnSend.setOnClickListener {
-            addNote(favUser, favRepo)
+            addNote(clickedFavUser, clickedFavRepo)
         }
         return binding.root
     }
@@ -77,25 +77,25 @@ class UserNoteFragment : Fragment() {
         })
     }
 
-    fun addNote(favUser: String?, favRepo: String?) {
+    fun addNote(clickedFavUser: String?, clickedFavRepo: String?) {
 
-        var currentUser = "mojombo"
+        var loginUser = "mojombo"
         var note = binding.etNote.text.toString()
 
         lifecycleScope.launch {
-            if (favUser?.isNotEmpty() == true) {
-                var isAdded = viewModel.addNote(currentUser, favUser, note, "User")
+            if (clickedFavUser?.isNotEmpty() == true) {
+                var isAdded = viewModel.addNote(loginUser, clickedFavUser, note, "User")
                 if (isAdded) {
-                    noteListPager(favUser, "User")
+                    noteListPager(clickedFavUser, "User")
                 } else {
-                    noteListPager(favUser, "User")
+                    noteListPager(clickedFavUser, "User")
                 }
-            } else if (favRepo?.isNotEmpty() == true) {
-                var isAdded = viewModel.addNote(currentUser, favRepo, note, "Repository")
+            } else if (clickedFavRepo?.isNotEmpty() == true) {
+                var isAdded = viewModel.addNote(loginUser, clickedFavRepo, note, "Repository")
                 if (isAdded) {
-                    noteListPager(favRepo, "Repository")
+                    noteListPager(clickedFavRepo, "Repository")
                 } else {
-                    noteListPager(favRepo, "Repository")
+                    noteListPager(clickedFavRepo, "Repository")
                 }
             }
         }

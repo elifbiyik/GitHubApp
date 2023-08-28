@@ -26,15 +26,15 @@ class DetailRepository @Inject constructor(
         database.getReference("User")
 
 
-    suspend fun getShowUser(currentUser: String): User {
-        return apiServise.getShowUser(currentUser)
+    suspend fun getShowUser(clickedUserLogin: String): User {
+        return apiServise.getShowUser(clickedUserLogin)
     }
 
 
     // ValueEventListener kullanıldığında; callback veya asenkron kullan.
 
     suspend fun showFavoriteUser(
-        login: String,
+        loginUser: String,
         context: Context
     ): ArrayList<String> {
 
@@ -42,7 +42,7 @@ class DetailRepository @Inject constructor(
         return suspendCoroutine { continuation ->
             try {
                 val userList: ArrayList<String> = ArrayList()
-                val databaseReference = database.getReference("User/${login}")
+                val databaseReference = database.getReference("User/${loginUser}")
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -74,7 +74,7 @@ class DetailRepository @Inject constructor(
     // login -> giriş yapılan kullanıcı
     // favUser -> Favorilere eklenmek istenen kullanıcı
     suspend fun addFavoriteUser(
-        login: String,
+        loginUser: String,
         favUser: String,
         favHtml: String,
         favAvatar: String,
@@ -84,7 +84,7 @@ class DetailRepository @Inject constructor(
             var isValid = false
             var userList: ArrayList<String> = ArrayList()
 
-            var databaseReference = database.getReference("User/${login}")
+            var databaseReference = database.getReference("User/${loginUser}")
             var getData = object : ValueEventListener {
                 @SuppressLint("SuspiciousIndentation")
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -99,7 +99,7 @@ class DetailRepository @Inject constructor(
                         isValid = false
                     } else {
                         val favUsers = User(favUser, html_url = favHtml, avatar_url = favAvatar)
-                        databaseReferenceUser.child(login).child(favUser).setValue(favUsers)
+                        databaseReferenceUser.child(loginUser).child(favUser).setValue(favUsers)
                         isValid = true
                     }
                 }
@@ -119,10 +119,10 @@ class DetailRepository @Inject constructor(
 
 
     suspend fun removeFavoriteUser(
-        login: String,
+        loginUser: String,
         favUser: String
     ) {
-        database.getReference("User/${login}").child(favUser).removeValue()
+        database.getReference("User/${loginUser}").child(favUser).removeValue()
     }
 
 

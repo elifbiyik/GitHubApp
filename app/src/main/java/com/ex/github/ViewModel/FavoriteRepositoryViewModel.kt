@@ -13,9 +13,8 @@ class FavoriteRepositoryViewModel @Inject constructor(var repository: FavoriteRe
 
     var currentFavoriteRepositoryMutableLiveData = MutableLiveData<List<Repositories>>()
 
-    suspend fun getAllList (currentUser : String ): List<Repositories> {
-        var response = repository.getAllList(currentUser)
-        Log.d("xxxxxxx", response.toString())
+    suspend fun getAllList (loginUser : String ): List<Repositories> {
+        var response = repository.getAllList(loginUser)
         currentFavoriteRepositoryMutableLiveData.value = response
         return response
     }

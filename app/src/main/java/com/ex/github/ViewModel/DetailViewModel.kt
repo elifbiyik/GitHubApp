@@ -14,38 +14,37 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
 
     var currentUserMutableLiveData = MutableLiveData<User>()
 
-    suspend fun getShowUser(currentUser: String): User {
-        var user = repository.getShowUser(currentUser)
+    suspend fun getShowUser(clickedUserLogin: String): User {
+        var user = repository.getShowUser(clickedUserLogin)
         currentUserMutableLiveData.value = user
         return user
     }
 
 
     suspend fun addFavoriteUser(
-        login: String,
+        loginUser: String,
         favUser: String,
         favHtml: String,
         favAvatar: String,
         context: Context
     ): Boolean {
 
-        var x = repository.addFavoriteUser(login, favUser, favHtml, favAvatar, context)
-        Log.d("xxxVM", x.toString())
-        return x
+        var isAdd = repository.addFavoriteUser(loginUser, favUser, favHtml, favAvatar, context)
+        return isAdd
     }
 
     suspend fun showFavoriteUser(
-        login: String,
+        loginUser: String,
         context: Context
     ): ArrayList<String> {
-        return repository.showFavoriteUser(login, context)
+        return repository.showFavoriteUser(loginUser, context)
     }
 
     suspend fun removeFavoriteUser(
-        login: String,
+        loginUser: String,
         favUser: String,
     ) {
-        var x = repository.removeFavoriteUser(login, favUser)
+        var x = repository.removeFavoriteUser(loginUser, favUser)
         Log.d("xxxVM", x.toString())
     }
 

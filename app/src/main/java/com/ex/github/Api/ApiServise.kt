@@ -14,31 +14,27 @@ interface ApiServise {
     @GET(CONSTANT.ALL_REPOSITORIES)
     suspend fun getAllRepositories(): List<Repositories>
 
-    @GET("${CONSTANT.ALL_USERS}/{currentUser}")
+    @GET("${CONSTANT.ALL_USERS}/{clickedUserLogin}")
     suspend fun getShowUser(
-        @Path("currentUser") username: String
+        @Path("clickedUserLogin") username: String
     ): User
 
-    @GET("${CONSTANT.ALL_USERS}/{currentUser}/followers")
+    @GET("${CONSTANT.ALL_USERS}/{clickedUserLogin}/followers")
     suspend fun getShowUserFollowers(
-        @Path("currentUser") name: String
+        @Path("clickedUserLogin") name: String
     ): List<User>
 
-    @GET("${CONSTANT.ALL_USERS}/{currentUser}/following")
+    @GET("${CONSTANT.ALL_USERS}/{clickedUserLogin}/following")
     suspend fun getShowUserFollowing(
-        @Path("currentUser") name: String
+        @Path("clickedUserLogin") name: String
     ): List<User>
 
 
-    @GET("${CONSTANT.ALL_USERS}/{currentUser}/repos")
+    @GET("${CONSTANT.ALL_USERS}/{clickedUserLogin}/repos")
     suspend fun getShowUserRepository(
-        @Path("currentUser") name: String
+        @Path("clickedUserLogin") name: String
     ): List<Repositories>
 
-    @GET("${CONSTANT.ALL_USERS}/{currentUser}/gists")
-    suspend fun getShowUserGists(
-        @Path("currentUser") name: String
-    ): List<User>
 
 
 

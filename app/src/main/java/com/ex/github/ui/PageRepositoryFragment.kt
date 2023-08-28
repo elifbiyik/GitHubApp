@@ -46,15 +46,15 @@ class PageRepositoryFragment() : Fragment() {
 
         bindingItem.tvName.visibility = View.GONE
 
-        val login = "mojombo"
-        val currentUser = arguments?.getString("login")
+        val loginUser = "mojombo"
+        val clickedUserLogin = arguments?.getString("clickedUserLogin")
 
         lifecycleScope.launch {
-            var list = currentUser?.let { viewModel.getShowUserRepository(it) }
+            var list = clickedUserLogin?.let { viewModel.getShowUserRepository(it) }
             if (list != null) {
                 adapter = RepositoryAdapter(list) { it, it1 ->
                     // Yıldıza tıklandığında ;
-                    isFavorite(it, login, currentUser.toString(), it1.name)
+                    isFavorite(it, loginUser, clickedUserLogin.toString(), it1.name)
                 }
 
                 binding.recyclerview.adapter = adapter
@@ -73,17 +73,17 @@ class PageRepositoryFragment() : Fragment() {
         return binding.root
     }
 
-    fun isFavorite(imageView: ImageView, login: String, currentUser: String, name: String) {
+    fun isFavorite(imageView: ImageView, loginUser: String, clickedUserLogin: String, repositoryName: String) {
 
         lifecycleScope.launch {
-            var list = viewModel.getAllList(login)
-            var item = Repositories(name, currentUser, null, null, null, null)
+            var list = viewModel.getAllList(loginUser)
+            var item = Repositories(repositoryName, clickedUserLogin, null, null, null, null)
             if (list.contains(item)) {
                 imageView.Color(R.color.black)
-                viewModel.deleteFavoriteRepository(login, name)
+                viewModel.deleteFavoriteRepository(loginUser, repositoryName)
             } else {
                 imageView.Color(R.color.yellow)
-                viewModel.addFavoriteRepository(login, currentUser, name)
+                viewModel.addFavoriteRepository(loginUser, clickedUserLogin, repositoryName)
             }
         }
 

@@ -12,8 +12,8 @@ class AllNoteViewModel @Inject constructor(var repository: AllNoteRepository) : 
 
     var currentUserAllNoteMutableLiveData = MutableLiveData<List<Note>>()
 
-    suspend fun getAllNote(login: String, noteToFavUser: String, isUserOrRepository : String): ArrayList<Note> {
-        var list = repository.getAllNote(login, noteToFavUser, isUserOrRepository)
+    suspend fun getAllNote(noteToFavUser: String, isUserOrRepository : String): ArrayList<Note> {
+        var list = repository.getAllNote(noteToFavUser, isUserOrRepository)
         currentUserAllNoteMutableLiveData.value = list
         return list
     }

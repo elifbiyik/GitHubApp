@@ -21,11 +21,9 @@ class FavoriteFragment : Fragment() {
     private lateinit var adapter: ViewPagerFavoriteAdapter
     private val viewModel: FavoriteRepositoryViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
 
         }
     }

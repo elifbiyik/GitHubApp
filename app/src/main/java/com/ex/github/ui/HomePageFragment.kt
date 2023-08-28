@@ -46,16 +46,12 @@ class HomePageFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
 
             var list = viewModel.getAllUsers()
-            Log.d("xx", list.toString())
-
             adapter = HomePageAdapter(list) {
-
                 val fragment = DetailFragment().apply {
                     val bundle = Bundle().apply {
-                        putString("login", it.login)
-                        putString("image", it.avatar_url)
-                        putString("htmlUrl", it.html_url)
-                        putString("avatarUrl", it.avatar_url)
+                        putString("clickedUserLogin", it.login)
+                        putString("clickedUserHtmlUrl", it.html_url)
+                        putString("clickedUserAvatarUrl", it.avatar_url)
                     }
                     arguments = bundle
                 }

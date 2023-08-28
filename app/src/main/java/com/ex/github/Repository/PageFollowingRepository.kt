@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class PageFollowingRepository @Inject constructor(var apiServise: ApiServise) {
 
-    suspend fun getShowUserFollowing(currentUser : String): List<User> {
-       return apiServise.getShowUserFollowing(currentUser)
+    suspend fun getShowUserFollowing(clickedUserLogin : String): List<User> {
+       return apiServise.getShowUserFollowing(clickedUserLogin)
     }
 }

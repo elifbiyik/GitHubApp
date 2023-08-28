@@ -29,7 +29,6 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
 
     suspend fun filterRepositories(search : String) {
         var response = repository.getAllRepositories()
-        Log.d("xxxxx", response.toString())
         var responseBody = response.filter { it.name.contains(search,ignoreCase = true) }
         filteredRepositoriesMutableLiveData.value = responseBody
     }

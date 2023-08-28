@@ -43,8 +43,8 @@ class MyNoteFragment : Fragment() {
         val isUserOrRepository = arguments?.getString("isUserOrRepository").toString()
 
         lifecycleScope.launch {
-            var currentUser = "mojombo"
-            var list = viewModel.getMyNote(currentUser, favorite, isUserOrRepository)
+            var loginUser = "mojombo"
+            var list = viewModel.getMyNote(loginUser, favorite, isUserOrRepository)
 
             adapter = MyNoteAdapter(list)
             binding.recyclerview.adapter = adapter
