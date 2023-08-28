@@ -9,7 +9,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.AllCommentFragment">
+        tools:context=".ui.MyNoteFragment">
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.052"
-            tools:listitem="@layout/fragment_all_comment_item" />
+            tools:listitem="@layout/fragment_my_note_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

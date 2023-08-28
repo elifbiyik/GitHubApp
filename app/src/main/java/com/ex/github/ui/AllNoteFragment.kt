@@ -11,18 +11,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ex.github.Adapter.MyCommentAdapter
-import com.ex.github.ViewModel.MyCommentViewModel
-import com.ex.github.databinding.FragmentMyCommentBinding
+import com.ex.github.Adapter.AllNoteAdapter
+import com.ex.github.ViewModel.AllNoteViewModel
+import com.ex.github.databinding.FragmentAllNoteBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MyCommentFragment : Fragment() {
+class AllNoteFragment : Fragment() {
 
-    private lateinit var binding: FragmentMyCommentBinding
-    private val viewModel: MyCommentViewModel by viewModels()
-    private lateinit var adapter: MyCommentAdapter
+    private lateinit var binding: FragmentAllNoteBinding
+    private val viewModel: AllNoteViewModel by viewModels()
+    private lateinit var adapter : AllNoteAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,23 +37,23 @@ class MyCommentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentMyCommentBinding.inflate(inflater, container, false)
+        binding = FragmentAllNoteBinding.inflate(inflater, container, false)
 
 
-        val favUser = arguments?.getString("favUser").toString()
+        val favorite = arguments?.getString("favorite").toString()
+        val isUserOrRepository = arguments?.getString("isUserOrRepository").toString()
 
 
         lifecycleScope.launch {
             var currentUser = "mojombo"
-            var list = viewModel.getMyComment(currentUser, favUser)
-            Log.d("xxxxFirebaseListCommentFrag", list.toString())
+            var list = viewModel.getAllNote(currentUser, favorite, isUserOrRepository)
 
-            adapter = MyCommentAdapter(list)
+            adapter = AllNoteAdapter(list)
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
 
-            viewModel.currentUserMyCommentMutableLiveData.observe(viewLifecycleOwner, Observer {
+            viewModel.currentUserAllNoteMutableLiveData.observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty()) {
                     adapter.list = it
                     adapter.notifyDataSetChanged()

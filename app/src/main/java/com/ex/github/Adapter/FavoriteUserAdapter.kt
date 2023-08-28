@@ -17,7 +17,7 @@ class FavoriteUserAdapter(var list: List<User>, private val onClick : (User) -> 
         fun bind(favUsersList: User) {
             with(binding) {
                 tvName.text = favUsersList.login
-                tvLogin.text = favUsersList.html_url
+                tvLogin.text = favUsersList.url
                 binding.imageView.ImageLoad(favUsersList.avatar_url.toString())
 
                 root.setOnClickListener {onClick(favUsersList) }

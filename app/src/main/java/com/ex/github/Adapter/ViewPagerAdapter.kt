@@ -7,7 +7,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ex.github.ui.PageFollowersFragment
 import com.ex.github.ui.PageFollowingFragment
-import com.ex.github.ui.PageGistsFragment
 import com.ex.github.ui.PageRepositoryFragment
 
 
@@ -16,7 +15,7 @@ class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val currentUse
 //class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
 
-    override fun getItemCount(): Int = 4
+    override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
@@ -41,7 +40,6 @@ class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val currentUse
                 fragment.arguments = bundle
                 fragment
             }
-            3 -> PageGistsFragment()
             else -> throw IllegalArgumentException("Invalid position")
         }
     }

@@ -1,9 +1,7 @@
 package com.ex.github.ViewModel
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ex.github.Comment
 import com.ex.github.Repository.UserNoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -11,12 +9,12 @@ import javax.inject.Inject
 @HiltViewModel
 class UserNoteViewModel @Inject constructor(private var repository : UserNoteRepository) : ViewModel() {
 
-    var currentUserAddCommentMutableLiveData = MutableLiveData<Boolean>()
+    var currentUserAddNoteMutableLiveData = MutableLiveData<Boolean>()
 
-    suspend fun addComment(login: String,commentToUser : String, comment: String) : Boolean {
+    suspend fun addNote(login: String,noteToUserOrRepository : String, note: String, isUserOrRepository : String) : Boolean {
 
-        var myComment = repository.addComment(login, commentToUser, comment)
-        currentUserAddCommentMutableLiveData.value = myComment
-        return myComment
+        var myNote = repository.addNote(login, noteToUserOrRepository, note, isUserOrRepository)
+        currentUserAddNoteMutableLiveData.value = myNote
+        return myNote
     }
 }

@@ -80,7 +80,7 @@ class HomePageFragment : Fragment() {
 
 
         binding.ivFavorite.setOnClickListener {
-            replace(FavoriteUserFragment())
+            replace(FavoriteFragment())
         }
 
 

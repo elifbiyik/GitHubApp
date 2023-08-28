@@ -5,11 +5,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.ex.github.ui.AllCommentFragment
-import com.ex.github.ui.MyCommentFragment
-import com.ex.github.ui.PageFollowersFragment
+import com.ex.github.ui.AllNoteFragment
+import com.ex.github.ui.MyNoteFragment
 
-class ViewPagerCommentAdapter(fm : FragmentManager, lifecycle: Lifecycle,private var favUser : String) : FragmentStateAdapter(fm, lifecycle) {
+class ViewPagerNoteAdapter(fm : FragmentManager, lifecycle: Lifecycle, private var favorite : String, private var isUserOrRepository : String) : FragmentStateAdapter(fm, lifecycle) {
 
     override fun getItemCount(): Int {
         return 2
@@ -18,16 +17,18 @@ class ViewPagerCommentAdapter(fm : FragmentManager, lifecycle: Lifecycle,private
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> {
-                val fragment = MyCommentFragment()
+                val fragment = MyNoteFragment()
                 val bundle = Bundle()
-                bundle.putString("favUser", favUser)
+                bundle.putString("favorite", favorite)
+                bundle.putString("isUserOrRepository", isUserOrRepository)
                 fragment.arguments = bundle
                 fragment
             }
             1 -> {
-                val fragment = AllCommentFragment()
+                val fragment = AllNoteFragment()
                 val bundle = Bundle()
-                bundle.putString("favUser", favUser)
+                bundle.putString("favorite", favorite)
+                bundle.putString("isUserOrRepository", isUserOrRepository)
                 fragment.arguments = bundle
                 fragment
             }

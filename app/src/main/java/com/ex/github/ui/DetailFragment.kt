@@ -16,7 +16,6 @@ import com.ex.github.Color
 import com.ex.github.ImageLoad
 import com.ex.github.R
 import com.ex.github.ViewModel.DetailViewModel
-import com.ex.github.databinding.FragmentAllCommentBinding
 import com.ex.github.databinding.FragmentDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -107,12 +106,12 @@ class DetailFragment @Inject constructor() : Fragment() {
 
 
             lifecycleScope.launch {
+                // Kullanıcının  fav olup olmadığına bakılır. (kalp rengi için)
                 var currentUser = "mojombo" // Login yaptıktan sonra loginden al
                 var listFavUsers = viewModel.showFavoriteUser(
                     currentUser,
                     requireContext()
                 )
-                Log.d("xxxListFavUsersDetail", listFavUsers.toString())
 
                 if (listFavUsers.contains(name)) {
                     binding.ivFav.Color(R.color.red)

@@ -39,15 +39,11 @@ class PageFollowingFragment : Fragment() {
 
         binding = FragmentPageFollowingBinding.inflate(inflater, container, false)
 
-        //  binding.tvFollowing.text = "Following"
-
-
+        var currentUser = arguments?.getString("login")
                 lifecycleScope.launch {
 
-                    var currentUser = arguments?.getString("login")
                     var list = currentUser?.let { viewModel.getShowUserFollowing(it) }
                     Log.d("xxxxcurrentUser2", currentUser.toString())
-
 
                     if (list != null) {
                         adapter = FollowingAdapter(list)

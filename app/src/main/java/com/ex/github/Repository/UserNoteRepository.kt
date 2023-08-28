@@ -2,7 +2,7 @@ package com.ex.github.Repository
 
 
 import android.util.Log
-import com.ex.github.Comment
+import com.ex.github.Note
 import com.google.firebase.database.FirebaseDatabase
 import java.lang.Exception
 import javax.inject.Inject
@@ -10,20 +10,23 @@ import javax.inject.Inject
 class UserNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
 
-    private val databaseReferenceComment =
-        database.getReference("Comment")
+    private val databaseReferenceNote =
+        database.getReference("Note")
 
 
-    suspend fun addComment(
+    suspend fun addNote(
         login: String,
-        commentToUser : String,
-        comment: String
-    ): Boolean {
+        noteToUserOrRepository : String,
+        note: String,
+        isUserOrRepository : String
+    ): Boolean {             // var key = databaseReferenceNote.push().getKey()
         try {
-            val userComment = Comment(login, commentToUser, comment)
-            // var key = databaseReferenceCustomer.push().getKey()
-            databaseReferenceComment.child(login).child(commentToUser)//.child(key)
-                .setValue(userComment)
+            val userNote = Note(login, noteToUserOrRepository, note)
+            if (isUserOrRepository == "User") {
+                databaseReferenceNote.child("User").child(login).child(noteToUserOrRepository).setValue(userNote)
+            } else if (isUserOrRepository == "Repository") {
+                databaseReferenceNote.child("Repository").child(login).child(noteToUserOrRepository).setValue(userNote)
+            }
             return true
         } catch (e: Exception) {
             Log.d("Hata", e.message.toString())

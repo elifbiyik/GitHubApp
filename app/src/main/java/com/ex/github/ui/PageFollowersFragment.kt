@@ -1,5 +1,6 @@
 package com.ex.github.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -30,6 +31,7 @@ class PageFollowersFragment() : Fragment() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,9 +44,6 @@ class PageFollowersFragment() : Fragment() {
             lifecycleScope.launch {
                 var list = currentUser?.let { viewModel.getShowUserFollowers(it) }
 
-                Log.d("xxxxcurrentUser", currentUser.toString())
-
-
                 if (list != null) {
                     Log.d("xxxx", list.toString())
 
@@ -56,7 +55,6 @@ class PageFollowersFragment() : Fragment() {
                         viewLifecycleOwner,
                         Observer {
                             if (it.isNotEmpty()) {
-                                //                        binding.progressBar.visibility = View.GONE
                                 adapter.list = it
                                 adapter.notifyDataSetChanged()
                             }

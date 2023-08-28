@@ -36,24 +36,19 @@ class FavoriteUserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentFavoriteUserBinding.inflate(inflater, container, false)
-
-
 
         lifecycleScope.launch {
             binding.progressBar.visibility = View.VISIBLE
 
             var currentUser = "mojombo"  //Login yaptıktan sonra loginden al
             var list = viewModel.showFavoriteUser(currentUser, requireContext())
-            Log.d("xxxxFavListFav", list.toString())
-
-
 
             adapter = FavoriteUserAdapter(list){
-
                 var favUser = it.login.toString() //bindingItem.tvName.text.toString()
                 //tıklanan user
-                var fragment = UserNote()
+                var fragment = UserNoteFragment()
                 var bundle = Bundle()
                 bundle.putString("favUser", favUser)
                 fragment.arguments = bundle
