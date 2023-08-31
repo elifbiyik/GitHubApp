@@ -22,8 +22,7 @@ class DetailRepository @Inject constructor(
 ) {
 
 
-    private val databaseReferenceUser =
-        database.getReference("User")
+    private val databaseReferenceUser = database.getReference("Favorite User")
 
 
     suspend fun getShowUser(clickedUserLogin: String): User {
@@ -42,7 +41,7 @@ class DetailRepository @Inject constructor(
         return suspendCoroutine { continuation ->
             try {
                 val userList: ArrayList<String> = ArrayList()
-                val databaseReference = database.getReference("User/${loginUser}")
+                val databaseReference = databaseReferenceUser.child(loginUser)
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -84,7 +83,7 @@ class DetailRepository @Inject constructor(
             var isValid = false
             var userList: ArrayList<String> = ArrayList()
 
-            var databaseReference = database.getReference("User/${loginUser}")
+            val databaseReference = databaseReferenceUser.child(loginUser)
             var getData = object : ValueEventListener {
                 @SuppressLint("SuspiciousIndentation")
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -122,7 +121,7 @@ class DetailRepository @Inject constructor(
         loginUser: String,
         favUser: String
     ) {
-        database.getReference("User/${loginUser}").child(favUser).removeValue()
+        databaseReferenceUser.child(loginUser).child(favUser).removeValue()
     }
 
 

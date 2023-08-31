@@ -70,4 +70,6 @@ object AppModuleAppModule {
     fun provideFirebaseDatabase(): FirebaseDatabase {
         return FirebaseDatabase.getInstance()
     }
+
+
 }

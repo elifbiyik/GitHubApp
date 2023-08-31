@@ -8,9 +8,11 @@ import com.ex.github.User
 import com.ex.github.databinding.FragmentPageFollowersItemBinding
 
 
-class FollowerAdapter(var list : List<User> ) : RecyclerView.Adapter<FollowerAdapter.ViewHolder> () {
+class FollowerAdapter(var list: List<User>, private val onClick: (User) -> Unit) :
+    RecyclerView.Adapter<FollowerAdapter.ViewHolder>() {
 
-    inner class ViewHolder (var binding : FragmentPageFollowersItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(var binding: FragmentPageFollowersItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(followerList: User) {
 
@@ -18,6 +20,8 @@ class FollowerAdapter(var list : List<User> ) : RecyclerView.Adapter<FollowerAda
                 tvName.text = followerList.login
                 tvLogin.text = followerList.html_url
                 binding.imageView.ImageLoad(followerList.avatar_url.toString())
+
+                root.setOnClickListener {onClick(followerList)}
             }
         }
     }
@@ -31,9 +35,7 @@ class FollowerAdapter(var list : List<User> ) : RecyclerView.Adapter<FollowerAda
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var followers = list[position]
-        if (followers != null) {
-            holder.bind(followers)
-        }
+        holder.bind(followers)
 
     }
 

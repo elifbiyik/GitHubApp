@@ -9,5 +9,7 @@ data class User(
     var public_gists: String? = null,
     var followers: String? = null,
     var following: String? = null,
-    var html_url: String? = null
+    var html_url: String? = null,
+    var password: String? = null,
+    var phoneNumber: String? = null
 )

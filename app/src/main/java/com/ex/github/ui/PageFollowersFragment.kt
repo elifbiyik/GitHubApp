@@ -12,8 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.FollowerAdapter
+import com.ex.github.R
 import com.ex.github.ViewModel.PageFollowersViewModel
 import com.ex.github.databinding.FragmentPageFollowersBinding
+import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -45,7 +47,16 @@ class PageFollowersFragment() : Fragment() {
                 var list = clickedUserLogin?.let { viewModel.getShowUserFollowers(it) }
 
                 if (list != null) {
-                    adapter = FollowerAdapter(list)
+                    adapter = FollowerAdapter(list) {
+                        var fragment = DetailFragment()
+                        var bundle = Bundle().apply {
+                            putString("clickedUserLogin", it.login)
+                            putString("clickedUserHtmlUrl", it.html_url)
+                            putString("clickedUserAvatarUrl", it.avatar_url)
+                        }
+                        fragment.arguments = bundle
+                        replace(fragment)
+                    }
                     binding.recyclerview.adapter = adapter
                     binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 

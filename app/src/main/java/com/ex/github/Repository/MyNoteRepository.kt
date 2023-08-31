@@ -16,6 +16,9 @@ import kotlin.coroutines.suspendCoroutine
 
 class MyNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
+    private val databaseReferenceNoteForUser = database.getReference("Note/Favorite User")
+
+    private val databaseReferenceNoteForRepository = database.getReference("Note/Favorite Repository")
 
     suspend fun getMyNote(loginUser: String, noteToFavUser: String, isUserOrRepo: String): ArrayList<Note> {
         return suspendCoroutine { continuation ->
@@ -23,9 +26,10 @@ class MyNoteRepository @Inject constructor(private var database: FirebaseDatabas
                 val noteList: ArrayList<Note> = ArrayList()
                 val databaseReference: DatabaseReference?
                 if (isUserOrRepo == "User") {
-                    databaseReference = database.getReference("Note/User/${loginUser}")
+                    databaseReference = databaseReferenceNoteForUser.child(loginUser)
+
                 } else if (isUserOrRepo == "Repository") {
-                    databaseReference = database.getReference("Note/Repository/${loginUser}")
+                    databaseReference = databaseReferenceNoteForRepository.child(loginUser)
                 }else {
                     // Eğer isUserOrRepo ne "User" ne de "Repository" değilse, hata durumu
                     continuation.resumeWithException(IllegalArgumentException("Invalid value for isUserOrRepo"))

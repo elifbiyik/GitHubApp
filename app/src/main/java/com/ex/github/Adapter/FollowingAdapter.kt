@@ -8,7 +8,7 @@ import com.ex.github.User
 import com.ex.github.databinding.FragmentPageFollowingItemBinding
 
 
-class FollowingAdapter(var list : List<User> ) : RecyclerView.Adapter<FollowingAdapter.ViewHolder> () {
+class FollowingAdapter(var list : List<User>, private val onClick : (User) -> Unit ) : RecyclerView.Adapter<FollowingAdapter.ViewHolder> () {
 
     inner class ViewHolder (var binding : FragmentPageFollowingItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -18,6 +18,7 @@ class FollowingAdapter(var list : List<User> ) : RecyclerView.Adapter<FollowingA
                 tvLogin.text = followingList.html_url
                 binding.imageView.ImageLoad(followingList.avatar_url.toString())
 
+                root.setOnClickListener {onClick(followingList) }
             }
         }
     }

@@ -16,15 +16,19 @@ import kotlin.coroutines.suspendCoroutine
 
 class AllNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
+    private val databaseReferenceNoteForUser = database.getReference("Note/Favorite User")
+
+    private val databaseReferenceNoteForRepository = database.getReference("Note/Favorite Repository")
+
     suspend fun getAllNote(noteToFavUser: String, isUserOrRepository: String): ArrayList<Note> {
         return suspendCoroutine { continuation ->
             try {
                 val noteAllList: ArrayList<Note> = ArrayList()
                 val databaseReference: DatabaseReference  // databaseReference'ı burada tanımla
                 if (isUserOrRepository == "User") {
-                    databaseReference = database.getReference("Note/User")
+                    databaseReference = databaseReferenceNoteForUser
                 } else if (isUserOrRepository == "Repository") {
-                    databaseReference = database.getReference("Note/Repository")
+                    databaseReference = databaseReferenceNoteForRepository
                 }else {
                     // Eğer isUserOrRepo ne "User" ne de "Repository" değilse, hata durumu
                     continuation.resumeWithException(IllegalArgumentException("Invalid value for isUserOrRepo"))
@@ -56,7 +60,6 @@ class AllNoteRepository @Inject constructor(private var database: FirebaseDataba
                     }
                 }
                 databaseReference.addListenerForSingleValueEvent(getData)
-                Log.d("xxxAllCom", noteAllList.toString())
             } catch (e: Exception) {
                 Log.d("Hata", e.message.toString())
                 continuation.resumeWithException(e) // Hata durumunda istisna fırlat

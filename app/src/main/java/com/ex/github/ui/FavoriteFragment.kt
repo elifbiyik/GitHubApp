@@ -1,10 +1,12 @@
 package com.ex.github.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.ex.github.Adapter.ViewPagerFavoriteAdapter
@@ -35,10 +37,6 @@ class FavoriteFragment : Fragment() {
 
         binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
-        adapter = ViewPagerFavoriteAdapter(childFragmentManager, lifecycle)
-        viewPager = binding.viewPager
-        viewPager.adapter = adapter
-
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
@@ -48,10 +46,10 @@ class FavoriteFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-
+        adapter = ViewPagerFavoriteAdapter(childFragmentManager, lifecycle)
+        viewPager = binding.viewPager
+        viewPager.adapter = adapter
 
         return binding.root
     }
-
-
 }

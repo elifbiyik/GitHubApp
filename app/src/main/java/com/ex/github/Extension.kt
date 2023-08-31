@@ -2,7 +2,9 @@ package com.ex.github
 
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.ex.github.ui.SignInFragment
 
 
 fun ImageView.ImageLoad(url: String) {
@@ -21,6 +23,15 @@ fun downloadImage(view: ImageView, url: String) {
 
 fun ImageView.Color(colorful: Int) {
     setColorFilter(ContextCompat.getColor(context,colorful))
+}
+
+
+fun Fragment.replace(fragment : Fragment){
+
+    requireActivity().supportFragmentManager.beginTransaction()
+        .replace(R.id.constraint, fragment)
+        .addToBackStack(null)
+        .commit()
 }
 
 

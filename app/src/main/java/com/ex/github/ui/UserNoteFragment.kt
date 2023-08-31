@@ -53,9 +53,6 @@ class UserNoteFragment : Fragment() {
             binding.textView.text = ""
         }
 
-
-        // TODO(butonu if else'lerin içine alsam ?? Firebasede Note/FavRepository ve Note/FavUser için)????
-        // TODO(Repository'i ekleyince current User null dönüyor)
         binding.btnSend.setOnClickListener {
             addNote(clickedFavUser, clickedFavRepo)
         }

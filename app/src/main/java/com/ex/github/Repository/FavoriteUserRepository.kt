@@ -17,6 +17,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class FavoriteUserRepository @Inject constructor(private var database: FirebaseDatabase) {
 
+    private val databaseReferenceUser = database.getReference("Favorite User")
+
     suspend fun showFavoriteUser(
         loginUser: String,
         context: Context
@@ -24,7 +26,7 @@ class FavoriteUserRepository @Inject constructor(private var database: FirebaseD
         return suspendCoroutine { continuation ->
             try {
                 val userList: ArrayList<User> = ArrayList()
-                val databaseReference = database.getReference("User/${loginUser}")
+                val databaseReference = databaseReferenceUser.child(loginUser)
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")
                     override fun onDataChange(snapshot: DataSnapshot) {

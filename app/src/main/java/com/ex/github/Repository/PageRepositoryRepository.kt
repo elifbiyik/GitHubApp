@@ -11,7 +11,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.core.Repo
 import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -24,7 +23,7 @@ class PageRepositoryRepository @Inject constructor(
 ) {
 
     private val databaseReferenceRepository =
-        database.getReference("Repository")
+        database.getReference("Favorite Repository")
 
 
     suspend fun getShowUserRepository(clickedUserLogin: String): List<Repositories> {
@@ -55,7 +54,6 @@ class PageRepositoryRepository @Inject constructor(
             try { // Giriş yapan kullanıcının bütün favoritelerini alıyor.
                 val favRepoList: ArrayList<Repositories> = ArrayList()
                 var favRepo = databaseReferenceRepository.child(loginUser)
-
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")
                     override fun onDataChange(snapshot: DataSnapshot) {

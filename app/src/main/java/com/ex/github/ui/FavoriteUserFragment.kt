@@ -15,6 +15,7 @@ import com.ex.github.Adapter.FavoriteUserAdapter
 import com.ex.github.R
 import com.ex.github.ViewModel.FavoriteUserViewModel
 import com.ex.github.databinding.FragmentFavoriteUserBinding
+import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -52,10 +53,7 @@ class FavoriteUserFragment : Fragment() {
                 bundle.putString("clickedFavUser", clickedFavUser)
                 fragment.arguments = bundle
 
-                requireActivity(). supportFragmentManager.beginTransaction()
-                    .replace(R.id.constraint, fragment)
-                    .addToBackStack(null)
-                    .commit()
+               replace(fragment)
             }
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())

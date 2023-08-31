@@ -14,6 +14,7 @@ import com.ex.github.Adapter.FavoriteRepositoryAdapter
 import com.ex.github.R
 import com.ex.github.ViewModel.FavoriteRepositoryViewModel
 import com.ex.github.databinding.FragmentFavoriteRepositoryBinding
+import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,10 +50,7 @@ class FavoriteRepositoryFragment : Fragment() {
                 bundle.putString("clickedFavRepo", clickedFavRepo)
                 fragment.arguments = bundle
 
-                requireActivity(). supportFragmentManager.beginTransaction()
-                    .replace(R.id.constraint, fragment)
-                    .addToBackStack(null)
-                    .commit()
+               replace(fragment)
             }
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())

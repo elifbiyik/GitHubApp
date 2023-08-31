@@ -16,6 +16,7 @@ import com.ex.github.Adapter.HomePageAdapter
 import com.ex.github.ViewModel.HomePageViewModel
 import com.ex.github.R
 import com.ex.github.databinding.FragmentHomePageBinding
+import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,24 +75,16 @@ class HomePageFragment : Fragment() {
 
         searchView()
 
-
         binding.ivFavorite.setOnClickListener {
             replace(FavoriteFragment())
         }
 
+        binding.ivAccount.setOnClickListener {
+            replace(AccountFragment())
+        }
 
         return binding.root
     }
-
-
-    fun replace(fragment: Fragment) {
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.constraint, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
 
     fun searchView() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,

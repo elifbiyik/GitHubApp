@@ -2,11 +2,11 @@ package com.ex.github.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -99,11 +99,6 @@ class DetailFragment @Inject constructor() : Fragment() {
                 viewPager.currentItem = 2
             }
 
-            //     binding.llGists.setOnClickListener {
-            //        viewPager.currentItem = 3
-//        }
-
-
             lifecycleScope.launch {
                 // Kullanıcının  fav olup olmadığına bakılır. (kalp rengi için)
                 var loginUser = "mojombo" // Login yaptıktan sonra loginden al
@@ -117,7 +112,9 @@ class DetailFragment @Inject constructor() : Fragment() {
                 } else {
                     binding.ivFav.Color(R.color.black)
                 }
+
                 binding.ivFav.setOnClickListener {
+                    Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show()
                     lifecycleScope.launch {
                         var listFavUsers = viewModel.showFavoriteUser(
                             loginUser,

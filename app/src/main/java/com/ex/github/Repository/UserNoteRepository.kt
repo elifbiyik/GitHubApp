@@ -10,9 +10,10 @@ import javax.inject.Inject
 class UserNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
 
-    private val databaseReferenceNote =
-        database.getReference("Note")
 
+    private val databaseReferenceNoteForUser = database.getReference("Note/Favorite User")
+
+    private val databaseReferenceNoteForRepository = database.getReference("Note/Favorite Repository")
 
     suspend fun addNote(
         loginUser: String,
@@ -23,9 +24,9 @@ class UserNoteRepository @Inject constructor(private var database: FirebaseDatab
         try {
             val userNote = Note(loginUser, noteToUserOrRepository, note)
             if (isUserOrRepository == "User") {
-                databaseReferenceNote.child("User").child(loginUser).child(noteToUserOrRepository).setValue(userNote)
+                databaseReferenceNoteForUser.child(loginUser).child(noteToUserOrRepository).setValue(userNote)
             } else if (isUserOrRepository == "Repository") {
-                databaseReferenceNote.child("Repository").child(loginUser).child(noteToUserOrRepository).setValue(userNote)
+                databaseReferenceNoteForRepository.child(loginUser).child(noteToUserOrRepository).setValue(userNote)
             }
             return true
         } catch (e: Exception) {
