@@ -4,7 +4,6 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.ex.github.ui.SignInFragment
 
 
 fun ImageView.ImageLoad(url: String) {

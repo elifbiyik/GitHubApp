@@ -1,7 +1,9 @@
 package com.ex.github.ViewModel
 
 import android.app.Activity
+import android.content.Context
 import android.telephony.PhoneNumberUtils
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,19 +18,24 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(var repository: SignInRepository) : ViewModel() {
 
-      var userMutableLiveData = MutableLiveData<Boolean>()
+    var userMutableLiveData = MutableLiveData<Boolean>()
 
-    suspend fun verify( activity: Activity ,phone : String) {
-        repository.verify(activity ,"+90$phone")
+    suspend fun verify(context: Context, activity: Activity, phone: String) {
+        repository.verify(activity, "+90$phone")
+
     }
 
-    suspend fun signIn(credential: PhoneAuthCredential){
-       /* var result = repository.signIn(credential)
-        userMutableLiveData.value = result
-        return result*/
+    fun getVerificationId(): String? {
+        return repository.getVerification()
     }
 
+    suspend  fun signInWithCredential(context: Context, credential: PhoneAuthCredential) : Boolean{
+       return repository.signIn(context, credential)
 
+    }
 
+    suspend fun isRegistered(phone: String): Boolean {
+        return repository.isRegistered(phone)
+    }
 
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ex.github.Repositories
 import com.ex.github.Repository.HomePageRepository
 import com.ex.github.User
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,5 +32,10 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
         var response = repository.getAllRepositories()
         var responseBody = response.filter { it.name.contains(search,ignoreCase = true) }
         filteredRepositoriesMutableLiveData.value = responseBody
+    }
+
+    fun currentUser(): FirebaseUser? {
+        Log.d("auth.currentUserVM", repository.currentUser().toString())
+        return repository.currentUser()
     }
 }

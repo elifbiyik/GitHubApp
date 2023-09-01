@@ -1,6 +1,8 @@
 package com.ex.github.ViewModel
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,16 +19,20 @@ class SignUpViewModel @Inject constructor(
 
     var userMutableLiveData = MutableLiveData<Boolean>()
 
-    suspend fun signUp(nameSurname: String, phone: String) {
-       if (nameSurname.isNullOrBlank() || phone.isNullOrBlank()) {
+    suspend fun signUp(nameSurname: String, phone: String, imageUri: Uri?) {
+        if (nameSurname.isNullOrBlank() || phone.isNullOrBlank()) {
             Toast.makeText(
                 context,
                 "Please enter your email, password or phone number",
                 Toast.LENGTH_SHORT
             ).show()
         } else {
-            val isValid = repository.signUp(nameSurname, phone)
+            val isValid = repository.signUp(nameSurname, phone, imageUri)
             userMutableLiveData.value = isValid
         }
+    }
+
+    fun uploadProfilePhoto(phone: String, imageUri: Uri?) {
+        repository.uploadProfilePhoto(phone, imageUri)
     }
 }

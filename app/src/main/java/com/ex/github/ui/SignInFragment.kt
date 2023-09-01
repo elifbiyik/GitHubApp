@@ -31,7 +31,7 @@ class SignInFragment : Fragment() {
     private val viewModel: SignInViewModel by viewModels()
 
 
-  //  private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    //  private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     //lateinit var verificationId: String
 
 
@@ -59,41 +59,60 @@ class SignInFragment : Fragment() {
 
         binding.btnSignIn.setOnClickListener {
             var phone = binding.etPhone.text.toString()
-            lifecycleScope.launch {
-                Log.d("Telefon numarası", phone)
 
-                viewModel.verify(requireActivity(), phone)
-                showAlertDialog(requireContext(), phone)
+            lifecycleScope.launch {
+                var isRegister = viewModel.isRegistered(phone)
+
+                if (phone.isEmpty()) {
+                    Toast.makeText(context, " Enter phone number", Toast.LENGTH_SHORT).show()
+                } else if (phone.length < 10) {
+                    Toast.makeText(context, "Missing", Toast.LENGTH_SHORT).show()
+                } else if (!isRegister) {
+                    Toast.makeText(context, " You must register", Toast.LENGTH_SHORT).show()
+                } else {
+                    lifecycleScope.launch {
+                        Log.d("Telefon numarası", phone)
+
+                        viewModel.verify(requireContext(), requireActivity(), phone)
+                        showAlertDialog(requireContext(), phone)
+                    }
+                }
             }
         }
         return binding.root
     }
 
-
     private fun showAlertDialog(context: Context, phone: String) {
-
         val inputEditTextField = EditText(requireActivity())
-
         val alertDialogBuilder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Verify")
         alertDialogBuilder.setMessage("Verification Code")
         alertDialogBuilder.setView(inputEditTextField)
 
         alertDialogBuilder.setPositiveButton("OK") { dialog, which ->
-            val verificationCode = inputEditTextField.text.toString()
+            val etVerificationCode = inputEditTextField.text.toString()
+            val verificationId = viewModel.getVerificationId()
 
+            lifecycleScope.launch {
+                val credential =
+                    PhoneAuthProvider.getCredential(verificationId.toString(), etVerificationCode)
+               var isSuccess =  viewModel.signInWithCredential(requireContext(), credential)
+                if(isSuccess){
 
-           /* val verificationId = viewModel.signIn()
-            if (verificationId != null) {
-                val credential = PhoneAuthProvider.getCredential(verificationId, verificationCode)
-                viewModel.signInWithCredential(credential)
-            } else {
-            }*/
+                    var fragment = AccountFragment()
+                    var bundle = Bundle()
+                    var phoneNumber = "+90$phone"
+                    bundle.putString("Phone", phoneNumber)
+                    Log.d("SİGNINFRAGMENT NUMBER", phoneNumber)
+                    Log.d("SİGNINFRAGMENT PHONE", phone)
+                    fragment.arguments = bundle
 
-
-
+                    replace(HomePageFragment())
+                }else{
+                    dialog.dismiss()
+                }
+            }
         }
-
 
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()

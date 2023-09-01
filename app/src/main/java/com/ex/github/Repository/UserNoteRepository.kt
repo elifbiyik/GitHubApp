@@ -9,10 +9,7 @@ import javax.inject.Inject
 
 class UserNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
-
-
     private val databaseReferenceNoteForUser = database.getReference("Note/Favorite User")
-
     private val databaseReferenceNoteForRepository = database.getReference("Note/Favorite Repository")
 
     suspend fun addNote(

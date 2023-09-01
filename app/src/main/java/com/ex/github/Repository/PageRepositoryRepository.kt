@@ -1,12 +1,9 @@
 package com.ex.github.Repository
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.ex.github.Api.ApiServise
 import com.ex.github.Repositories
-import com.ex.github.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

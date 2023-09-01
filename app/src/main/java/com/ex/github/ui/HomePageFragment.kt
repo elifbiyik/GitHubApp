@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.HomePageAdapter
 import com.ex.github.ViewModel.HomePageViewModel
-import com.ex.github.R
 import com.ex.github.databinding.FragmentHomePageBinding
 import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +41,9 @@ class HomePageFragment : Fragment() {
     ): View? {
 
         binding = FragmentHomePageBinding.inflate(inflater, container, false)
+
+        var x = viewModel.currentUser()
+        Log.d("auth.currentUserFrag", x.toString())
 
         lifecycleScope.launch(Dispatchers.Main) {
             binding.progressBar.visibility = View.VISIBLE
