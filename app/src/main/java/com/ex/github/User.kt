@@ -1,5 +1,7 @@
 package com.ex.github
 
+import android.net.Uri
+
 data class User(
     var login: String? = null,
     var avatar_url: String? = null,
@@ -11,5 +13,8 @@ data class User(
     var following: String? = null,
     var html_url: String? = null,
     var password: String? = null,
-    var phoneNumber: String? = null
+    var phoneNumber: String? = null,
+    var storage: Uri? = null,
+    var isFirebase: Boolean? = false
+
 )

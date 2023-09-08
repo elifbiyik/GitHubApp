@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import com.ex.github.Api.ApiServise
 import com.ex.github.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -18,26 +19,88 @@ import kotlin.coroutines.suspendCoroutine
 
 class DetailRepository @Inject constructor(
     var apiServise: ApiServise,
-    var database: FirebaseDatabase
+    var database: FirebaseDatabase,
+    var auth: FirebaseAuth
 ) {
-
 
     private val databaseReferenceUser = database.getReference("Favorite User")
 
-
-    suspend fun getShowUser(clickedUserLogin: String): User {
+    suspend fun getShowUserFromApi(clickedUserLogin: String): User {
         return apiServise.getShowUser(clickedUserLogin)
     }
 
+    suspend fun getShowUserFromFirebase(clickedUserLogin: String): User {
+        return suspendCoroutine { continuation ->
+            try {
+                val databaseReference =
+                    FirebaseDatabase.getInstance().getReference("User").child(clickedUserLogin)
+                val getData = object : ValueEventListener {
+                    @SuppressLint("SuspiciousIndentation")
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            var currentUserLogin =
+                                snapshot.child("login").getValue(String::class.java).toString()
+                            var currentUserPhone =
+                                snapshot.child("phoneNumber").getValue(String::class.java)
+                                    .toString()
 
-    // ValueEventListener kullanıldığında; callback veya asenkron kullan.
+                            continuation.resume(User(currentUserLogin, phoneNumber = currentUserPhone))
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+                }
+                databaseReference.addListenerForSingleValueEvent(getData)
+            } catch (e: Exception) {
+                Log.d("Hata", e.message.toString())
+                continuation.resumeWithException(e)
+            }
+        }
+    }
+
+
+    suspend fun currentUser(): List<String> {
+        var currentUserPhone = auth.currentUser?.phoneNumber.toString()
+        return suspendCoroutine { continuation ->
+            try {
+                val userInfoList: ArrayList<String> = ArrayList()
+                val databaseReference =
+                    FirebaseDatabase.getInstance().getReference("User").child(currentUserPhone)
+                val getData = object : ValueEventListener {
+                    @SuppressLint("SuspiciousIndentation")
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            var currentUserLogin =
+                                snapshot.child("login").getValue(String::class.java).toString()
+                            var currentUserPhone =
+                                snapshot.child("phoneNumber").getValue(String::class.java)
+                                    .toString()
+
+                            userInfoList.add(currentUserLogin)
+                            userInfoList.add(currentUserPhone)
+                            continuation.resume(userInfoList)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+                }
+                databaseReference.addListenerForSingleValueEvent(getData)
+            } catch (e: Exception) {
+                Log.d("Hata", e.message.toString())
+                continuation.resumeWithException(e)
+            }
+        }
+    }
 
     suspend fun showFavoriteUser(
         loginUser: String,
         context: Context
     ): ArrayList<String> {
 
-        // suspendCoroutine -> Asenkron işlem sonuçlarını dön.
         return suspendCoroutine { continuation ->
             try {
                 val userList: ArrayList<String> = ArrayList()
@@ -51,14 +114,14 @@ class DetailRepository @Inject constructor(
                                 userList.add(favUser)
                             }
                             continuation.resume(userList)
-                            // resume ->  Sonucu dön.
+                        } else {
+                            continuation.resume(ArrayList())
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(context, "You can't ! ", Toast.LENGTH_SHORT).show()
                         continuation.resumeWithException(error.toException())
-                        // resumeWithException -> Hata durumu
                     }
                 }
                 databaseReference.addListenerForSingleValueEvent(getData)
@@ -68,7 +131,6 @@ class DetailRepository @Inject constructor(
             }
         }
     }
-
 
     // login -> giriş yapılan kullanıcı
     // favUser -> Favorilere eklenmek istenen kullanıcı
@@ -124,7 +186,4 @@ class DetailRepository @Inject constructor(
         databaseReferenceUser.child(loginUser).child(favUser).removeValue()
     }
 
-
 }
-
-

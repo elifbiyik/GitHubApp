@@ -35,13 +35,14 @@
                 android:layout_marginTop="8dp"
                 android:gravity="start"
                 android:text="login"
-                android:textColor="@color/material_dynamic_neutral10"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.38"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
                 tools:ignore="MissingConstraints" />
+
+            <!--android:textColor="@color/material_dynamic_neutral10"-->
 
 
             <TextView

@@ -7,7 +7,6 @@ import com.ex.github.ImageLoad
 import com.ex.github.User
 import com.ex.github.databinding.FragmentFavoriteUserItemBinding
 
-
 class FavoriteUserAdapter(var list: List<User>, private val onClick : (User) -> Unit) :
     RecyclerView.Adapter<FavoriteUserAdapter.ViewHolder>() {
 

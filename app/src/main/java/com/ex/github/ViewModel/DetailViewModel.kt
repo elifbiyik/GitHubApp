@@ -1,7 +1,6 @@
 package com.ex.github.ViewModel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ex.github.Repository.DetailRepository
@@ -13,13 +12,19 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(var repository: DetailRepository) : ViewModel() {
 
     var currentUserMutableLiveData = MutableLiveData<User>()
+    var firebaseUserMutableLiveData = MutableLiveData<User>()
 
-    suspend fun getShowUser(clickedUserLogin: String): User {
-        var user = repository.getShowUser(clickedUserLogin)
+    suspend fun getShowUserFromApi(clickedUserLogin: String): User {
+        var user = repository.getShowUserFromApi(clickedUserLogin)
         currentUserMutableLiveData.value = user
         return user
     }
 
+    suspend fun getShowUserFromFirebase(clickedUserLogin: String) : User {
+        var user = repository.getShowUserFromFirebase(clickedUserLogin)
+        firebaseUserMutableLiveData.value = user
+        return user
+    }
 
     suspend fun addFavoriteUser(
         loginUser: String,
@@ -44,8 +49,10 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
         loginUser: String,
         favUser: String,
     ) {
-        var x = repository.removeFavoriteUser(loginUser, favUser)
-        Log.d("xxxVM", x.toString())
+        repository.removeFavoriteUser(loginUser, favUser)
     }
 
+    suspend fun currentUser(): List<String> {
+        return repository.currentUser()
+    }
 }

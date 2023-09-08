@@ -6,11 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.Note
 import com.ex.github.databinding.FragmentAllNoteItemBinding
 
-
 class AllNoteAdapter(var list : List<Note> ) : RecyclerView.Adapter<AllNoteAdapter.ViewHolder> () {
 
     inner class ViewHolder (var binding : FragmentAllNoteItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(notes : Note) {
             with(binding) {
                 tvName.text = notes.note
@@ -30,7 +28,6 @@ class AllNoteAdapter(var list : List<Note> ) : RecyclerView.Adapter<AllNoteAdapt
         if (note != null) {
             holder.bind(note)
         }
-
     }
 
     override fun getItemCount(): Int {

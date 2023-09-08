@@ -15,10 +15,13 @@ class FavoriteUserViewModel @Inject constructor(var repository: FavoriteUserRepo
 
     suspend fun showFavoriteUser(
         loginUser: String,
-        context: Context
     ): ArrayList<User> {
-        var users = repository.showFavoriteUser(loginUser, context)
+        var users = repository.showFavoriteUser(loginUser)
         currentUserFavoriteUserMutableLiveData.value = users
         return users
+    }
+
+    suspend fun currentUser (): List<String> {
+        return repository.currentUser()
     }
 }

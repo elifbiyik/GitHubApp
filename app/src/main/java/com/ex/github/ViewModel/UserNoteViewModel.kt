@@ -12,9 +12,12 @@ class UserNoteViewModel @Inject constructor(private var repository : UserNoteRep
     var currentUserAddNoteMutableLiveData = MutableLiveData<Boolean>()
 
     suspend fun addNote(loginUser: String,noteToUserOrRepository : String, note: String, isUserOrRepository : String) : Boolean {
-
         var myNote = repository.addNote(loginUser, noteToUserOrRepository, note, isUserOrRepository)
         currentUserAddNoteMutableLiveData.value = myNote
         return myNote
+    }
+
+    suspend fun currentUser (): List<String> {
+        return repository.currentUser()
     }
 }

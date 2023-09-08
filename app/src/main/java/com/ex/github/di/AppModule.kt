@@ -18,17 +18,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModuleAppModule {
 
-
-
-
+/*
         @Provides
         @Singleton
         fun provideOkHttpClient(): OkHttpClient {
             return OkHttpClient.Builder().build()
         }
 
-/*
-      @Provides
+*/
+    @Provides
           @Singleton
           fun provideOkHttpClient(): OkHttpClient {
               return OkHttpClient.Builder()
@@ -41,7 +39,6 @@ object AppModuleAppModule {
                   .build()
           }
 
-*/
 
     @Provides
     @Singleton

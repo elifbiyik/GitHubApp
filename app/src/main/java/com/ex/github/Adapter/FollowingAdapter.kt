@@ -23,7 +23,6 @@ class FollowingAdapter(var list : List<User>, private val onClick : (User) -> Un
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowingAdapter.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = FragmentPageFollowingItemBinding.inflate(inflater, parent, false)

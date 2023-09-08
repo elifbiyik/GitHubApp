@@ -1,7 +1,6 @@
 package com.ex.github.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.HomePageAdapter
+import com.ex.github.Repositories
+import com.ex.github.User
 import com.ex.github.ViewModel.HomePageViewModel
 import com.ex.github.databinding.FragmentHomePageBinding
 import com.ex.github.replace
@@ -35,6 +36,17 @@ class HomePageFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        viewModel.usersMutableLiveData.observe(viewLifecycleOwner, Observer {
+            if (it.isNotEmpty()) {
+                adapter.list = it
+                adapter.notifyDataSetChanged()
+            }
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,19 +54,33 @@ class HomePageFragment : Fragment() {
 
         binding = FragmentHomePageBinding.inflate(inflater, container, false)
 
-        var x = viewModel.currentUser()
-        Log.d("auth.currentUserFrag", x.toString())
-
         lifecycleScope.launch(Dispatchers.Main) {
             binding.progressBar.visibility = View.VISIBLE
+            var listUsers = viewModel.getAllUsers()
+            var listRepo = viewModel.getAllRepositories()
 
-            var list = viewModel.getAllUsers()
+            var list = listUsers + listRepo
+
             adapter = HomePageAdapter(list) {
                 val fragment = DetailFragment().apply {
                     val bundle = Bundle().apply {
-                        putString("clickedUserLogin", it.login)
-                        putString("clickedUserHtmlUrl", it.html_url)
-                        putString("clickedUserAvatarUrl", it.avatar_url)
+                        when (it) {
+                            is User -> {
+                                if (!it.isFirebase!!) {
+                                    putString("clickedUserLogin", it.login)
+                                    putString("clickedUserHtmlUrl", it.html_url)
+                                    putString("clickedUserAvatarUrl", it.avatar_url)
+                                } else {
+                                    putString("clickedUserLogin", it.login)
+                                    putString("clickedUserNumber", it.phoneNumber)
+                                }
+                            }
+
+                            is Repositories -> {
+                                putString("clickedRepoName", it.name)
+                                putString("clickedRepoIsWhose", it.full_name)
+                            }
+                        }
                     }
                     arguments = bundle
                 }
@@ -64,15 +90,7 @@ class HomePageFragment : Fragment() {
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-            viewModel.usersMutableLiveData.observe(viewLifecycleOwner) {
-                if (it.isNotEmpty()) {
-                    adapter.list = it
-                    adapter.notifyDataSetChanged()
-                    binding.progressBar.visibility = View.GONE
-                } else {
-                    Toast.makeText(requireContext(), "Unsuccesfull", Toast.LENGTH_SHORT).show()
-                }
-            }
+            binding.progressBar.visibility = View.GONE
         }
 
         searchView()
@@ -111,22 +129,12 @@ class HomePageFragment : Fragment() {
             viewModel.filterUsers(p0)
             viewModel.filterRepositories(p0)
 
-            viewModel.filteredUsersMutableLiveData.observe(viewLifecycleOwner, Observer {
+            viewModel.filteredMutableLiveData.observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty()) {
                     adapter.list = it
                     adapter.notifyDataSetChanged()
                 } else {
                     Toast.makeText(requireContext(), "Not Found User ", Toast.LENGTH_SHORT).show()
-                }
-            })
-
-            viewModel.filteredUsersMutableLiveData.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()) {
-                    adapter.list = it
-                    adapter.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(requireContext(), "Not Found Repository ", Toast.LENGTH_SHORT)
-                        .show()
                 }
             })
         }

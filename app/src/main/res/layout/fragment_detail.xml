@@ -18,8 +18,10 @@
             android:id="@+id/appBarLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/material_dynamic_neutral95"
             tools:ignore="MissingConstraints">
+<!--
+            android:background="@color/material_dynamic_neutral95"
+-->
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsingToolbarLayout"
@@ -60,12 +62,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:textColor="@color/material_dynamic_neutral10"
                             android:textSize="18sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.369"
                             app:layout_constraintStart_toEndOf="@+id/imageUser"
                             app:layout_constraintTop_toTopOf="@+id/imageUser" />
+<!--
+                        android:textColor="@color/material_dynamic_neutral10"
+-->
 
 
                         <TextView
@@ -74,12 +78,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="14dp"
 
-                            android:textColor="@color/material_dynamic_neutral10"
                             android:textSize="14sp"
                             app:layout_constraintEnd_toEndOf="@+id/tvName"
                             app:layout_constraintStart_toStartOf="@+id/tvName"
                             app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
+<!--
+                        android:textColor="@color/material_dynamic_neutral10"
+-->
 
                         <TextView
                             android:id="@+id/tvUrl"
@@ -87,12 +93,16 @@
                             android:layout_height="wrap_content"
 
                             android:textAlignment="center"
-                            android:textColor="@android:color/holo_blue_dark"
                             android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="@+id/imageUser"
                             app:layout_constraintEnd_toEndOf="@+id/tvLogin"
                             app:layout_constraintStart_toStartOf="@+id/tvLogin"
                             app:layout_constraintTop_toBottomOf="@+id/tvLogin" />
+
+<!--
+                        android:textColor="@android:color/holo_blue_dark"
+-->
+
 
                         <ImageView
                             android:id="@+id/iv_fav"
@@ -121,6 +131,7 @@
                         app:cardElevation="8dp">
 
                         <LinearLayout
+                            android:id="@+id/linear"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"

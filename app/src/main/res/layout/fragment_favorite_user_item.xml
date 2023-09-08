@@ -33,7 +33,6 @@
                 android:layout_marginTop="8dp"
                 android:gravity="start"
                 android:text="login"
-                android:textColor="@color/material_dynamic_neutral10"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.38"

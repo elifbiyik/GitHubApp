@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.ex.github.Api.ApiServise
 import com.ex.github.Repositories
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -16,17 +17,16 @@ import kotlin.coroutines.suspendCoroutine
 
 class PageRepositoryRepository @Inject constructor(
     var apiServise: ApiServise,
-    var database: FirebaseDatabase
+    var database: FirebaseDatabase,
+    var auth: FirebaseAuth
 ) {
 
     private val databaseReferenceRepository =
         database.getReference("Favorite Repository")
 
-
     suspend fun getShowUserRepository(clickedUserLogin: String): List<Repositories> {
         return apiServise.getShowUserRepository(clickedUserLogin)
     }
-
 
     suspend fun addFavoriteRepository(loginUser: String, clickedUserLogin: String, repositoryName: String) {
         try {
@@ -46,9 +46,8 @@ class PageRepositoryRepository @Inject constructor(
     }
 
     suspend fun getAllList(loginUser: String) : ArrayList<Repositories> {
-
         return suspendCoroutine { continuation ->
-            try { // Giriş yapan kullanıcının bütün favoritelerini alıyor.
+            try {
                 val favRepoList: ArrayList<Repositories> = ArrayList()
                 var favRepo = databaseReferenceRepository.child(loginUser)
                 val getData = object : ValueEventListener {
@@ -72,8 +71,7 @@ class PageRepositoryRepository @Inject constructor(
                             }
                             continuation.resume(favRepoList)
                         } else {
-                            continuation.resume(ArrayList()) // Boş liste döndürme
-
+                            continuation.resume(ArrayList())
                         }
                     }
 
@@ -83,6 +81,41 @@ class PageRepositoryRepository @Inject constructor(
                 }
                 favRepo.addListenerForSingleValueEvent(getData)
             } catch (e: Exception) {
+                continuation.resumeWithException(e)
+            }
+        }
+    }
+
+    suspend fun currentUser(): List<String> {
+        var currentUserPhone = auth.currentUser?.phoneNumber.toString()
+        return suspendCoroutine { continuation ->
+            try {
+                val userInfoList: ArrayList<String> = ArrayList()
+                val databaseReference =
+                    FirebaseDatabase.getInstance().getReference("User").child(currentUserPhone)
+                val getData = object : ValueEventListener {
+                    @SuppressLint("SuspiciousIndentation")
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            var currentUserLogin =
+                                snapshot.child("login").getValue(String::class.java).toString()
+                            var currentUserPhone =
+                                snapshot.child("phoneNumber").getValue(String::class.java)
+                                    .toString()
+
+                            userInfoList.add(currentUserLogin)
+                            userInfoList.add(currentUserPhone)
+                            continuation.resume(userInfoList)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+                }
+                databaseReference.addListenerForSingleValueEvent(getData)
+            } catch (e: Exception) {
+                Log.d("Hata", e.message.toString())
                 continuation.resumeWithException(e)
             }
         }

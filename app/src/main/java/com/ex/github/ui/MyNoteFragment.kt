@@ -1,7 +1,6 @@
 package com.ex.github.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -43,13 +42,13 @@ class MyNoteFragment : Fragment() {
         val isUserOrRepository = arguments?.getString("isUserOrRepository").toString()
 
         lifecycleScope.launch {
-            var loginUser = "mojombo"
+            var currentUser = viewModel.currentUser()
+            var loginUser = currentUser[0]
             var list = viewModel.getMyNote(loginUser, favorite, isUserOrRepository)
 
             adapter = MyNoteAdapter(list)
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
-
 
             viewModel.currentUserMyNoteMutableLiveData.observe(viewLifecycleOwner, Observer {
                 if (it.isNotEmpty()) {
@@ -59,9 +58,7 @@ class MyNoteFragment : Fragment() {
                     Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
                 }
             })
-
         }
-
         return binding.root
     }
 }

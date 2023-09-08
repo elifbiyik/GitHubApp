@@ -12,8 +12,6 @@ import com.ex.github.ui.PageRepositoryFragment
 
 class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val clickedUserLogin : String) :
     FragmentStateAdapter(fm, lifecycle) {
-//class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
-
 
     override fun getItemCount(): Int = 3
 

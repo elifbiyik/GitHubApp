@@ -23,7 +23,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/comment_background"
             android:padding="15dp">
 
 
@@ -33,7 +32,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="comment"
-                android:textColor="@color/material_dynamic_neutral10"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

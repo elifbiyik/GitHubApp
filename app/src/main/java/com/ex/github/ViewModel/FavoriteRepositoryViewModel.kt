@@ -19,5 +19,7 @@ class FavoriteRepositoryViewModel @Inject constructor(var repository: FavoriteRe
         return response
     }
 
-
+    suspend fun currentUser (): List<String> {
+        return repository.currentUser()
+    }
 }

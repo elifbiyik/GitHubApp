@@ -17,5 +17,4 @@ class AllNoteViewModel @Inject constructor(var repository: AllNoteRepository) : 
         currentUserAllNoteMutableLiveData.value = list
         return list
     }
-
 }

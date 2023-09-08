@@ -21,7 +21,6 @@ import javax.inject.Inject
 class SignInRepository @Inject constructor(private val auth: FirebaseAuth) {
 
     var verificationId: String? = null
-    var token: PhoneAuthProvider.ForceResendingToken? = null
     lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
     private val databaseReference: DatabaseReference =
@@ -31,7 +30,7 @@ class SignInRepository @Inject constructor(private val auth: FirebaseAuth) {
         return verificationId
     }
 
-    // 2-  Kodu doğrula
+    // 4 - Firebase oturum açma başlatılır. Duruma göre True - False döner
     suspend fun signIn(context:Context, credential: PhoneAuthCredential) : Boolean{
         return withContext(Dispatchers.Main) {
             try {
@@ -49,11 +48,13 @@ class SignInRepository @Inject constructor(private val auth: FirebaseAuth) {
             }
         }
     }
+
+    // 3 - Tel no doğru girilirse başlatır. Firebase oturum açma başlatır.
     fun signInCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
     }
 
-    // 1- Kodu gönder
+    // 1 - Doğrulama Kodu için istek gönder
     fun verify(activity: Activity, phone: String) {
         verificationCallbacks()
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -65,24 +66,23 @@ class SignInRepository @Inject constructor(private val auth: FirebaseAuth) {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
+    // 2 - doğrulama sırasındaki olaylar. Eğer başarılı olursa ;  verificationId oluşur.(doğrulama işlemi sırasında kullanılacaktır.)
     fun verificationCallbacks() {
         mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 signInCredential(credential)
-            }
+            } // Tel no doğrulama başarılıysa çağrılır. Tel no bilgilerini içeririr.signInCredential'e verir
 
             override fun onVerificationFailed(p0: FirebaseException) {
                 Log.d("Failed", "Failed")
-            }
+            } // Tel no doğrulama başarısızsa
 
             override fun onCodeSent(
                 verificationId: String,
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
                 this@SignInRepository.verificationId = verificationId
-                this@SignInRepository.token = token
-                Log.d("TOKEN", token.toString())
-            }
+            } // Doğ. Kod başarılıysa verificaitonId gönderilir. Kimlik doğrulama işlemi sırasında eşleştirmek için kul.
         }
     }
 
@@ -99,6 +99,10 @@ class SignInRepository @Inject constructor(private val auth: FirebaseAuth) {
         } catch (e: Exception) {
             false
         }
+    }
+
+    fun currentUser(): String {
+        return auth.currentUser?.uid ?: ""
     }
 }
 

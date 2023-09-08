@@ -7,7 +7,6 @@ import com.ex.github.ImageLoad
 import com.ex.github.User
 import com.ex.github.databinding.FragmentPageFollowersItemBinding
 
-
 class FollowerAdapter(var list: List<User>, private val onClick: (User) -> Unit) :
     RecyclerView.Adapter<FollowerAdapter.ViewHolder>() {
 
@@ -26,7 +25,6 @@ class FollowerAdapter(var list: List<User>, private val onClick: (User) -> Unit)
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowerAdapter.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = FragmentPageFollowersItemBinding.inflate(inflater, parent, false)
@@ -36,7 +34,6 @@ class FollowerAdapter(var list: List<User>, private val onClick: (User) -> Unit)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var followers = list[position]
         holder.bind(followers)
-
     }
 
     override fun getItemCount(): Int {

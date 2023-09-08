@@ -18,4 +18,7 @@ class MyNoteViewModel @Inject constructor(var repository: MyNoteRepository) : Vi
         return list
     }
 
+    suspend fun currentUser (): List<String> {
+        return repository.currentUser()
+    }
 }

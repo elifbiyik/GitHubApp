@@ -15,11 +15,14 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.ex.github.ImageLoad
+import com.ex.github.Adapter.ViewPagerAccountAdapter
 import com.ex.github.R
 import com.ex.github.ViewModel.AccountViewModel
 import com.ex.github.databinding.FragmentAccountBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,6 +31,8 @@ class AccountFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountBinding
     private val viewModel: AccountViewModel by viewModels()
+    private lateinit var viewPager: ViewPager2
+    private lateinit var adapter: ViewPagerAccountAdapter
 
     private var imageUri: Uri? = null
     private val REQUEST_IMAGE_GALLERY = 1
@@ -45,13 +50,23 @@ class AccountFragment : Fragment() {
 
         binding = FragmentAccountBinding.inflate(inflater, container, false)
 
-        var phone = arguments?.getString("Phone").toString() //"+905453950891"
-        binding.accPhone.setText(phone)
+        noteListPager()
 
-        viewModel.getPhoto(phone)
+        lifecycleScope.launch {
+            var list = viewModel.currentUser()
+            var nameSurname = list[0]
+            var phone = list[1]
+            binding.accNameSurname.setText(nameSurname)
+            binding.accPhone.setText(phone)
 
-        binding.accPhone.isEnabled = false
-        binding.accNameSurname.isEnabled = false
+            binding.accPhone.isEnabled = false
+            binding.accNameSurname.isEnabled = false
+
+            viewModel.getPhoto("+90${phone}")
+            
+            var size = viewModel.showFavoriteUser(nameSurname)
+            binding.tvFollowing.text = size.toString()
+        }
 
         binding.edit.setOnClickListener {
             if (binding.edit.text == "Done") {
@@ -78,27 +93,31 @@ class AccountFragment : Fragment() {
             dialog.show()
         }
 
-
         viewModel.userProfilePhotoMutableLiveData.observe(viewLifecycleOwner, Observer { uri ->
             Glide.with(requireContext())
                 .load(uri)
                 .into(binding.accIm)
         })
+
+        binding.signOut.setOnClickListener {
+            viewModel.signOut()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.constraint, SignInFragment()).addToBackStack(null).commit()
+        }
+
         return binding.root
     }
 
     override fun onPause() {
         super.onPause()
-
         lifecycleScope.launch {
             var phone = binding.accPhone.text.toString()
-            viewModel.updateUserProfilePhoto(phone, imageUri)
+            viewModel.updateUserProfilePhoto("+90${phone}", imageUri)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_IMAGE_GALLERY -> {
@@ -108,5 +127,28 @@ class AccountFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun noteListPager() {
+        adapter = ViewPagerAccountAdapter(childFragmentManager, lifecycle)
+        viewPager = binding.viewPager
+        viewPager.adapter = adapter
+
+        TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "My Note"
+                1 -> tab.text = "All Note"
+                else -> tab.text = "Undefined"
+            }
+        }.attach()
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
     }
 }

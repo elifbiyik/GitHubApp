@@ -2,7 +2,6 @@ package com.ex.github.ui
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -27,11 +26,8 @@ class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
     private val viewModel: SignUpViewModel by viewModels()
-
     private var imageUri: Uri? = null
-
     private val REQUEST_IMAGE_GALLERY = 1
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +44,6 @@ class SignUpFragment : Fragment() {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         binding.uploadProfilePhoto.setOnClickListener {
-
             val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog)
             builder.setTitle("Select Image")
             builder.setMessage("Choose your option")
@@ -62,14 +57,11 @@ class SignUpFragment : Fragment() {
             dialog.show()
         }
 
-
-
         binding.btnSignUp.setOnClickListener {
-            var nameSurname = binding.etNameSurname.text.toString()
             var phone = binding.etPhone.text.toString()
-
+            var nameSurname = binding.etNameSurname.text.toString()
             lifecycleScope.launch {
-                viewModel.signUp(nameSurname, phone, imageUri)
+                viewModel.signUp(nameSurname, phone)
             }
         }
 
@@ -87,16 +79,21 @@ class SignUpFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-
         lifecycleScope.launch {
            var phone = binding.etPhone.text.toString()
-            viewModel.uploadProfilePhoto(phone, imageUri)
+            if(imageUri != null) {
+                viewModel.uploadProfilePhoto(phone, imageUri)
+            } else {
+                val drawableResId = R.drawable.ic_account_circle_24
+                val uri = Uri.parse("android.resource://com.ex.github/$drawableResId")
+                viewModel.uploadProfilePhoto(phone, uri)
+            }
+
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
 
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {

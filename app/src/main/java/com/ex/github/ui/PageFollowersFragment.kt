@@ -2,7 +2,6 @@ package com.ex.github.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.FollowerAdapter
-import com.ex.github.R
 import com.ex.github.ViewModel.PageFollowersViewModel
 import com.ex.github.databinding.FragmentPageFollowersBinding
 import com.ex.github.replace
@@ -45,7 +43,6 @@ class PageFollowersFragment() : Fragment() {
 
             lifecycleScope.launch {
                 var list = clickedUserLogin?.let { viewModel.getShowUserFollowers(it) }
-
                 if (list != null) {
                     adapter = FollowerAdapter(list) {
                         var fragment = DetailFragment()

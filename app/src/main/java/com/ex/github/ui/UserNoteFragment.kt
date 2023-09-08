@@ -1,7 +1,6 @@
 package com.ex.github.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.ex.github.Adapter.ViewPagerNoteAdapter
 import com.ex.github.ViewModel.UserNoteViewModel
 import com.ex.github.databinding.FragmentUserNoteBinding
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,9 +39,7 @@ class UserNoteFragment : Fragment() {
 
         // Eğer ?: "" yazılmazsa ; favUser != null' is always 'true' oluyor. Repository için binding.textView.text = null oluyor
         var clickedFavUser = arguments?.getString("clickedFavUser") ?: ""
-        // Tıklanan user
         var clickedFavRepo = arguments?.getString("clickedFavRepo") ?: ""
-        // Tıklanan user
 
         if (clickedFavUser.isNotEmpty()) {
             binding.textView.text = clickedFavUser
@@ -59,10 +57,20 @@ class UserNoteFragment : Fragment() {
         return binding.root
     }
 
-    fun noteListPager(favorite: String, isUserOrRepository : String) {
-        adapter = ViewPagerNoteAdapter(childFragmentManager, lifecycle, favorite, isUserOrRepository)
+    fun noteListPager(favorite: String, isUserOrRepository: String) {
+        adapter =
+            ViewPagerNoteAdapter(childFragmentManager, lifecycle, favorite, isUserOrRepository)
         viewPager = binding.viewPager
         viewPager.adapter = adapter
+
+        TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "My Note"
+                1 -> tab.text = "All Note"
+                else -> tab.text = "Undefined"
+            }
+        }.attach()
+
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -75,11 +83,11 @@ class UserNoteFragment : Fragment() {
     }
 
     fun addNote(clickedFavUser: String?, clickedFavRepo: String?) {
-
-        var loginUser = "mojombo"
-        var note = binding.etNote.text.toString()
-
         lifecycleScope.launch {
+            var list = viewModel.currentUser()
+            var loginUser = list[0]
+            var note = binding.etNote.text.toString()
+
             if (clickedFavUser?.isNotEmpty() == true) {
                 var isAdded = viewModel.addNote(loginUser, clickedFavUser, note, "User")
                 if (isAdded) {

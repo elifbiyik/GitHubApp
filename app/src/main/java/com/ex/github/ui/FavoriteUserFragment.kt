@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.FavoriteUserAdapter
-import com.ex.github.R
 import com.ex.github.ViewModel.FavoriteUserViewModel
 import com.ex.github.databinding.FragmentFavoriteUserBinding
 import com.ex.github.replace
@@ -43,18 +42,20 @@ class FavoriteUserFragment : Fragment() {
         lifecycleScope.launch {
             binding.progressBar.visibility = View.VISIBLE
 
-            var loginUser = "mojombo"  //Login yaptıktan sonra loginden al
-            var list = viewModel.showFavoriteUser(loginUser, requireContext())
+            var currentUser = viewModel.currentUser()
+            var loginUser = currentUser[0]
+            var list = viewModel.showFavoriteUser(loginUser)
 
-            adapter = FavoriteUserAdapter(list){
+            adapter = FavoriteUserAdapter(list) {
                 var clickedFavUser = it.login.toString()
                 var fragment = UserNoteFragment()
                 var bundle = Bundle()
                 bundle.putString("clickedFavUser", clickedFavUser)
                 fragment.arguments = bundle
 
-               replace(fragment)
+                replace(fragment)
             }
+
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 

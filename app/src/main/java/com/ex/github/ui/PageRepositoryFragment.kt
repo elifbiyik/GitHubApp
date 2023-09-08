@@ -1,12 +1,15 @@
 package com.ex.github.ui
 
 import android.annotation.SuppressLint
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -35,26 +38,30 @@ class PageRepositoryFragment() : Fragment() {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentPageRepositoryBinding.inflate(inflater, container, false)
-        bindingItem = FragmentPageRepositoryItemBinding.inflate(inflater, container, false)
 
-        bindingItem.tvName.visibility = View.GONE
-
-        val loginUser = "mojombo"
-        val clickedUserLogin = arguments?.getString("clickedUserLogin")
+        val clickedUserLogin = arguments?.getString("clickedUserLogin").toString()
 
         lifecycleScope.launch {
+            var currentUser = viewModel.currentUser()
+            var loginUser = currentUser[0]
             var list = clickedUserLogin?.let { viewModel.getShowUserRepository(it) }
+
             if (list != null) {
-                adapter = RepositoryAdapter(list) { it, it1 ->
-                    // Yıldıza tıklandığında ;
-                    isFavorite(it, loginUser, clickedUserLogin.toString(), it1.name)
+                var listFavoriteRepository = viewModel.getAllList(loginUser)
+                adapter = RepositoryAdapter(
+                    list,
+                    listFavoriteRepository,
+                    clickedUserLogin,
+                    viewModel
+                ){
+                    if(it.isFavorite) {
+                        viewModel.addFavoriteRepository(loginUser, clickedUserLogin, it.name)
+                    }else {
+                        viewModel.deleteFavoriteRepository(loginUser, it.name)
+                    }
                 }
 
                 binding.recyclerview.adapter = adapter
@@ -68,17 +75,45 @@ class PageRepositoryFragment() : Fragment() {
                             adapter.notifyDataSetChanged()
                         }
                     })
+
+               /* viewModel.currentUserFavoriteRepositoryMutableLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                        if (it.isNotEmpty()) {
+                            adapter.listFavoriteRepository = it
+                            adapter.notifyDataSetChanged()
+                        }
+                    })*/
             }
+
         }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        binding = FragmentPageRepositoryBinding.inflate(inflater, container, false)
+
+
+
         return binding.root
     }
 
-    fun isFavorite(imageView: ImageView, loginUser: String, clickedUserLogin: String, repositoryName: String) {
-
+    fun isFavorite(
+        listFavoriteRepository: ArrayList<Repositories>,
+        imageView: ImageView,
+        loginUser: String,
+        clickedUserLogin: String,
+        repositoryName: String
+    ) {
         lifecycleScope.launch {
-            var list = viewModel.getAllList(loginUser)
             var item = Repositories(repositoryName, clickedUserLogin, null, null, null, null)
-            if (list.contains(item)) {
+            //      var listFavoriteRepository = viewModel.getAllList(loginUser)
+
+            if (listFavoriteRepository.contains(item)) {
                 imageView.Color(R.color.black)
                 viewModel.deleteFavoriteRepository(loginUser, repositoryName)
             } else {
@@ -86,6 +121,5 @@ class PageRepositoryFragment() : Fragment() {
                 viewModel.addFavoriteRepository(loginUser, clickedUserLogin, repositoryName)
             }
         }
-
     }
 }

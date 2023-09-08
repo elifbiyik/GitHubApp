@@ -13,9 +13,9 @@ class SignUpRepository @Inject constructor(private val auth: FirebaseAuth) {
     private val databaseReference: DatabaseReference =
         FirebaseDatabase.getInstance().getReference("User")
 
-    suspend fun signUp(nameSurname: String, phone: String, imageUri: Uri?): Boolean {
+    suspend fun signUp(nameSurname: String, phone: String): Boolean {
         try {
-            val user = User(nameSurname, phoneNumber = phone, avatar_url = imageUri.toString())
+            val user = User(nameSurname, phoneNumber = phone, isFirebase = true)
             databaseReference.child("+90${phone}").setValue(user)
             return true
         } catch (e: Exception) {

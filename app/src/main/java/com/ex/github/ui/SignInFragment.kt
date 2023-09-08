@@ -3,7 +3,6 @@ package com.ex.github.ui
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +10,11 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.ex.github.R
 import com.ex.github.ViewModel.SignInViewModel
 import com.ex.github.databinding.FragmentSignInBinding
 import com.ex.github.replace
-import com.google.firebase.FirebaseException
-import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -29,11 +25,6 @@ class SignInFragment : Fragment() {
 
     private lateinit var binding: FragmentSignInBinding
     private val viewModel: SignInViewModel by viewModels()
-
-
-    //  private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-    //lateinit var verificationId: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +62,8 @@ class SignInFragment : Fragment() {
                     Toast.makeText(context, " You must register", Toast.LENGTH_SHORT).show()
                 } else {
                     lifecycleScope.launch {
-                        Log.d("Telefon numarası", phone)
-
-                        viewModel.verify(requireContext(), requireActivity(), phone)
-                        showAlertDialog(requireContext(), phone)
+                        viewModel.verify(requireActivity(), phone)
+                        showAlertDialog(requireContext())
                     }
                 }
             }
@@ -82,7 +71,7 @@ class SignInFragment : Fragment() {
         return binding.root
     }
 
-    private fun showAlertDialog(context: Context, phone: String) {
+    private fun showAlertDialog(context: Context) {
         val inputEditTextField = EditText(requireActivity())
         val alertDialogBuilder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Verify")
@@ -95,27 +84,16 @@ class SignInFragment : Fragment() {
 
             lifecycleScope.launch {
                 val credential =
-                    PhoneAuthProvider.getCredential(verificationId.toString(), etVerificationCode)
+                    PhoneAuthProvider.getCredential(verificationId.toString(), etVerificationCode)  // Doğrulama kimliği
                var isSuccess =  viewModel.signInWithCredential(requireContext(), credential)
                 if(isSuccess){
-
-                    var fragment = AccountFragment()
-                    var bundle = Bundle()
-                    var phoneNumber = "+90$phone"
-                    bundle.putString("Phone", phoneNumber)
-                    Log.d("SİGNINFRAGMENT NUMBER", phoneNumber)
-                    Log.d("SİGNINFRAGMENT PHONE", phone)
-                    fragment.arguments = bundle
-
                     replace(HomePageFragment())
                 }else{
                     dialog.dismiss()
                 }
             }
         }
-
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
-
 }

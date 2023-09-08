@@ -22,7 +22,6 @@
             android:autoText="false"
             android:text="Favorite User"
             android:textAlignment="textStart"
-            android:textColor="@color/material_dynamic_neutral40"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +37,6 @@
             android:layout_marginStart="2dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="2dp"
-            android:background="@drawable/visibility_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -49,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:ems="10"
-                android:hint="Comment"
+                android:hint="Note"
                 android:inputType="text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,9 +59,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="40dp"
                 android:text="Send"
-                app:layout_constraintBottom_toBottomOf="@+id/etComment"
+                app:layout_constraintBottom_toBottomOf="@+id/etNote"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/etComment"
+                app:layout_constraintStart_toEndOf="@+id/etNote"
                 app:layout_constraintTop_toTopOf="@+id/etNote" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

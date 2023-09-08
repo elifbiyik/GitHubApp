@@ -17,20 +17,19 @@ import kotlin.coroutines.suspendCoroutine
 class AllNoteRepository @Inject constructor(private var database: FirebaseDatabase) {
 
     private val databaseReferenceNoteForUser = database.getReference("Note/Favorite User")
-
     private val databaseReferenceNoteForRepository = database.getReference("Note/Favorite Repository")
 
     suspend fun getAllNote(noteToFavUser: String, isUserOrRepository: String): ArrayList<Note> {
         return suspendCoroutine { continuation ->
             try {
                 val noteAllList: ArrayList<Note> = ArrayList()
-                val databaseReference: DatabaseReference  // databaseReference'ı burada tanımla
+                val databaseReference: DatabaseReference
                 if (isUserOrRepository == "User") {
                     databaseReference = databaseReferenceNoteForUser
                 } else if (isUserOrRepository == "Repository") {
                     databaseReference = databaseReferenceNoteForRepository
                 }else {
-                    // Eğer isUserOrRepo ne "User" ne de "Repository" değilse, hata durumu
+                    // Eğer isUserOrRepo ne "User" ne de "Repository" değilse; hata
                     continuation.resumeWithException(IllegalArgumentException("Invalid value for isUserOrRepo"))
                     return@suspendCoroutine
                 }
@@ -50,19 +49,17 @@ class AllNoteRepository @Inject constructor(private var database: FirebaseDataba
                                     }
                                 }
                             }
-// Yorum yapılanlar Note'un altında isim ile tutuluyor. Bu yüzden ; child(ivey) = ivey'se dedik
-                            //key  = ivey
                         }
-                        continuation.resume(noteAllList) // İşlem tamamlandığında listeyi döndür
+                        continuation.resume(noteAllList) // İşlem tamamlandığında listeyi dönd.
                     }
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+                        continuation.resumeWithException(error.toException())
                     }
                 }
                 databaseReference.addListenerForSingleValueEvent(getData)
             } catch (e: Exception) {
                 Log.d("Hata", e.message.toString())
-                continuation.resumeWithException(e) // Hata durumunda istisna fırlat
+                continuation.resumeWithException(e)
             }
         }
     }
