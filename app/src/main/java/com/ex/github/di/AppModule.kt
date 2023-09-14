@@ -1,5 +1,6 @@
 package com.ex.github.di
 
+import android.util.Log
 import com.ex.github.Api.ApiServise
 import com.ex.github.Api.CONSTANT
 import com.google.firebase.auth.FirebaseAuth
@@ -18,26 +19,31 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModuleAppModule {
 
-/*
-        @Provides
-        @Singleton
-        fun provideOkHttpClient(): OkHttpClient {
-            return OkHttpClient.Builder().build()
-        }
 
-*/
-    @Provides
-          @Singleton
-          fun provideOkHttpClient(): OkHttpClient {
-              return OkHttpClient.Builder()
-                  .addInterceptor { chain ->
-                      val request = chain.request().newBuilder()
-                          .addHeader("Authorization", CONSTANT.TOKEN)
-                          .build()
-                      chain.proceed(request)
-                  }
+   @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
+
+
+
+    var requestCount: Int = 0
+
+  /*  @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+       return OkHttpClient.Builder()
+          .addInterceptor { chain ->
+              val request = chain.request().newBuilder()
+                  .addHeader("Authorization", CONSTANT.TOKEN)
                   .build()
+              chain.proceed(request)
           }
+          .build()
+    }*/
+
+
 
 
     @Provides
@@ -53,6 +59,8 @@ object AppModuleAppModule {
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiServise {
+        requestCount += 1
+        Log.d("****** count: ", requestCount.toString())
         return retrofit.create(ApiServise::class.java)
     }
 
@@ -67,6 +75,4 @@ object AppModuleAppModule {
     fun provideFirebaseDatabase(): FirebaseDatabase {
         return FirebaseDatabase.getInstance()
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.ex.github.ViewModel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ex.github.Repository.FavoriteUserRepository
@@ -15,8 +16,13 @@ class FavoriteUserViewModel @Inject constructor(var repository: FavoriteUserRepo
 
     suspend fun showFavoriteUser(
         loginUser: String,
-    ): ArrayList<User> {
-        var users = repository.showFavoriteUser(loginUser)
+    ): List<User> {
+        var usersFirebase = repository.showFavoriteUserFirebase(loginUser)
+        var usersApi = repository.showFavoriteUserApi(loginUser)
+        var users = usersFirebase + usersApi
+
+        Log.d("FavUserVM", users.toString())
+
         currentUserFavoriteUserMutableLiveData.value = users
         return users
     }

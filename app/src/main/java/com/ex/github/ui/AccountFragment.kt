@@ -63,10 +63,15 @@ class AccountFragment : Fragment() {
             binding.accNameSurname.isEnabled = false
 
             viewModel.getPhoto("+90${phone}")
-            
-            var size = viewModel.showFavoriteUser(nameSurname)
-            binding.tvFollowing.text = size.toString()
+
+            var sizeFollowing = viewModel.showUserFollowing(nameSurname)
+            binding.tvFollowing.text = sizeFollowing.toString()
+
+            var sizeFollower = viewModel.showUserFollower(nameSurname)
+            binding.tvFollowers.text = sizeFollower.toString()
+
         }
+
 
         binding.edit.setOnClickListener {
             if (binding.edit.text == "Done") {

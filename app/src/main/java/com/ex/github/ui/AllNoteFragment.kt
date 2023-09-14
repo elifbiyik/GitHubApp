@@ -47,14 +47,16 @@ class AllNoteFragment : Fragment() {
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-            viewModel.currentUserAllNoteMutableLiveData.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()) {
-                    adapter.list = it
-                    adapter.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
-                }
-            })
+            if (view != null) {
+                viewModel.currentUserAllNoteMutableLiveData.observe(viewLifecycleOwner, Observer {
+                    if (it.isNotEmpty()) {
+                        adapter.list = it
+                        adapter.notifyDataSetChanged()
+                    } else {
+                        Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
         }
         return binding.root
     }

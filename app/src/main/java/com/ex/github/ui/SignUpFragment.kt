@@ -65,14 +65,16 @@ class SignUpFragment : Fragment() {
             }
         }
 
-        viewModel.userMutableLiveData.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                replace(SignInFragment())
-            } else {
-                Toast.makeText(context, "Try again ..", Toast.LENGTH_SHORT).show()
-            }
-        })
+        if (view != null) {
+            viewModel.userMutableLiveData.observe(viewLifecycleOwner, Observer {
+                if (it) {
+                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                    replace(SignInFragment())
+                } else {
+                    Toast.makeText(context, "Try again ..", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
 
         return binding.root
     }

@@ -14,7 +14,7 @@ class HomePageAdapterRepository(var list : List<Repositories>, private val onCli
         fun bind(repositoryDetailList: Repositories) {
            with(binding) {
                binding.tvLogin.text = repositoryDetailList.name
-               binding.tvHtmlUrl.text = repositoryDetailList.repoIsWhose
+               binding.tvHtmlUrl.text = repositoryDetailList.full_name
                binding.imageView.visibility = View.GONE
 
                 root.setOnClickListener {onClick(repositoryDetailList) }

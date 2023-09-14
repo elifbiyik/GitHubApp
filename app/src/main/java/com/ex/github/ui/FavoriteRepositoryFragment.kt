@@ -42,24 +42,28 @@ class FavoriteRepositoryFragment : Fragment() {
             var loginUser = currentUser[0]
             var list = viewModel.getAllList(loginUser)
 
-            adapter = FavoriteRepositoryAdapter(list){
+            adapter = FavoriteRepositoryAdapter(list) {
                 var clickedFavRepo = it.name
                 var fragment = UserNoteFragment()
                 var bundle = Bundle()
                 bundle.putString("clickedFavRepo", clickedFavRepo)
                 fragment.arguments = bundle
 
-               replace(fragment)
+                replace(fragment)
             }
 
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-            viewModel.currentFavoriteRepositoryMutableLiveData.observe(viewLifecycleOwner, Observer {
-                adapter.list = it
-                adapter.notifyDataSetChanged()
-                binding.progressBar.visibility = View.GONE
-            })
+            if (view != null) {
+                viewModel.currentFavoriteRepositoryMutableLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                        adapter.list = it
+                        adapter.notifyDataSetChanged()
+                        binding.progressBar.visibility = View.GONE
+                    })
+            }
         }
         return binding.root
     }

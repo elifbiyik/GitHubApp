@@ -1,9 +1,13 @@
 package com.ex.github.Repository
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.util.Log
 import com.ex.github.Api.ApiServise
+import com.ex.github.R
 import com.ex.github.Repositories
+import com.ex.github.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,11 +28,86 @@ class PageRepositoryRepository @Inject constructor(
     private val databaseReferenceRepository =
         database.getReference("Favorite Repository")
 
-    suspend fun getShowUserRepository(clickedUserLogin: String): List<Repositories> {
+
+    private fun showAlertDialog(context: Context) {
+        val alertDialogBuilder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+        alertDialogBuilder.setTitle("Error")
+        alertDialogBuilder.setMessage("Too many requests")
+
+        alertDialogBuilder.setPositiveButton("OK") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+
+    suspend fun getShowUserRepository(
+        clickedUserLogin: String,
+        context: Context
+    ): List<Repositories> {
+
+        try {
+            var x = apiServise.getShowUserRepository(clickedUserLogin)
+            Log.d("getShowUserRepository", x.toString())
+        } catch (e: Exception) {
+            Log.d("getShowUserRepositoryCatch", e.message.toString())
+            showAlertDialog(context)
+        }
+
         return apiServise.getShowUserRepository(clickedUserLogin)
     }
 
-    suspend fun addFavoriteRepository(loginUser: String, clickedUserLogin: String, repositoryName: String) {
+    suspend fun getShowUserRepositoryFromFirebase(
+        clickedUserLogin: String,
+    ): List<Repositories> {
+        return suspendCoroutine { continuation ->
+            try {
+                val repoList: ArrayList<Repositories> = ArrayList()
+                val databaseReference = databaseReferenceRepository.child(clickedUserLogin)
+                val getData = object : ValueEventListener {
+                    @SuppressLint("SuspiciousIndentation")
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            for (j in snapshot.children) {
+                                val userLogin = j.child("login").getValue(String::class.java)
+                                val userFullName = j.child("full_name").getValue(String::class.java)
+                                val repoName = j.child("name").getValue(String::class.java)
+
+                                repoList.add(
+                                    Repositories(
+                                        addFavWhose = userLogin,
+                                        full_name = userFullName,
+                                        name = repoName
+                                    )
+                                )
+                            }
+                            continuation.resume(repoList)
+                        } else {
+                            continuation.resume(ArrayList())
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+                }
+                databaseReference.addListenerForSingleValueEvent(getData)
+            } catch (e: Exception) {
+                Log.d("Hata", e.message.toString())
+                continuation.resumeWithException(e)
+            }
+        }
+
+    }
+
+
+    suspend fun addFavoriteRepository(
+        loginUser: String,
+        clickedUserLogin: String,
+        repositoryName: String
+    ) {
         try {
             val repository = Repositories(repositoryName, clickedUserLogin, null, null, null, null)
             databaseReferenceRepository.child(loginUser).child(repositoryName).setValue(repository)
@@ -45,7 +124,7 @@ class PageRepositoryRepository @Inject constructor(
         }
     }
 
-    suspend fun getAllList(loginUser: String) : ArrayList<Repositories> {
+    suspend fun getAllList(loginUser: String): ArrayList<Repositories> {
         return suspendCoroutine { continuation ->
             try {
                 val favRepoList: ArrayList<Repositories> = ArrayList()
@@ -57,7 +136,7 @@ class PageRepositoryRepository @Inject constructor(
                             for (i in snapshot.children) {
                                 val repoName = i.child("name").getValue(String::class.java)!!
                                 val repoIsWhose =
-                                    i.child("repoIsWhose").getValue(String::class.java)!!
+                                    i.child("full_name").getValue(String::class.java)!!
                                 favRepoList.add(
                                     Repositories(
                                         repoName,

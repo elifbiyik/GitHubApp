@@ -1,6 +1,8 @@
 package com.ex.github.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.ImageLoad
@@ -14,10 +16,15 @@ class FollowerAdapter(var list: List<User>, private val onClick: (User) -> Unit)
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(followerList: User) {
-
             with(binding) {
                 tvName.text = followerList.login
-                tvLogin.text = followerList.html_url
+
+                if(followerList.html_url == "null") {
+                    tvLogin.text = ""
+                } else {
+                    tvLogin.text = followerList.html_url
+                }
+
                 binding.imageView.ImageLoad(followerList.avatar_url.toString())
 
                 root.setOnClickListener {onClick(followerList)}

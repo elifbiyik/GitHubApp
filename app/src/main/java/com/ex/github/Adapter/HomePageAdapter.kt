@@ -53,15 +53,17 @@ class HomePageAdapter(var list: List<User>, private val onClick: (User) -> Unit)
 
 package com.ex.github.Adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.ImageLoad
+import com.ex.github.R
 import com.ex.github.Repositories
 import com.ex.github.User
 import com.ex.github.databinding.FragmentHomePageItemBinding
 
-class HomePageAdapter(var list: List<Any>, private val onClick: (Any) -> Unit) :
+class HomePageAdapter(var list: List<Any>?, private val onClick: (Any) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -79,7 +81,7 @@ class HomePageAdapter(var list: List<Any>, private val onClick: (Any) -> Unit) :
                 val uri =
                     android.net.Uri.parse("android.resource://com.ex.github.Adapter/$drawableResId")
                         .toString()
-                binding.imageView.ImageLoad(uri)
+                imageView.ImageLoad(uri)
 
             root.setOnClickListener {onClick(repoList) }
             }
@@ -89,8 +91,6 @@ class HomePageAdapter(var list: List<Any>, private val onClick: (Any) -> Unit) :
     inner class UserViewHolder(var binding: FragmentHomePageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        var isFirebase = false
-
         fun bind(userList: User) {
             with(binding) {
                 binding.tvLogin.text = userList.login
@@ -99,6 +99,10 @@ class HomePageAdapter(var list: List<Any>, private val onClick: (Any) -> Unit) :
                     binding.imageView.ImageLoad(userList.avatar_url.toString())
                 } else if (userList.storage != null) {
                     binding.imageView.ImageLoad(userList.storage.toString())
+                }else {
+                    val drawableResId = R.drawable.ic_account_circle_24
+                    val uri = Uri.parse("android.resource://com.ex.github/$drawableResId")
+                    binding.imageView.ImageLoad(uri.toString())
                 }
                     root.setOnClickListener {onClick(userList) }
             }
@@ -106,7 +110,7 @@ class HomePageAdapter(var list: List<Any>, private val onClick: (Any) -> Unit) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (list[position]) {
+        return when (list?.get(position)) {
             is User -> VIEW_TYPE_USER
             is Repositories -> VIEW_TYPE_REPOSITORIES
             else -> throw IllegalArgumentException("Invalid item type")
@@ -131,19 +135,19 @@ class HomePageAdapter(var list: List<Any>, private val onClick: (Any) -> Unit) :
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             VIEW_TYPE_USER -> {
-                val user = list[position] as User
+                val user = list?.get(position) as User
                 val userViewHolder = holder as UserViewHolder
                 userViewHolder.bind(user)
             }
 
             VIEW_TYPE_REPOSITORIES -> {
-                val repository = list[position] as Repositories
+                val repository = list?.get(position) as Repositories
                 val repositoryViewHolder = holder as RepositoryViewHolder
                 repositoryViewHolder.bind(repository)
             }

@@ -1,8 +1,11 @@
 package com.ex.github.Repository
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.util.Log
 import com.ex.github.Api.ApiServise
+import com.ex.github.R
 import com.ex.github.Repositories
 import com.ex.github.User
 import com.google.firebase.auth.FirebaseAuth
@@ -11,6 +14,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.core.Repo
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +24,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 import javax.inject.Inject
+import kotlin.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -30,17 +34,48 @@ class HomePageRepository @Inject constructor(
     var auth: FirebaseAuth,
     var apiServise: ApiServise,
     var database: FirebaseDatabase
-) {
+)  {
 
     private val databaseReference: DatabaseReference =
         FirebaseDatabase.getInstance().getReference("User")
 
-    suspend fun getAllUsersFromApi(): List<User> {
-        return apiServise.getAllUser()
+    private fun showAlertDialog(context: Context) {
+        val alertDialogBuilder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+        alertDialogBuilder.setTitle("Error")
+        alertDialogBuilder.setMessage("Too many requests")
+
+        alertDialogBuilder.setPositiveButton("OK") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 
-    suspend fun getAllRepositories(): List<Repositories> {
-        return apiServise.getAllRepositories()
+
+    suspend fun getAllUsersFromApi(context: Context): List<User>? {
+
+        var x: List<User>? = null
+        try {
+             x = apiServise.getAllUser()
+            Log.d("getAllUsersFromApi", x.toString())
+        } catch (e: Exception) {
+            Log.d("getAllUsersFromApiCatch", e.message.toString())
+            showAlertDialog(context)
+        }
+        return x
+    }
+
+    suspend fun getAllRepositories(context: Context): List<Repositories>? {
+        var x: List<Repositories>? = null
+        try {
+            x = apiServise.getAllRepositories()
+            Log.d("getAllRepositories", x.toString())
+        } catch (e: Exception) {
+            Log.d("getAllRepositoriesCatch", e.message.toString())
+            showAlertDialog(context)
+        }
+        return x
     }
 
     suspend fun getAllUsersFromFirebase(): List<User> {
@@ -80,10 +115,9 @@ class HomePageRepository @Inject constructor(
                                 }
                                 // storage'dan sonuç dönüp dönmemesine bakmamız lazım o yüzden await kullan
                                 // await kullandığın için async kullan.
-
                                 userPromises.add(userDeferred)
-                            }
 
+                            }
                             GlobalScope.launch(Dispatchers.Main) {
                                 val usersList = userPromises.awaitAll().filterNotNull()
                                 continuation.resume(usersList)
@@ -101,7 +135,7 @@ class HomePageRepository @Inject constructor(
                 }
                 databaseReference.addListenerForSingleValueEvent(getData)
             } catch (e: Exception) {
-                Log.d("Hata", e.message.toString())
+                Log.d("HatagetAllUsersFromFirebase", e.message.toString())
                 continuation.resumeWithException(e)
             }
         }
@@ -140,7 +174,7 @@ class HomePageRepository @Inject constructor(
                 }
                 databaseReference.addListenerForSingleValueEvent(getData)
             } catch (e: Exception) {
-                Log.d("Hata", e.message.toString())
+                Log.d("HatacurrentUser", e.message.toString())
                 continuation.resumeWithException(e)
             }
         }

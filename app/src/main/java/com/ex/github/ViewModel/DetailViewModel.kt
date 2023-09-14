@@ -1,6 +1,7 @@
 package com.ex.github.ViewModel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ex.github.Repository.DetailRepository
@@ -13,15 +14,18 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
 
     var currentUserMutableLiveData = MutableLiveData<User>()
     var firebaseUserMutableLiveData = MutableLiveData<User>()
+    var firebaseUserFollowingSizeMutableLiveData = MutableLiveData<ArrayList<String>>()
+    var firebaseUserFollowerSizeMutableLiveData = MutableLiveData<ArrayList<String>>()
 
-    suspend fun getShowUserFromApi(clickedUserLogin: String): User {
-        var user = repository.getShowUserFromApi(clickedUserLogin)
+    suspend fun getShowUserFromApi(clickedUserLogin: String, context: Context): User {
+        var user = repository.getShowUserFromApi(clickedUserLogin, context)
         currentUserMutableLiveData.value = user
         return user
     }
 
-    suspend fun getShowUserFromFirebase(clickedUserLogin: String) : User {
-        var user = repository.getShowUserFromFirebase(clickedUserLogin)
+    suspend fun getShowUserFromFirebase(clickedUserPhoneNumber: String) : User {
+        var user = repository.getShowUserFromFirebase("+90$clickedUserPhoneNumber")
+        Log.d("xxxxxx", user.toString())
         firebaseUserMutableLiveData.value = user
         return user
     }
@@ -31,10 +35,12 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
         favUser: String,
         favHtml: String,
         favAvatar: String,
+        clickedUserisFirebase : Boolean,
+        phoneNumber : String,
         context: Context
     ): Boolean {
 
-        var isAdd = repository.addFavoriteUser(loginUser, favUser, favHtml, favAvatar, context)
+        var isAdd = repository.addFavoriteUser(loginUser, favUser, favHtml, favAvatar,clickedUserisFirebase, phoneNumber, context)
         return isAdd
     }
 
@@ -55,4 +61,19 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
     suspend fun currentUser(): List<String> {
         return repository.currentUser()
     }
-}
+
+    suspend fun getShowUserFollowersSize(clickedUserLogin: String) : Int {
+        var list = repository.followersListForSize (clickedUserLogin)
+      Log.d("VMDetailLisst", list.toString())
+        return list.size
+    }
+
+    suspend fun getShowUserFollowingSize(clickedUserLogin: String) : Int {
+        var list = repository.followingListForSize (clickedUserLogin)
+        return list.size
+    }
+
+    suspend fun getShowUserRepositorySize(clickedUserLogin: String) : Int {
+        var list = repository.repositoryListForSize (clickedUserLogin)
+        return list.size
+    }}

@@ -3,6 +3,7 @@ package com.ex.github.Repository
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
+import com.ex.github.Note
 import com.ex.github.R
 import com.ex.github.User
 import com.google.android.gms.tasks.Task
@@ -19,7 +20,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class AccountRepository @Inject constructor(private var database: FirebaseDatabase, private var auth: FirebaseAuth) {
+class AccountRepository @Inject constructor(
+    private var database: FirebaseDatabase,
+    private var auth: FirebaseAuth
+) {
 
     private val databaseReferenceUser = database.getReference("Favorite User")
 
@@ -33,6 +37,7 @@ class AccountRepository @Inject constructor(private var database: FirebaseDataba
     }
 
     fun updateUserProfilePhoto(phone: String, imageUri: Uri?): Task<Uri> {
+
         val storageReference = FirebaseStorage.getInstance()
         var imageReference = storageReference.reference.child("$phone.jpg")
 
@@ -59,7 +64,8 @@ class AccountRepository @Inject constructor(private var database: FirebaseDataba
                             var currentUserLogin =
                                 snapshot.child("login").getValue(String::class.java).toString()
                             var currentUserPhone =
-                                snapshot.child("phoneNumber").getValue(String::class.java).toString()
+                                snapshot.child("phoneNumber").getValue(String::class.java)
+                                    .toString()
 
                             userInfoList.add(currentUserLogin)
                             userInfoList.add(currentUserPhone)
@@ -79,8 +85,8 @@ class AccountRepository @Inject constructor(private var database: FirebaseDataba
         }
     }
 
-    suspend fun showFavoriteUser(
-        loginUser: String,
+    suspend fun showUserFollowing(
+        loginUser: String
     ): ArrayList<User> {
         return suspendCoroutine { continuation ->
             try {
@@ -105,6 +111,47 @@ class AccountRepository @Inject constructor(private var database: FirebaseDataba
                     }
                 }
                 databaseReference.addListenerForSingleValueEvent(getData)
+            } catch (e: Exception) {
+                Log.d("Hata", e.message.toString())
+                continuation.resumeWithException(e)
+            }
+        }
+    }
+
+    suspend fun showUserFollower(
+        loginUser: String
+    ) : List<User> {
+        return suspendCoroutine { continuation ->
+            try {
+                val userList: ArrayList<User> = ArrayList()
+                val getData = object : ValueEventListener {
+                    @SuppressLint("SuspiciousIndentation")
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            for (j in snapshot.children) {
+                                for (i in j.children) {
+                                    var favLogin = i.child("favLogin").getValue(String::class.java)
+                                    val html_url =
+                                        i.child("html_url").getValue(String::class.java)!!
+                                    if (favLogin == loginUser) {
+                                        userList.add(
+                                            User(
+                                                favLogin = favLogin,
+                                                html_url = html_url,
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        continuation.resume(userList) // İşlem tamamlandığında listeyi dönd.
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+                }
+                databaseReferenceUser.addListenerForSingleValueEvent(getData)
             } catch (e: Exception) {
                 Log.d("Hata", e.message.toString())
                 continuation.resumeWithException(e)

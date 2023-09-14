@@ -18,9 +18,11 @@ import com.ex.github.Adapter.RepositoryAdapter
 import com.ex.github.Color
 import com.ex.github.R
 import com.ex.github.Repositories
+import com.ex.github.User
 import com.ex.github.ViewModel.PageRepositoryViewModel
 import com.ex.github.databinding.FragmentPageRepositoryBinding
 import com.ex.github.databinding.FragmentPageRepositoryItemBinding
+import com.google.firebase.database.core.Repo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -38,57 +40,6 @@ class PageRepositoryFragment() : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        val clickedUserLogin = arguments?.getString("clickedUserLogin").toString()
-
-        lifecycleScope.launch {
-            var currentUser = viewModel.currentUser()
-            var loginUser = currentUser[0]
-            var list = clickedUserLogin?.let { viewModel.getShowUserRepository(it) }
-
-            if (list != null) {
-                var listFavoriteRepository = viewModel.getAllList(loginUser)
-                adapter = RepositoryAdapter(
-                    list,
-                    listFavoriteRepository,
-                    clickedUserLogin,
-                    viewModel
-                ){
-                    if(it.isFavorite) {
-                        viewModel.addFavoriteRepository(loginUser, clickedUserLogin, it.name)
-                    }else {
-                        viewModel.deleteFavoriteRepository(loginUser, it.name)
-                    }
-                }
-
-                binding.recyclerview.adapter = adapter
-                binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
-
-                viewModel.currentUserRepositoryMutableLiveData.observe(
-                    viewLifecycleOwner,
-                    Observer {
-                        if (it.isNotEmpty()) {
-                            adapter.list = it
-                            adapter.notifyDataSetChanged()
-                        }
-                    })
-
-               /* viewModel.currentUserFavoriteRepositoryMutableLiveData.observe(
-                    viewLifecycleOwner,
-                    Observer {
-                        if (it.isNotEmpty()) {
-                            adapter.listFavoriteRepository = it
-                            adapter.notifyDataSetChanged()
-                        }
-                    })*/
-            }
-
-        }
-    }
-
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,29 +48,61 @@ class PageRepositoryFragment() : Fragment() {
 
         binding = FragmentPageRepositoryBinding.inflate(inflater, container, false)
 
+        val clickedUserLogin = arguments?.getString("clickedUserLogin").toString()
+        val clickedUserisFirebase = arguments?.getBoolean("isFirebase")
 
+        lifecycleScope.launch {
+            var currentUser = viewModel.currentUser()
+            var loginUser = currentUser[0]
+
+            var list: List<Repositories>? = null
+
+            if (clickedUserisFirebase == false) {
+                list =
+                    clickedUserLogin?.let { viewModel.getShowUserRepository(it, requireContext()) }
+            } else {
+                list = clickedUserLogin?.let { viewModel.getShowUserRepositoryFromFirebase(it) }
+            }
+
+            if (list != null) {
+                var listFavoriteRepository = viewModel.getAllList(loginUser)
+                adapter = RepositoryAdapter(
+                    list,
+                    listFavoriteRepository,
+                    clickedUserLogin
+                ) {
+                    if (clickedUserisFirebase == false) {
+                        if (it.isFavorite) {
+                            viewModel.addFavoriteRepository(
+                                loginUser,
+                                clickedUserLogin,
+                                it.name.toString()
+                            )
+                        } else {
+                            viewModel.deleteFavoriteRepository(loginUser, it.name.toString())
+                        }
+                    } else {
+                        Toast.makeText(context, "You can't", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                binding.recyclerview.adapter = adapter
+                binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
+
+                if (view != null) {
+                    viewModel.currentUserRepositoryMutableLiveData.observe(
+                        viewLifecycleOwner,
+                        Observer {
+                            if (it.isNotEmpty()) {
+                                adapter.list = it
+                                adapter.notifyDataSetChanged()
+                            }
+                        })
+                }
+            }
+
+        }
 
         return binding.root
-    }
-
-    fun isFavorite(
-        listFavoriteRepository: ArrayList<Repositories>,
-        imageView: ImageView,
-        loginUser: String,
-        clickedUserLogin: String,
-        repositoryName: String
-    ) {
-        lifecycleScope.launch {
-            var item = Repositories(repositoryName, clickedUserLogin, null, null, null, null)
-            //      var listFavoriteRepository = viewModel.getAllList(loginUser)
-
-            if (listFavoriteRepository.contains(item)) {
-                imageView.Color(R.color.black)
-                viewModel.deleteFavoriteRepository(loginUser, repositoryName)
-            } else {
-                imageView.Color(R.color.yellow)
-                viewModel.addFavoriteRepository(loginUser, clickedUserLogin, repositoryName)
-            }
-        }
     }
 }

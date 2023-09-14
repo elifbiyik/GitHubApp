@@ -1,6 +1,7 @@
 package com.ex.github.Adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.ImageLoad
@@ -14,9 +15,20 @@ class FollowingAdapter(var list : List<User>, private val onClick : (User) -> Un
 
         fun bind(followingList: User) {
             with(binding) {
-                tvName.text = followingList.login
-                tvLogin.text = followingList.html_url
-                binding.imageView.ImageLoad(followingList.avatar_url.toString())
+
+                if(followingList.favLogin == "null") {
+                    tvName.text = followingList.login
+                }else {
+                    tvName.text = followingList.favLogin
+                }
+
+                if(followingList.html_url == "null") {
+                    tvLogin.text = ""
+                } else {
+                    tvLogin.text = followingList.html_url
+                }
+
+                imageView.ImageLoad(followingList.avatar_url.toString())
 
                 root.setOnClickListener {onClick(followingList) }
             }

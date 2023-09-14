@@ -1,16 +1,19 @@
 package com.ex.github.Repository
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.ex.github.Api.ApiServise
+import com.ex.github.R
 import com.ex.github.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -24,27 +27,56 @@ class DetailRepository @Inject constructor(
 ) {
 
     private val databaseReferenceUser = database.getReference("Favorite User")
+    private val databaseReferenceRepository = database.getReference("Favorite Repository")
 
-    suspend fun getShowUserFromApi(clickedUserLogin: String): User {
+    private fun showAlertDialog(context: Context) {
+        val alertDialogBuilder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
+        alertDialogBuilder.setTitle("Error")
+        alertDialogBuilder.setMessage("Too many requests")
+
+        alertDialogBuilder.setPositiveButton("OK") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    suspend fun getShowUserFromApi(clickedUserLogin: String, context : Context): User {
+
+        try {
+            var x = apiServise.getShowUser(clickedUserLogin)
+            Log.d("getShowUser", x.toString())
+        }catch (e:Exception){
+            Log.d("getShowUserCatch", e.message.toString())
+            showAlertDialog(context)
+        }
         return apiServise.getShowUser(clickedUserLogin)
     }
 
-    suspend fun getShowUserFromFirebase(clickedUserLogin: String): User {
+
+    suspend fun getShowUserFromFirebase(clickedUserPhoneNumber: String): User {
         return suspendCoroutine { continuation ->
             try {
                 val databaseReference =
-                    FirebaseDatabase.getInstance().getReference("User").child(clickedUserLogin)
+                    FirebaseDatabase.getInstance().getReference("User")
+                        .child(clickedUserPhoneNumber)
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
-                            var currentUserLogin =
+                            var clickedUserLogin =
                                 snapshot.child("login").getValue(String::class.java).toString()
-                            var currentUserPhone =
+                            var clickedUserPhone =
                                 snapshot.child("phoneNumber").getValue(String::class.java)
                                     .toString()
 
-                            continuation.resume(User(currentUserLogin, phoneNumber = currentUserPhone))
+                            continuation.resume(
+                                User(
+                                    clickedUserLogin,
+                                    phoneNumber = clickedUserPhone
+                                )
+                            )
                         }
                     }
 
@@ -110,7 +142,7 @@ class DetailRepository @Inject constructor(
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             for (i in snapshot.children) {
-                                val favUser = i.child("login").getValue(String::class.java)!!
+                                val favUser = i.child("favLogin").getValue(String::class.java)!!
                                 userList.add(favUser)
                             }
                             continuation.resume(userList)
@@ -139,12 +171,13 @@ class DetailRepository @Inject constructor(
         favUser: String,
         favHtml: String,
         favAvatar: String,
+        clickedUserIsFirebase: Boolean,
+        phoneNumber : String,
         context: Context
     ): Boolean {
         try {
             var isValid = false
             var userList: ArrayList<String> = ArrayList()
-
             val databaseReference = databaseReferenceUser.child(loginUser)
             var getData = object : ValueEventListener {
                 @SuppressLint("SuspiciousIndentation")
@@ -159,11 +192,21 @@ class DetailRepository @Inject constructor(
                         Toast.makeText(context, "You can't", Toast.LENGTH_SHORT).show()
                         isValid = false
                     } else {
-                        val favUsers = User(favUser, html_url = favHtml, avatar_url = favAvatar)
-                        databaseReferenceUser.child(loginUser).child(favUser).setValue(favUsers)
+                        val favUsers = User(
+                            loginUser,
+                            favLogin = favUser,
+                            html_url = favHtml,
+                            phoneNumber = phoneNumber ,
+                            avatar_url = favAvatar,
+                            isFirebase = clickedUserIsFirebase
+
+                        )
+                        databaseReferenceUser.child(loginUser).child(favUser)
+                            .setValue(favUsers)
                         isValid = true
                     }
                 }
+
 
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(context, "You can't ! ", Toast.LENGTH_SHORT).show()
@@ -178,7 +221,6 @@ class DetailRepository @Inject constructor(
         }
     }
 
-
     suspend fun removeFavoriteUser(
         loginUser: String,
         favUser: String
@@ -186,4 +228,83 @@ class DetailRepository @Inject constructor(
         databaseReferenceUser.child(loginUser).child(favUser).removeValue()
     }
 
+
+    suspend fun followersListForSize (clickUserLogin : String) : ArrayList<String>{
+        return suspendCoroutine { continuation ->
+                val followersList: ArrayList<String> = ArrayList()
+                val getData = object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            for (i in snapshot.children) {
+                                for (j in i.children) {
+                                    var user = j.child("favLogin").getValue(String::class.java)
+
+                                    if (clickUserLogin == user) {
+                                        followersList.add(user)
+                                    }
+                                }
+                            }
+                        }
+                        continuation.resume(followersList)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+                }
+                databaseReferenceUser.addListenerForSingleValueEvent(getData)
+        }
+    }
+
+
+
+        suspend fun followingListForSize (clickUserLogin : String) : ArrayList<String>{
+            val databaseReference = databaseReferenceUser.child(clickUserLogin)
+            return suspendCoroutine { continuation ->
+                var followingList : ArrayList<String> = ArrayList()
+                var getData = object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+                        if(snapshot.exists()) {
+                            for (i in snapshot.children){
+                                var user = i.child("favLogin").getValue(String::class.java)
+                                user?.let { followingList.add(it) }
+                            }
+                            continuation.resume(followingList)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        continuation.resumeWithException(error.toException())
+                    }
+                }
+                databaseReference.addListenerForSingleValueEvent(getData)
+            }
+    }
+
+    suspend fun repositoryListForSize (clickUserLogin: String) : ArrayList<String> {
+        val databaseReference = databaseReferenceRepository.child(clickUserLogin)
+
+        return suspendCoroutine { continuation ->
+            var repositoryList : ArrayList<String> = ArrayList()
+
+            var getData = object  : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()) {
+                        for (i in snapshot.children) {
+                            val repoName = i.child("name").getValue(String::class.java)!!
+                            repositoryList.add(repoName)
+                        }
+                        continuation.resume(repositoryList)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    continuation.resumeWithException(error.toException())
+                }
+
+            }
+            databaseReference.addListenerForSingleValueEvent(getData)
+        }
+    }
 }

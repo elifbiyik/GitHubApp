@@ -1,5 +1,6 @@
 package com.ex.github.ViewModel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,8 +16,14 @@ class PageRepositoryViewModel @Inject constructor(var repository: PageRepository
     var currentUserRepositoryMutableLiveData = MutableLiveData<List<Repositories>>()
     var currentUserFavoriteRepositoryMutableLiveData = MutableLiveData<List<Repositories>>()
 
-    suspend fun getShowUserRepository (clickedUserLogin : String ): List<Repositories> {
-        var response = repository.getShowUserRepository(clickedUserLogin)
+    suspend fun getShowUserRepository (clickedUserLogin : String, context : Context ): List<Repositories> {
+        var response = repository.getShowUserRepository(clickedUserLogin, context)
+        currentUserRepositoryMutableLiveData.value = response
+        return response
+    }
+
+    suspend fun getShowUserRepositoryFromFirebase (clickedUserLogin : String): List<Repositories> {
+        var response = repository.getShowUserRepositoryFromFirebase(clickedUserLogin)
         currentUserRepositoryMutableLiveData.value = response
         return response
     }

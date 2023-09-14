@@ -47,180 +47,56 @@ class DetailFragment @Inject constructor() : Fragment() {
         var clickedUserLogin = arguments?.getString("clickedUserLogin")
         var clickedUserHtmlUrl = arguments?.getString("clickedUserHtmlUrl")
         var clickedUserAvatarUrl = arguments?.getString("clickedUserAvatarUrl")
-
+        var clickedUserisFirebase = arguments?.getString("isFirebase").toBoolean()
+        var clickedUserPhoneNumber = arguments?.getString("clickedUserNumber")
 
         var clickedRepoName = arguments?.getString("clickedRepoName")
         var clickedRepoIsWhose = arguments?.getString("clickedRepoIsWhose")
 
 
-
         lifecycleScope.launch {
 
-            var listApi = viewModel.getShowUserFromApi(clickedUserLogin.toString())
-
-            clickedUserLogin?.let {
-                with(binding) {
-                    var currentUser = viewModel.getShowUserFromApi(it)
-                    tvName.text = currentUser.name
-                    tvLogin.text = currentUser.login
-                    tvUrl.text = currentUser.html_url
-                    tvFollowers.text = currentUser.followers
-                    tvFollowing.text = currentUser.following
-                    tvRepository.text = currentUser.public_repos
-                    clickedUserAvatarUrl?.let {
-                        imageUser.ImageLoad(it)
-                    }
-                }
-            }
-
-            clickedUserLogin?.let {
-                with(binding) {
-                    var currentUser = viewModel.getShowUserFromFirebase(it)
-                    tvName.text = currentUser.login
-                    tvLogin.text = currentUser.login
-                    tvUrl.text = currentUser.html_url
-                    tvFollowers.text = currentUser.followers
-                    tvFollowing.text = currentUser.following
-                    tvRepository.text = currentUser.public_repos
-                    clickedUserAvatarUrl?.let {
-                        imageUser.ImageLoad(it)
-                    }
-                }
-            }
-
-
-
-
-            clickedRepoName?.let {
-                with(binding) {
-                    tvName.text = clickedRepoName
-                    tvName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25.toFloat())
-                    tvLogin.text = clickedRepoIsWhose
-                    tvLogin.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20.toFloat())
-                    ivFav.visibility=View.GONE
-                    cardView.visibility = View.GONE
-                    viewPager.visibility = View.GONE
-                }
-            }
-
-
-            lifecycleScope.launch {
-                var currentUser = viewModel.currentUser()
-                var loginUser = currentUser[0]
-
-                var listFavUsers = viewModel.showFavoriteUser(
-                    loginUser,
-                    requireContext()
-                )
-
-                if (listFavUsers.contains(clickedUserLogin)) {
-                    binding.ivFav.Color(R.color.red)
-                } else {
-                    binding.ivFav.Color(R.color.black)
-                }
-
-                binding.ivFav.setOnClickListener {
-                    Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show()
-                    lifecycleScope.launch {
-                        var listFavUsers = viewModel.showFavoriteUser(
-                            loginUser,
-                            requireContext()
-                        )
-                        if (!listFavUsers.contains(clickedUserLogin)) {
-                            binding.ivFav.Color(R.color.red)
-                            viewModel.addFavoriteUser(
-                                loginUser,
-                                clickedUserLogin.toString(),
-                                clickedUserHtmlUrl.toString(),
-                                clickedUserAvatarUrl.toString(),
-                                requireContext()
-                            )
-                        } else {
-                            binding.ivFav.Color(R.color.black)
-                            viewModel.removeFavoriteUser(
-                                loginUser,
-                                clickedUserLogin.toString()
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        adapter = ViewPagerAdapter(childFragmentManager, lifecycle, clickedUserLogin.toString())
-        viewPager = binding.viewPager
-        viewPager.adapter = adapter
-
-        val red = ContextCompat.getColor(requireContext(), R.color.red)
-        val black = ContextCompat.getColor(requireContext(), R.color.black)
-
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                // Sayfa değiştirildiğinde yapılacak işlemler
-                when (position) {
-                    0 -> {
-                        binding.tvTitleFollower.setTextColor(red)
-                        binding.tvTitleFollowing.setTextColor(black)
-                        binding.tvTitleRepository.setTextColor(black)
-                    }
-
-                    1 -> {
-                        binding.tvTitleFollower.setTextColor(black)
-                        binding.tvTitleFollowing.setTextColor(red)
-                        binding.tvTitleRepository.setTextColor(black)
-                    }
-
-                    2 -> {
-                        binding.tvTitleFollower.setTextColor(black)
-                        binding.tvTitleFollowing.setTextColor(black)
-                        binding.tvTitleRepository.setTextColor(red)
-                    }
-                }
-            }
-        })
-        return binding.root
-    }
-}
-
-/*
-        lifecycleScope.launch {
-
-            var listApi = viewModel.getShowUserFromApi(clickedUserLogin.toString())
-            var listFirebase = viewModel.getShowUserFromFirebase(clickedUserLogin.toString())
-
-            Log.d("xxxxxxxApi", listApi.toString())
-            Log.d("xxxxxxxFirebase", listFirebase.toString())
-
-            if (listApi.isFirebase) {
-                clickedUserLogin?.let {
+            if (!clickedUserLogin.isNullOrEmpty()) {
+                if (clickedUserisFirebase == false) {
                     with(binding) {
-                        tvName.text = listApi.name
-                        tvLogin.text = listApi.login
-                        tvUrl.text = listApi.html_url
-                        tvFollowers.text = listApi.followers
-                        tvFollowing.text = listApi.following
-                        tvRepository.text = listApi.public_repos
-                        clickedUserAvatarUrl?.let {
-                            imageUser.ImageLoad(it)
-                        }
+                        val currentUser =
+                        viewModel.getShowUserFromApi(clickedUserLogin, requireContext())
+                        tvName.text = currentUser.name
+                        tvLogin.text = currentUser.login
+                        tvUrl.text = currentUser.html_url
+                        tvFollowers.text = currentUser.followers
+                        tvFollowing.text = currentUser.following
+                        tvRepository.text = currentUser.public_repos
+                        clickedUserAvatarUrl?.let { imageUser.ImageLoad(it) }
                     }
                 }
-            } else if (listFirebase.isFirebase) {
-                clickedUserLogin?.let {
-                    with(binding) {
-                        var currentUser = viewModel.getShowUserFromFirebase(it)
-                        tvName.text = listFirebase.login
-                        tvUrl.text = currentUser.phoneNumber
-
-                        clickedUserAvatarUrl?.let {
-                            imageUser.ImageLoad(it)
-                        }
-                    }
-                }
-            } else {
-                Toast.makeText(context, "Toast", Toast.LENGTH_SHORT).show()
             }
+            if (!clickedUserPhoneNumber.isNullOrEmpty()) {
 
+                var followersSize = clickedUserLogin?.let {
+                    viewModel.getShowUserFollowersSize(it)
+                }.toString()
+
+                var followingSize = clickedUserLogin?.let {
+                    viewModel.getShowUserFollowingSize(it)
+                }.toString()
+
+                var repositorySize = clickedUserLogin?.let {
+                    viewModel.getShowUserRepositorySize(it)
+                }.toString()
+
+                with(binding) {
+                    if (clickedUserisFirebase == true) {
+                        val currentUser = viewModel.getShowUserFromFirebase(clickedUserPhoneNumber)
+                        tvName.text = currentUser.login
+                        tvLogin.text = currentUser.phoneNumber
+                        tvFollowers.text = followersSize
+                        tvFollowing.text = followingSize
+                        tvRepository.text = repositorySize
+                        clickedUserAvatarUrl?.let { imageUser.ImageLoad(it) }
+                    }
+                }
+            }
 
             clickedRepoName?.let {
                 with(binding) {
@@ -234,7 +110,6 @@ class DetailFragment @Inject constructor() : Fragment() {
                 }
             }
 
-
             lifecycleScope.launch {
                 var currentUser = viewModel.currentUser()
                 var loginUser = currentUser[0]
@@ -264,6 +139,8 @@ class DetailFragment @Inject constructor() : Fragment() {
                                 clickedUserLogin.toString(),
                                 clickedUserHtmlUrl.toString(),
                                 clickedUserAvatarUrl.toString(),
+                                clickedUserisFirebase,
+                                clickedUserPhoneNumber.toString(),
                                 requireContext()
                             )
                         } else {
@@ -277,4 +154,66 @@ class DetailFragment @Inject constructor() : Fragment() {
                 }
             }
         }
- */
+
+        adapter = ViewPagerAdapter(
+            childFragmentManager,
+            lifecycle,
+            clickedUserLogin.toString(),
+            clickedUserisFirebase
+        )
+        viewPager = binding.viewPager
+        viewPager.adapter = adapter
+
+        val red = ContextCompat.getColor(requireContext(), R.color.red)
+        val black = ContextCompat.getColor(requireContext(), R.color.black)
+
+        viewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    // Sayfa kaydırıldığında
+                    when (position) {
+                        0 -> {
+                            binding.tvTitleFollower.setTextColor(red)
+                            binding.tvTitleFollowing.setTextColor(black)
+                            binding.tvTitleRepository.setTextColor(black)
+                        }
+
+                        1 -> {
+                            binding.tvTitleFollower.setTextColor(black)
+                            binding.tvTitleFollowing.setTextColor(red)
+                            binding.tvTitleRepository.setTextColor(black)
+                        }
+
+                        2 -> {
+                            binding.tvTitleFollower.setTextColor(black)
+                            binding.tvTitleFollowing.setTextColor(black)
+                            binding.tvTitleRepository.setTextColor(red)
+                        }
+                    }
+                }
+            })
+
+        binding.llFollowers.setOnClickListener {
+            binding.tvTitleFollower.setTextColor(red)
+            binding.tvTitleFollowing.setTextColor(black)
+            binding.tvTitleRepository.setTextColor(black)
+
+            viewPager.currentItem = 0
+        }
+        binding.llFollowing.setOnClickListener {
+            binding.tvTitleFollower.setTextColor(black)
+            binding.tvTitleFollowing.setTextColor(red)
+            binding.tvTitleRepository.setTextColor(black)
+
+            viewPager.currentItem = 1
+        }
+        binding.llRepository.setOnClickListener {
+            binding.tvTitleFollower.setTextColor(black)
+            binding.tvTitleFollowing.setTextColor(black)
+            binding.tvTitleRepository.setTextColor(red)
+
+            viewPager.currentItem = 2
+        }
+        return binding.root
+    }
+}

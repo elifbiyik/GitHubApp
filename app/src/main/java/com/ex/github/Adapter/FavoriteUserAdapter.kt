@@ -1,9 +1,13 @@
 package com.ex.github.Adapter
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.ImageLoad
+import com.ex.github.R
 import com.ex.github.User
 import com.ex.github.databinding.FragmentFavoriteUserItemBinding
 
@@ -15,9 +19,26 @@ class FavoriteUserAdapter(var list: List<User>, private val onClick : (User) -> 
 
         fun bind(favUsersList: User) {
             with(binding) {
-                tvName.text = favUsersList.login
-                tvLogin.text = favUsersList.url
-                binding.imageView.ImageLoad(favUsersList.avatar_url.toString())
+                tvName.text = favUsersList.favLogin
+
+                Log.d("FavUSerAdapter", favUsersList.toString())
+
+                if(favUsersList.html_url != null) {
+                    tvLogin.text = favUsersList.html_url
+                } else if (favUsersList.html_url == null) {
+                    tvLogin.visibility = View.GONE
+                }
+
+                if(favUsersList.avatar_url != null) {
+                    binding.imageView.ImageLoad(favUsersList.avatar_url.toString())
+                } else if (favUsersList.storage != null) {
+                    binding.imageView.ImageLoad(favUsersList.storage.toString())
+                }else {
+                    val drawableResId = R.drawable.ic_account_circle_24
+                    val uri = Uri.parse("android.resource://com.ex.github/$drawableResId")
+                    binding.imageView.ImageLoad(uri.toString())
+                }
+
 
                 root.setOnClickListener {onClick(favUsersList) }
             }

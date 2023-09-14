@@ -46,8 +46,10 @@ class FavoriteUserFragment : Fragment() {
             var loginUser = currentUser[0]
             var list = viewModel.showFavoriteUser(loginUser)
 
+            Log.d("xFavUser", list.toString())
+
             adapter = FavoriteUserAdapter(list) {
-                var clickedFavUser = it.login.toString()
+                var clickedFavUser = it.favLogin.toString()
                 var fragment = UserNoteFragment()
                 var bundle = Bundle()
                 bundle.putString("clickedFavUser", clickedFavUser)
@@ -59,15 +61,20 @@ class FavoriteUserFragment : Fragment() {
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-            viewModel.currentUserFavoriteUserMutableLiveData.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()) {
-                    adapter.list = it
-                    adapter.notifyDataSetChanged()
-                    binding.progressBar.visibility = View.GONE
-                } else {
-                    Toast.makeText(requireContext(), "Unsuccesfull", Toast.LENGTH_SHORT).show()
-                }
-            })
+            if (view != null) {
+                viewModel.currentUserFavoriteUserMutableLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                        if (it.isNotEmpty()) {
+                            adapter.list = it
+                            adapter.notifyDataSetChanged()
+                            binding.progressBar.visibility = View.GONE
+                        } else {
+                            Toast.makeText(requireContext(), "Unsuccesfull", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    })
+            }
         }
         return binding.root
     }

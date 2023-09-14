@@ -35,8 +35,13 @@ class AccountViewModel @Inject constructor(var repository: AccountRepository) : 
         return repository.currentUser()
     }
 
-    suspend fun showFavoriteUser(loginUser: String ): Int {
-        var userSize = repository.showFavoriteUser(loginUser).size
+    suspend fun showUserFollowing(loginUser: String ): Int {
+        var userSize = repository.showUserFollowing(loginUser).size
+        return userSize
+    }
+
+    suspend fun showUserFollower(loginUser: String ): Int {
+        var userSize = repository.showUserFollower(loginUser).size
         return userSize
     }
 

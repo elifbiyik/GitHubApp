@@ -10,7 +10,7 @@ import com.ex.github.ui.PageFollowingFragment
 import com.ex.github.ui.PageRepositoryFragment
 
 
-class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val clickedUserLogin : String) :
+class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val clickedUserLogin : String, val isFirebase : Boolean) :
     FragmentStateAdapter(fm, lifecycle) {
 
     override fun getItemCount(): Int = 3
@@ -21,6 +21,7 @@ class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val clickedUse
                 val fragment = PageFollowersFragment()
                 val bundle = Bundle()
                 bundle.putString("clickedUserLogin", clickedUserLogin)
+                bundle.putBoolean("isFirebase", isFirebase)
                 fragment.arguments = bundle
                 fragment
             }
@@ -28,6 +29,7 @@ class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val clickedUse
                 val fragment = PageFollowingFragment()
                 val bundle = Bundle()
                 bundle.putString("clickedUserLogin", clickedUserLogin)
+                bundle.putBoolean("isFirebase", isFirebase)
                 fragment.arguments = bundle
                 fragment
             }
@@ -35,6 +37,7 @@ class ViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, val clickedUse
                 val fragment = PageRepositoryFragment()
                 val bundle = Bundle()
                 bundle.putString("clickedUserLogin", clickedUserLogin)
+                bundle.putBoolean("isFirebase", isFirebase)
                 fragment.arguments = bundle
                 fragment
             }

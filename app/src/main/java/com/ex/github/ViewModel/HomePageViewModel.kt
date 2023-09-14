@@ -1,6 +1,6 @@
 package com.ex.github.ViewModel
 
-import android.net.Uri
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,44 +13,94 @@ import javax.inject.Inject
 @HiltViewModel
 class HomePageViewModel @Inject constructor(var repository: HomePageRepository) : ViewModel() {
 
-    var usersMutableLiveData = MutableLiveData<List<User>>()
-    var repositoriesMutableLiveData = MutableLiveData<List<Repositories>>()
+    var usersMutableLiveData = MutableLiveData<List<User>?>()
+    var repositoriesMutableLiveData = MutableLiveData<List<Repositories>?>()
     var filteredUsersMutableLiveData = MutableLiveData<List<User>>()
-    var filteredRepositoriesMutableLiveData = MutableLiveData<List<Repositories>>()
-    var filteredMutableLiveData = MutableLiveData<List<Any>>()
+    var filteredRepositoriesMutableLiveData = MutableLiveData<List<Repositories>?>()
 
+/*    suspend fun getAllUsers(context: Context): List<User>? {
 
-    suspend fun getAllUsers(): List<User> {
-        var x = repository.getAllUsersFromApi()
         var y = repository.getAllUsersFromFirebase()
+        var x = repository.getAllUsersFromApi(context)
 
-        var list = x + y
+        var list: List<User>? = null
+        if (x != null) {
+            list = x + y
+        } else if ( y != null){
+            list = y
+        }
         usersMutableLiveData.value = list
+        return list
+    }
 
+
+    */
+    suspend fun getAllUsersFromFirebase (context: Context) : List<User>?{
+        var x = repository.getAllUsersFromFirebase()
+        var list: List<User>? = null
+        if (x != null) {
+            list = x
+        }
+        usersMutableLiveData.value = list
+        return list
+    }
+
+    suspend fun getAllUsersFromApi (context: Context) : List<User>?{
+        var x = repository.getAllUsersFromApi(context)
+        var list: List<User>? = null
+        if (x != null) {
+            list = x
+        }
+        usersMutableLiveData.value = list
         return list
     }
 
 
 
+    suspend fun getAllRepositories(context: Context): List<Repositories>? {
 
-    suspend fun getAllRepositories(): List<Repositories> {
-        repositoriesMutableLiveData.value = repository.getAllRepositories()
-        return repository.getAllRepositories()
+        var x = repository.getAllRepositories(context)
+
+        var list: List<Repositories>? = null
+        if (x != null) {
+            list = x
+        }
+        repositoriesMutableLiveData.value =  list
+        return list
     }
 
-    suspend fun filterUsers(search: String) {
-        var response = repository.getAllUsersFromApi()
-        var filterUsers = response.filter { it.login?.contains(search, ignoreCase = true) == true }
+    suspend fun filterUsers(search: String, context: Context) {
+
+        var firebase = repository.getAllUsersFromFirebase()
+        var api = repository.getAllUsersFromApi(context)
+
+        var response: List<User>? = null
+        if (api != null) {
+            response = api + firebase
+        } else {
+            response = firebase
+
+        }
+        var filterUsers =
+            response.filter { (it.login?.contains(search, ignoreCase = true) ?: null) as Boolean }
+        Log.d("HomeVMfilterUser", filterUsers.toString())
         filteredUsersMutableLiveData.value = filterUsers
     }
 
-    suspend fun filterRepositories(search: String) {
-        var response = repository.getAllRepositories()
-        var responseBody = response.filter { it.name.contains(search, ignoreCase = true) }
+    suspend fun filterRepositories(search: String, context: Context) {
+
+        var x = repository.getAllRepositories(context)
+
+        var response: List<Repositories>? = null
+        if(x != null) {
+            response = x
+        }
+
+        var responseBody =
+            response?.filter { (it.name?.contains(search, ignoreCase = true) ?: null) as Boolean }
+
+        Log.d("HomeVMresponseBody", responseBody.toString())
         filteredRepositoriesMutableLiveData.value = responseBody
     }
 
-    suspend fun filter () {
-        filteredMutableLiveData.value = listOf(filteredUsersMutableLiveData, filteredRepositoriesMutableLiveData)
-    }
 }

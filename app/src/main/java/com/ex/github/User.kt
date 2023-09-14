@@ -4,6 +4,7 @@ import android.net.Uri
 
 data class User(
     var login: String? = null,
+    var favLogin: String? = null,
     var avatar_url: String? = null,
     var url: String? = null,
     var name: String? = null,

@@ -17,7 +17,7 @@ class FavoriteRepositoryAdapter(
         fun bind(favoriteRepo: Repositories) {
             binding.apply {
                 tvName.text = favoriteRepo.name
-                tvLogin.text = favoriteRepo.repoIsWhose
+                tvLogin.text = favoriteRepo.full_name
 
                 root.setOnClickListener { onClick(favoriteRepo) }
             }

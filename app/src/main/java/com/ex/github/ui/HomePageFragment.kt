@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -36,17 +35,6 @@ class HomePageFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        viewModel.usersMutableLiveData.observe(viewLifecycleOwner, Observer {
-            if (it.isNotEmpty()) {
-                adapter.list = it
-                adapter.notifyDataSetChanged()
-            }
-        })
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,10 +44,42 @@ class HomePageFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             binding.progressBar.visibility = View.VISIBLE
-            var listUsers = viewModel.getAllUsers()
-            var listRepo = viewModel.getAllRepositories()
+            binding.searchView.visibility = View.GONE
+            binding.ivFavorite.visibility = View.GONE
+            binding.ivAccount.visibility = View.GONE
 
-            var list = listUsers + listRepo
+            var listUsersApi = viewModel.getAllUsersFromApi(requireContext())
+            var listUsersFirebase = viewModel.getAllUsersFromFirebase(requireContext())
+            var listRepo = viewModel.getAllRepositories(requireContext())
+
+            var list: List<Any>? = null
+            if (listUsersApi == null) {
+                if (listUsersFirebase != null && listRepo != null) {
+                    list = listUsersFirebase + listRepo
+                } else if (listUsersFirebase != null && listRepo == null) {
+                    list = listUsersFirebase
+                } else if (listUsersFirebase == null && listRepo != null) {
+                    list = listRepo
+                }
+            } else if (listUsersFirebase == null) {
+                if (listUsersApi != null && listRepo != null) {
+                    list = listUsersApi + listRepo
+                } else if (listUsersApi != null && listRepo == null) {
+                    list = listUsersApi
+                } else if (listUsersApi == null && listRepo != null) {
+                    list = listRepo
+                }
+            } else if (listRepo == null) {
+                if (listUsersApi != null && listUsersFirebase != null) {
+                    list = listUsersApi + listUsersFirebase
+                } else if (listUsersApi != null && listUsersFirebase == null) {
+                    list = listUsersApi
+                } else if (listUsersApi == null && listUsersFirebase != null) {
+                    list = listUsersFirebase
+                }
+            } else {
+                list = listUsersFirebase + listUsersApi + listRepo
+            }
 
             adapter = HomePageAdapter(list) {
                 val fragment = DetailFragment().apply {
@@ -70,9 +90,12 @@ class HomePageFragment : Fragment() {
                                     putString("clickedUserLogin", it.login)
                                     putString("clickedUserHtmlUrl", it.html_url)
                                     putString("clickedUserAvatarUrl", it.avatar_url)
+                                    putString("isFirebase", it.isFirebase.toString())
                                 } else {
                                     putString("clickedUserLogin", it.login)
                                     putString("clickedUserNumber", it.phoneNumber)
+                                    putString("clickedUserAvatarUrl", it.storage?.toString())
+                                    putString("isFirebase", it.isFirebase.toString())
                                 }
                             }
 
@@ -91,6 +114,9 @@ class HomePageFragment : Fragment() {
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
             binding.progressBar.visibility = View.GONE
+            binding.searchView.visibility = View.VISIBLE
+            binding.ivFavorite.visibility = View.VISIBLE
+            binding.ivAccount.visibility = View.VISIBLE
         }
 
         searchView()
@@ -126,17 +152,38 @@ class HomePageFragment : Fragment() {
     fun searchText(p0: String) {
         lifecycleScope.launch {
 
-            viewModel.filterUsers(p0)
-            viewModel.filterRepositories(p0)
+            viewModel.filterUsers(p0, requireContext())
+            viewModel.filterRepositories(p0, requireContext())
 
-            viewModel.filteredMutableLiveData.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()) {
-                    adapter.list = it
-                    adapter.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(requireContext(), "Not Found User ", Toast.LENGTH_SHORT).show()
-                }
-            })
+            // Can't access the Fragment View's LifecycleOwner for FavoriteUserFragment{8f7a67a} (1c1ddaaa-859b-40bf-8403-591016a298b2 tag=f0) when getView() is null i.e., before onCreateView() or after onDestroyView()
+            // hatası veriyor. Bu yüzden ->  if (view != null)  bunu yaz !!
+            if (view != null) {
+                viewModel.filteredUsersMutableLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer { user ->
+                        viewModel.filteredRepositoriesMutableLiveData.observe(
+                            viewLifecycleOwner,
+                            Observer { repo ->
+                                if (repo != null) {
+                                    if (repo.isNotEmpty() || user.isNotEmpty()) {
+                                        if (repo.isEmpty()) {
+                                            adapter.list = user
+                                            adapter.notifyDataSetChanged()
+                                        } else if (user.isEmpty()) {
+                                            adapter.list = repo
+                                            adapter.notifyDataSetChanged()
+                                        } else {
+                                            adapter.list = user + repo
+                                            adapter.notifyDataSetChanged()
+                                        }
+                                    } else {
+                                        adapter.list = user + repo
+                                        adapter.notifyDataSetChanged()
+                                    }
+                                }
+                            })
+                    })
+            }
         }
     }
 }

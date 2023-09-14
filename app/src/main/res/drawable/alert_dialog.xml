@@ -8,7 +8,7 @@
     </item>
     <item android:top="2dp" android:bottom="2dp" android:left="2dp" android:right="2dp">
         <shape android:shape="rectangle">
-            <solid android:color="#96ffffff" /> <!-- Orta kısım rengi -->
+            <solid android:color="#2AFFFFFF" /> <!-- Orta kısım rengi -->
             <corners android:radius="10dp" />
         </shape>
     </item>

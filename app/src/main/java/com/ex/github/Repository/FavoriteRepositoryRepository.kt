@@ -33,11 +33,11 @@ class FavoriteRepositoryRepository @Inject constructor(
                             for (i in snapshot.children) {
                                 val repoName = i.child("name").getValue(String::class.java)!!
                                 val repoIsWhose =
-                                    i.child("repoIsWhose").getValue(String::class.java)!!
+                                    i.child("full_name").getValue(String::class.java)!!
                                 favRepoList.add(
                                     Repositories(
-                                        repoName,
-                                        repoIsWhose,
+                                        name = repoName,
+                                        full_name = repoIsWhose,
                                         null,
                                         null,
                                         null,

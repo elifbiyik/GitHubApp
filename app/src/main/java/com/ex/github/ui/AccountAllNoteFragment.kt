@@ -40,18 +40,22 @@ class AccountAllNoteFragment : Fragment() {
             var currentUser = viewModel.currentUser()
             var loginUser = currentUser[0]
             var list = viewModel.getAllNote(loginUser)
-            adapter = AccountAllAdapter (list)
+            adapter = AccountAllAdapter(list)
             binding.recyclerview.adapter = adapter
             binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-            viewModel.currentUserAccountAllNoteMutableLiveData.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()) {
-                    adapter.list = it
-                    adapter.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
-                }
-            })
+            if (view != null) {
+                viewModel.currentUserAccountAllNoteMutableLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer {
+                        if (it.isNotEmpty()) {
+                            adapter.list = it
+                            adapter.notifyDataSetChanged()
+                        } else {
+                            Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            }
         }
         return binding.root
     }
