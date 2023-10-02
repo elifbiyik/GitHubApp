@@ -63,13 +63,12 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="40dp"
         android:orientation="vertical"
         android:paddingLeft="32dp"
         android:paddingRight="32dp">
@@ -85,8 +84,8 @@
                 android:id="@+id/et_Phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawablePadding="16dp"
                 android:drawableEnd="@drawable/ic_phone_enabled_24"
+                android:drawablePadding="16dp"
                 android:fontFamily="@font/calibri"
                 android:hint="Phone Number"
                 android:inputType="textPhonetic"
@@ -95,7 +94,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
-<!--
+        <!--
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -135,9 +134,9 @@
                 android:fontFamily="@font/calibri"
                 android:text="Sign up"
                 android:textAllCaps="false"
-                android:textStyle="bold"
                 android:textColor="#96ffffff"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnSignIn"
@@ -154,21 +153,5 @@
 
 
         </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/xx"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/calibri"
-            android:text="Forgot Password?"
-            android:textAlignment="center"
-            android:textColor="#96ffffff"
-            android:textSize="16sp" />
-
-
     </LinearLayout>
-
-
 </RelativeLayout>

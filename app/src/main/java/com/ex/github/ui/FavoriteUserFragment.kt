@@ -18,7 +18,6 @@ import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class FavoriteUserFragment : Fragment() {
 

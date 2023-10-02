@@ -4,8 +4,10 @@ import android.net.Uri
 
 data class User(
     var login: String? = null,
+    var loginPhone: String?=null,
     var favLogin: String? = null,
     var avatar_url: String? = null,
+    var login_avatar_url: Uri? = null,
     var url: String? = null,
     var name: String? = null,
     var public_repos: String? = null,

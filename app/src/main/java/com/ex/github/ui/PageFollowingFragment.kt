@@ -2,7 +2,6 @@ package com.ex.github.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,13 +55,14 @@ class PageFollowingFragment : Fragment() {
             }
 
             if (list != null) {
-                adapter = FollowingAdapter(list) {
+                adapter = FollowingAdapter(list, clickedUserisFirebase!!) {
                     if (clickedUserisFirebase == false) {   // Firebaseden gelen kullanıcıların takip ettiği kişilere tıklamaz.
                         var fragment = DetailFragment()
                         var bundle = Bundle().apply {
                             putString("clickedUserLogin", it.login)
                             putString("clickedUserHtmlUrl", it.html_url)
                             putString("clickedUserAvatarUrl", it.avatar_url)
+                            putString("isFirebase", it.isFirebase.toString())
                         }
                         fragment.arguments = bundle
                         replace(fragment)

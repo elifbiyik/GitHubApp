@@ -2,6 +2,8 @@ package com.ex.github.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.ex.github.R
@@ -24,9 +26,17 @@ class MainActivity : AppCompatActivity() {
             var sharedPreferences = this.getSharedPreferences("user", MODE_PRIVATE)
             var editor = sharedPreferences.edit()
             editor.putString("uid", useruid).apply()
-            loadFragment(HomePageFragment())
+
+            // Splash ekran
+            Handler(Looper.getMainLooper()).postDelayed({
+                loadFragment(HomePageFragment())
+            }, 2000)
         } else
-            loadFragment(SignInFragment())
+        // Splash ekran
+            Handler(Looper.getMainLooper()).postDelayed({
+                loadFragment(SignInFragment())
+            }, 2000)
+
     }
 
     fun loadFragment(fragment: Fragment) {

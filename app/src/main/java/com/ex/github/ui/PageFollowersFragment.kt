@@ -27,13 +27,6 @@ class PageFollowersFragment() : Fragment() {
     private val viewModel: PageFollowersViewModel by viewModels()
     private lateinit var adapter: FollowerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
-
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,9 +45,8 @@ class PageFollowersFragment() : Fragment() {
                     list = clickedUserLogin?.let { viewModel.getShowUserFollowersApi(it, requireContext()) }
                 } else {
                     list = clickedUserLogin?.let { viewModel.getShowUserFollowersFromFirebase(it) }
+                    Log.d("****List", list.toString())
                 }
-
-
 
                 if (list != null) {
                     adapter = FollowerAdapter(list) {
@@ -75,7 +67,7 @@ class PageFollowersFragment() : Fragment() {
                     binding.recyclerview.adapter = adapter
                     binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-                    if (view != null) {
+           //         if (view != null) {
                         viewModel.currentUserFollowersMutableLiveData.observe(
                             viewLifecycleOwner,
                             Observer {
@@ -84,9 +76,9 @@ class PageFollowersFragment() : Fragment() {
                                     adapter.notifyDataSetChanged()
                                 }
                             })
-                    }
+   //                 }
 
-                    if (view != null) {
+   //                 if (view != null) {
                         viewModel.currentUserFollowersFromfirebaseMutableLiveData.observe(
                             viewLifecycleOwner,
                             Observer {
@@ -95,7 +87,7 @@ class PageFollowersFragment() : Fragment() {
                                     adapter.notifyDataSetChanged()
                                 }
                             })
-                    }
+          //          }
                 }
             }
         return binding.root

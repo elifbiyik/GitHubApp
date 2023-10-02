@@ -1,6 +1,8 @@
 package com.ex.github.Repository
 
 import android.net.Uri
+import android.util.Log
+import com.ex.github.R
 import com.ex.github.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -27,5 +29,21 @@ class SignUpRepository @Inject constructor(private val auth: FirebaseAuth) {
         val storageReference = FirebaseStorage.getInstance()
         var imageReference = storageReference.reference.child("+90${phone}.jpg")
         imageUri?.let { imageReference.putFile(it) }
+    }
+
+    fun notUploadProfile(phone : String){
+        val storageReference = FirebaseStorage.getInstance()
+        var imageReference = storageReference.reference.child("+90${phone}.jpg")
+        val image = R.drawable.account
+        val imageUri = Uri.parse("android.resource://com.ex.github/$image")
+       imageUri?.let {
+           imageReference.putFile(it)
+               .addOnSuccessListener {
+                   Log.d("Upload", "Upload Okey")
+               }
+               .addOnFailureListener { e ->
+                   Log.d("Upload", e.message.toString())
+               }
+       }
     }
 }

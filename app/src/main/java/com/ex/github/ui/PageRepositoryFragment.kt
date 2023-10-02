@@ -69,7 +69,8 @@ class PageRepositoryFragment() : Fragment() {
                 adapter = RepositoryAdapter(
                     list,
                     listFavoriteRepository,
-                    clickedUserLogin
+                    clickedUserLogin,
+                    clickedUserisFirebase!!
                 ) {
                     if (clickedUserisFirebase == false) {
                         if (it.isFavorite) {

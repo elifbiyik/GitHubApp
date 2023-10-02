@@ -1,7 +1,7 @@
 package com.ex.github.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.ImageLoad
@@ -9,24 +9,35 @@ import com.ex.github.User
 import com.ex.github.databinding.FragmentPageFollowingItemBinding
 
 
-class FollowingAdapter(var list : List<User>, private val onClick : (User) -> Unit ) : RecyclerView.Adapter<FollowingAdapter.ViewHolder> () {
+class FollowingAdapter(var list : List<User>, var clickedUserisFirebase : Boolean, private val onClick : (User) -> Unit ) : RecyclerView.Adapter<FollowingAdapter.ViewHolder> () {
 
     inner class ViewHolder (var binding : FragmentPageFollowingItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
+
+        //  false api
         fun bind(followingList: User) {
             with(binding) {
 
-                if(followingList.favLogin == "null") {
+                Log.d("xxxxxxxxxxfavLogin", followingList.toString())
+
+                if(clickedUserisFirebase == false) { // Apiden gelenler
                     tvName.text = followingList.login
-                }else {
+                    if(followingList.html_url == "null") {
+                        tvLogin.text = ""
+                    } else {
+                        tvLogin.text = followingList.html_url
+                    }
+                } else {
                     tvName.text = followingList.favLogin
+                    if(followingList.html_url == "null") {
+                        tvLogin.text = ""
+                    } else {
+                        tvLogin.text = followingList.html_url
+                    }
                 }
 
-                if(followingList.html_url == "null") {
-                    tvLogin.text = ""
-                } else {
-                    tvLogin.text = followingList.html_url
-                }
+
+
 
                 imageView.ImageLoad(followingList.avatar_url.toString())
 

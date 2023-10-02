@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.ex.github.R
+import com.ex.github.R.drawable.ic_account_circle_24
 import com.ex.github.ViewModel.SignUpViewModel
 import com.ex.github.databinding.FragmentSignUpBinding
 import com.ex.github.replace
@@ -28,13 +29,6 @@ class SignUpFragment : Fragment() {
     private val viewModel: SignUpViewModel by viewModels()
     private var imageUri: Uri? = null
     private val REQUEST_IMAGE_GALLERY = 1
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +44,8 @@ class SignUpFragment : Fragment() {
 
             builder.setPositiveButton("Gallery") { dialog, which ->
                 dialog.dismiss()
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                val intent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
             }
             val dialog: AlertDialog = builder.create()
@@ -62,35 +57,29 @@ class SignUpFragment : Fragment() {
             var nameSurname = binding.etNameSurname.text.toString()
             lifecycleScope.launch {
                 viewModel.signUp(nameSurname, phone)
+                replace(SignInFragment())
             }
         }
 
-        if (view != null) {
-            viewModel.userMutableLiveData.observe(viewLifecycleOwner, Observer {
-                if (it) {
-                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                    replace(SignInFragment())
-                } else {
-                    Toast.makeText(context, "Try again ..", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
-
+        viewModel.userMutableLiveData.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Try again ..", Toast.LENGTH_SHORT).show()
+            }
+        })
         return binding.root
     }
 
     override fun onPause() {
         super.onPause()
         lifecycleScope.launch {
-           var phone = binding.etPhone.text.toString()
-            if(imageUri != null) {
+            var phone = binding.etPhone.text.toString()
+            if (imageUri != null) {
                 viewModel.uploadProfilePhoto(phone, imageUri)
             } else {
-                val drawableResId = R.drawable.ic_account_circle_24
-                val uri = Uri.parse("android.resource://com.ex.github/$drawableResId")
-                viewModel.uploadProfilePhoto(phone, uri)
+                viewModel.notUploadProfile(phone)
             }
-
         }
     }
 

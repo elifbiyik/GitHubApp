@@ -77,13 +77,10 @@ class HomePageAdapter(var list: List<Any>?, private val onClick: (Any) -> Unit) 
             with(binding) {
                 binding.tvLogin.text = repoList.name
                 binding.tvHtmlUrl.text = repoList.full_name
-                val drawableResId = com.ex.github.R.drawable.ic_account_circle_24
-                val uri =
-                    android.net.Uri.parse("android.resource://com.ex.github.Adapter/$drawableResId")
-                        .toString()
-                imageView.ImageLoad(uri)
+                val drawableResId = R.drawable.r
+                imageView.setImageResource(drawableResId)
 
-            root.setOnClickListener {onClick(repoList) }
+                root.setOnClickListener { onClick(repoList) }
             }
         }
     }
@@ -93,18 +90,18 @@ class HomePageAdapter(var list: List<Any>?, private val onClick: (Any) -> Unit) 
 
         fun bind(userList: User) {
             with(binding) {
-                binding.tvLogin.text = userList.login
-                binding.tvHtmlUrl.text = userList.html_url
+                tvLogin.text = userList.login
+                tvHtmlUrl.text = userList.html_url
                 if (userList.avatar_url != null) {
-                    binding.imageView.ImageLoad(userList.avatar_url.toString())
+                    imageView.ImageLoad(userList.avatar_url.toString())
                 } else if (userList.storage != null) {
-                    binding.imageView.ImageLoad(userList.storage.toString())
-                }else {
+                    imageView.ImageLoad(userList.storage.toString())
+                } else {
                     val drawableResId = R.drawable.ic_account_circle_24
                     val uri = Uri.parse("android.resource://com.ex.github/$drawableResId")
-                    binding.imageView.ImageLoad(uri.toString())
+                    imageView.ImageLoad(uri.toString())
                 }
-                    root.setOnClickListener {onClick(userList) }
+                root.setOnClickListener { onClick(userList) }
             }
         }
     }

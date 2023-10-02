@@ -1,6 +1,7 @@
 package com.ex.github.ViewModel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ex.github.Repository.PageFollowersRepository
@@ -23,6 +24,9 @@ class PageFollowersViewModel @Inject constructor(var repository: PageFollowersRe
     suspend fun getShowUserFollowersFromFirebase (clickedUserLogin: String): List<User> {
         var userFollowers = repository.getShowUserFollowersFromFirebase(clickedUserLogin)
         currentUserFollowersFromfirebaseMutableLiveData.value = userFollowers
+        Log.d("xxxxxxxcxcxc", userFollowers.toString())
+        Log.d("xxxxxxxcxcxcCCC", currentUserFollowersFromfirebaseMutableLiveData.value.toString())
+
         return userFollowers
     }
 

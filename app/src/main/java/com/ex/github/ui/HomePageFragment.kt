@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.github.Adapter.HomePageAdapter
+import com.ex.github.R
 import com.ex.github.Repositories
 import com.ex.github.User
 import com.ex.github.ViewModel.HomePageViewModel
@@ -19,6 +20,7 @@ import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 @AndroidEntryPoint
@@ -28,19 +30,19 @@ class HomePageFragment : Fragment() {
     private val viewModel: HomePageViewModel by viewModels()
     private lateinit var adapter: HomePageAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
+    // Accountta profil güncellendikten sonra HomePage dönünce güncellemyior.
+    override fun onPause() {
+        super.onPause()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentHomePageBinding.inflate(inflater, container, false)
+
+        var loginPhone = arguments?.getString("loginPhone")
 
         lifecycleScope.launch(Dispatchers.Main) {
             binding.progressBar.visibility = View.VISIBLE
@@ -49,7 +51,7 @@ class HomePageFragment : Fragment() {
             binding.ivAccount.visibility = View.GONE
 
             var listUsersApi = viewModel.getAllUsersFromApi(requireContext())
-            var listUsersFirebase = viewModel.getAllUsersFromFirebase(requireContext())
+            var listUsersFirebase = viewModel.getAllUsersFromFirebase()
             var listRepo = viewModel.getAllRepositories(requireContext())
 
             var list: List<Any>? = null
@@ -96,12 +98,16 @@ class HomePageFragment : Fragment() {
                                     putString("clickedUserNumber", it.phoneNumber)
                                     putString("clickedUserAvatarUrl", it.storage?.toString())
                                     putString("isFirebase", it.isFirebase.toString())
+
+                                    putString("loginPhone", loginPhone)
                                 }
                             }
 
                             is Repositories -> {
+                                var image = R.drawable.r
                                 putString("clickedRepoName", it.name)
                                 putString("clickedRepoIsWhose", it.full_name)
+                                putString("clickedUserAvatarUrl", image.toString())
                             }
                         }
                     }

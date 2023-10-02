@@ -18,24 +18,7 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
     var filteredUsersMutableLiveData = MutableLiveData<List<User>>()
     var filteredRepositoriesMutableLiveData = MutableLiveData<List<Repositories>?>()
 
-/*    suspend fun getAllUsers(context: Context): List<User>? {
-
-        var y = repository.getAllUsersFromFirebase()
-        var x = repository.getAllUsersFromApi(context)
-
-        var list: List<User>? = null
-        if (x != null) {
-            list = x + y
-        } else if ( y != null){
-            list = y
-        }
-        usersMutableLiveData.value = list
-        return list
-    }
-
-
-    */
-    suspend fun getAllUsersFromFirebase (context: Context) : List<User>?{
+    suspend fun getAllUsersFromFirebase () : List<User>?{
         var x = repository.getAllUsersFromFirebase()
         var list: List<User>? = null
         if (x != null) {
@@ -54,8 +37,6 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
         usersMutableLiveData.value = list
         return list
     }
-
-
 
     suspend fun getAllRepositories(context: Context): List<Repositories>? {
 
@@ -83,7 +64,6 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
         }
         var filterUsers =
             response.filter { (it.login?.contains(search, ignoreCase = true) ?: null) as Boolean }
-        Log.d("HomeVMfilterUser", filterUsers.toString())
         filteredUsersMutableLiveData.value = filterUsers
     }
 
@@ -102,5 +82,4 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
         Log.d("HomeVMresponseBody", responseBody.toString())
         filteredRepositoriesMutableLiveData.value = responseBody
     }
-
 }

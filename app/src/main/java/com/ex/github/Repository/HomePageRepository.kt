@@ -14,7 +14,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.core.Repo
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -96,8 +95,7 @@ class HomePageRepository @Inject constructor(
                                     i.child("phoneNumber").getValue(String::class.java)
 
                                 val storageReference = FirebaseStorage.getInstance()
-                                var storageRef =
-                                    storageReference.reference.child("+90$userPhone.jpg")
+                                var storageRef = storageReference.reference.child("+90$userPhone.jpg")
 
                                 val userDeferred = GlobalScope.async {
                                     try {
@@ -116,8 +114,8 @@ class HomePageRepository @Inject constructor(
                                 // storage'dan sonuç dönüp dönmemesine bakmamız lazım o yüzden await kullan
                                 // await kullandığın için async kullan.
                                 userPromises.add(userDeferred)
-
                             }
+
                             GlobalScope.launch(Dispatchers.Main) {
                                 val usersList = userPromises.awaitAll().filterNotNull()
                                 continuation.resume(usersList)
@@ -174,7 +172,6 @@ class HomePageRepository @Inject constructor(
                 }
                 databaseReference.addListenerForSingleValueEvent(getData)
             } catch (e: Exception) {
-                Log.d("HatacurrentUser", e.message.toString())
                 continuation.resumeWithException(e)
             }
         }

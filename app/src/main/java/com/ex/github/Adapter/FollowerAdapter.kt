@@ -1,8 +1,6 @@
 package com.ex.github.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.ImageLoad
@@ -20,7 +18,7 @@ class FollowerAdapter(var list: List<User>, private val onClick: (User) -> Unit)
                 tvName.text = followerList.login
 
                 if(followerList.html_url == "null") {
-                    tvLogin.text = ""
+                    tvLogin.text = followerList.phoneNumber
                 } else {
                     tvLogin.text = followerList.html_url
                 }

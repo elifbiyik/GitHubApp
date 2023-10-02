@@ -13,7 +13,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
 import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -42,12 +41,12 @@ class DetailRepository @Inject constructor(
         alertDialog.show()
     }
 
-    suspend fun getShowUserFromApi(clickedUserLogin: String, context : Context): User {
+    suspend fun getShowUserFromApi(clickedUserLogin: String, context: Context): User {
 
         try {
             var x = apiServise.getShowUser(clickedUserLogin)
             Log.d("getShowUser", x.toString())
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Log.d("getShowUserCatch", e.message.toString())
             showAlertDialog(context)
         }
@@ -168,11 +167,12 @@ class DetailRepository @Inject constructor(
     // favUser -> Favorilere eklenmek istenen kullanıcı
     suspend fun addFavoriteUser(
         loginUser: String,
+        loginPhone :String,
         favUser: String,
         favHtml: String,
         favAvatar: String,
         clickedUserIsFirebase: Boolean,
-        phoneNumber : String,
+        phoneNumber: String,
         context: Context
     ): Boolean {
         try {
@@ -194,13 +194,14 @@ class DetailRepository @Inject constructor(
                     } else {
                         val favUsers = User(
                             loginUser,
+                            loginPhone,
                             favLogin = favUser,
                             html_url = favHtml,
-                            phoneNumber = phoneNumber ,
+                            phoneNumber = phoneNumber,
                             avatar_url = favAvatar,
                             isFirebase = clickedUserIsFirebase
-
                         )
+
                         databaseReferenceUser.child(loginUser).child(favUser)
                             .setValue(favUsers)
                         isValid = true
@@ -229,72 +230,75 @@ class DetailRepository @Inject constructor(
     }
 
 
-    suspend fun followersListForSize (clickUserLogin : String) : ArrayList<String>{
+    suspend fun followersListForSize(clickUserLogin: String): ArrayList<String> {
         return suspendCoroutine { continuation ->
-                val followersList: ArrayList<String> = ArrayList()
-                val getData = object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            for (i in snapshot.children) {
-                                for (j in i.children) {
-                                    var user = j.child("favLogin").getValue(String::class.java)
+            val followersList: ArrayList<String> = ArrayList()
+            val getData = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (i in snapshot.children) {
+                            for (j in i.children) {
+                                var user = j.child("favLogin").getValue(String::class.java)
 
-                                    if (clickUserLogin == user) {
-                                        followersList.add(user)
-                                    }
+                                if (clickUserLogin == user) {
+                                    followersList.add(user)
                                 }
                             }
                         }
-                        continuation.resume(followersList)
                     }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        continuation.resumeWithException(error.toException())
-                    }
+                    continuation.resume(followersList)
                 }
-                databaseReferenceUser.addListenerForSingleValueEvent(getData)
+
+                override fun onCancelled(error: DatabaseError) {
+                    continuation.resumeWithException(error.toException())
+                }
+            }
+            databaseReferenceUser.addListenerForSingleValueEvent(getData)
         }
     }
 
 
+    suspend fun followingListForSize(clickUserLogin: String): ArrayList<String> {
+        val databaseReference = databaseReferenceUser.child(clickUserLogin)
+        return suspendCoroutine { continuation ->
+            var followingList: ArrayList<String> = ArrayList()
+            var getData = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
 
-        suspend fun followingListForSize (clickUserLogin : String) : ArrayList<String>{
-            val databaseReference = databaseReferenceUser.child(clickUserLogin)
-            return suspendCoroutine { continuation ->
-                var followingList : ArrayList<String> = ArrayList()
-                var getData = object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-
-                        if(snapshot.exists()) {
-                            for (i in snapshot.children){
-                                var user = i.child("favLogin").getValue(String::class.java)
-                                user?.let { followingList.add(it) }
-                            }
-                            continuation.resume(followingList)
+                    if (snapshot.exists()) {
+                        for (i in snapshot.children) {
+                            var user = i.child("favLogin").getValue(String::class.java)
+                            user?.let { followingList.add(it) }
                         }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        continuation.resumeWithException(error.toException())
+                        continuation.resume(followingList)
+                    } else {
+                        continuation.resume(followingList)
                     }
                 }
-                databaseReference.addListenerForSingleValueEvent(getData)
+
+                override fun onCancelled(error: DatabaseError) {
+                    continuation.resumeWithException(error.toException())
+                }
             }
+            databaseReference.addListenerForSingleValueEvent(getData)
+        }
     }
 
-    suspend fun repositoryListForSize (clickUserLogin: String) : ArrayList<String> {
+    suspend fun repositoryListForSize(clickUserLogin: String): ArrayList<String> {
         val databaseReference = databaseReferenceRepository.child(clickUserLogin)
 
         return suspendCoroutine { continuation ->
-            var repositoryList : ArrayList<String> = ArrayList()
+            var repositoryList: ArrayList<String> = ArrayList()
 
-            var getData = object  : ValueEventListener {
+            var getData = object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()) {
+                    if (snapshot.exists()) {
                         for (i in snapshot.children) {
                             val repoName = i.child("name").getValue(String::class.java)!!
                             repositoryList.add(repoName)
                         }
+                        continuation.resume(repositoryList)
+                    } else {
                         continuation.resume(repositoryList)
                     }
                 }

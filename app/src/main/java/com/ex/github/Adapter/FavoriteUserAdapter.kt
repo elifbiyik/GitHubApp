@@ -20,13 +20,12 @@ class FavoriteUserAdapter(var list: List<User>, private val onClick : (User) -> 
         fun bind(favUsersList: User) {
             with(binding) {
                 tvName.text = favUsersList.favLogin
-
                 Log.d("FavUSerAdapter", favUsersList.toString())
 
-                if(favUsersList.html_url != null) {
-                    tvLogin.text = favUsersList.html_url
-                } else if (favUsersList.html_url == null) {
+                if(favUsersList.html_url == "null") {
                     tvLogin.visibility = View.GONE
+                } else {
+                    tvLogin.text = favUsersList.html_url
                 }
 
                 if(favUsersList.avatar_url != null) {
@@ -38,7 +37,6 @@ class FavoriteUserAdapter(var list: List<User>, private val onClick : (User) -> 
                     val uri = Uri.parse("android.resource://com.ex.github/$drawableResId")
                     binding.imageView.ImageLoad(uri.toString())
                 }
-
 
                 root.setOnClickListener {onClick(favUsersList) }
             }

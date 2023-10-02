@@ -54,8 +54,8 @@ class DetailFragment @Inject constructor() : Fragment() {
         var clickedRepoIsWhose = arguments?.getString("clickedRepoIsWhose")
 
 
-        lifecycleScope.launch {
 
+        lifecycleScope.launch {
             if (!clickedUserLogin.isNullOrEmpty()) {
                 if (clickedUserisFirebase == false) {
                     with(binding) {
@@ -72,7 +72,6 @@ class DetailFragment @Inject constructor() : Fragment() {
                 }
             }
             if (!clickedUserPhoneNumber.isNullOrEmpty()) {
-
                 var followersSize = clickedUserLogin?.let {
                     viewModel.getShowUserFollowersSize(it)
                 }.toString()
@@ -107,12 +106,14 @@ class DetailFragment @Inject constructor() : Fragment() {
                     ivFav.visibility = View.GONE
                     cardView.visibility = View.GONE
                     viewPager.visibility = View.GONE
+                    clickedUserAvatarUrl?.let { imageUser.ImageLoad(it) }
                 }
             }
 
             lifecycleScope.launch {
                 var currentUser = viewModel.currentUser()
                 var loginUser = currentUser[0]
+                var loginPhone = currentUser[1]
 
                 var listFavUsers = viewModel.showFavoriteUser(
                     loginUser,
@@ -134,15 +135,17 @@ class DetailFragment @Inject constructor() : Fragment() {
                         )
                         if (!listFavUsers.contains(clickedUserLogin)) {
                             binding.ivFav.Color(R.color.red)
-                            viewModel.addFavoriteUser(
-                                loginUser,
-                                clickedUserLogin.toString(),
-                                clickedUserHtmlUrl.toString(),
-                                clickedUserAvatarUrl.toString(),
-                                clickedUserisFirebase,
-                                clickedUserPhoneNumber.toString(),
-                                requireContext()
-                            )
+                                viewModel.addFavoriteUser(
+                                    loginUser,
+                                    loginPhone,
+                                    clickedUserLogin.toString(),
+                                    clickedUserHtmlUrl.toString(),
+                                    clickedUserAvatarUrl.toString(),
+                                    clickedUserisFirebase,
+                                    clickedUserPhoneNumber.toString(),
+                                    requireContext()
+                                )
+
                         } else {
                             binding.ivFav.Color(R.color.black)
                             viewModel.removeFavoriteUser(

@@ -26,23 +26,12 @@ class SignInFragment : Fragment() {
     private lateinit var binding: FragmentSignInBinding
     private val viewModel: SignInViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentSignInBinding.inflate(inflater, container, false)
-
-        binding.xx.setOnClickListener {
-            replace(HomePageFragment())
-        }
 
         binding.btnSignup.setOnClickListener {
             replace(SignUpFragment())
@@ -64,6 +53,7 @@ class SignInFragment : Fragment() {
                     lifecycleScope.launch {
                         viewModel.verify(requireActivity(), phone)
                         showAlertDialog(requireContext())
+                        // Kullanıcının phone bilgisiyle fotoğrafına ulaşıp dB'ye kaydedicez. (Followers için)
                     }
                 }
             }
@@ -82,14 +72,21 @@ class SignInFragment : Fragment() {
             val etVerificationCode = inputEditTextField.text.toString()
             val verificationId = viewModel.getVerificationId()
 
-            lifecycleScope.launch {
-                val credential =
-                    PhoneAuthProvider.getCredential(verificationId.toString(), etVerificationCode)  // Doğrulama kimliği
-               var isSuccess =  viewModel.signInWithCredential(requireContext(), credential)
-                if(isSuccess){
-                    replace(HomePageFragment())
-                }else{
-                    dialog.dismiss()
+            if (etVerificationCode.isEmpty()) {
+                Toast.makeText(context, "You must enter code", Toast.LENGTH_SHORT).show()
+            } else {
+                lifecycleScope.launch {
+                    val credential =
+                        PhoneAuthProvider.getCredential(
+                            verificationId.toString(),
+                            etVerificationCode
+                        )  // Doğrulama kimliği
+                    var isSuccess = viewModel.signInWithCredential(requireContext(), credential)
+                    if (isSuccess) {
+                        replace(HomePageFragment())
+                    } else {
+                        dialog.dismiss()
+                    }
                 }
             }
         }

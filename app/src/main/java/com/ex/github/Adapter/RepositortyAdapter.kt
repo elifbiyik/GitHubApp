@@ -1,6 +1,8 @@
 package com.ex.github.Adapter
 
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.Color
@@ -13,6 +15,7 @@ class RepositoryAdapter(
     var list: List<Repositories>,
     var listFavoriteRepository: ArrayList<Repositories>,
     var clickedUserLogin: String,
+    var clickedUserisFirebase : Boolean,
     private val onClickFavorite: (Repositories) -> Unit
 ) : RecyclerView.Adapter<RepositoryAdapter.ViewHolder>() {
 
@@ -36,6 +39,14 @@ class RepositoryAdapter(
                 tvVisibility.text = repoList.visibility
                 tvLanguage.text = repoList.language
                 tvStar.text = repoList.stargazers_count
+            }
+
+            if(clickedUserisFirebase) {
+                binding.ivStar.visibility = View.GONE
+                binding.ivColor.visibility = View.GONE
+                binding.tvName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
+            } else {
+                binding.ivStar.visibility = View.VISIBLE
             }
         }
     }

@@ -34,4 +34,7 @@ class SignUpViewModel @Inject constructor(
     fun uploadProfilePhoto(phone: String, imageUri: Uri?) {
         repository.uploadProfilePhoto(phone, imageUri)
     }
+    fun notUploadProfile(phone: String) {
+        repository.notUploadProfile(phone)
+    }
 }

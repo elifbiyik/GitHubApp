@@ -3,7 +3,6 @@ package com.ex.github.Repository
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
-import com.ex.github.Note
 import com.ex.github.R
 import com.ex.github.User
 import com.google.android.gms.tasks.Task
