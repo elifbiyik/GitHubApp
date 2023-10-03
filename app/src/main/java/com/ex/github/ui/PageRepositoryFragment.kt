@@ -101,9 +101,7 @@ class PageRepositoryFragment() : Fragment() {
                         })
                 }
             }
-
         }
-
         return binding.root
     }
 }

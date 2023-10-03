@@ -24,12 +24,6 @@ class AllNoteFragment : Fragment() {
     private val viewModel: AllNoteViewModel by viewModels()
     private lateinit var adapter : AllNoteAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +47,7 @@ class AllNoteFragment : Fragment() {
                         adapter.list = it
                         adapter.notifyDataSetChanged()
                     } else {
-                        Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
+                  //      Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
                     }
                 })
             }

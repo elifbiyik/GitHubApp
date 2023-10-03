@@ -10,7 +10,6 @@ import com.ex.github.R
 import com.ex.github.Repositories
 import com.ex.github.databinding.FragmentPageRepositoryItemBinding
 
-
 class RepositoryAdapter(
     var list: List<Repositories>,
     var listFavoriteRepository: ArrayList<Repositories>,
@@ -92,13 +91,4 @@ class RepositoryAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
-
-/*    fun isFavoriteRepository(repositoryName: String, ivStar: ImageView) {
-        var item = Repositories(repositoryName, clickedUserLogin, null, null, null, null)
-        if (listFavoriteRepository.contains(item)) {
-            ivStar.Color(R.color.yellow)
-        } else {
-            ivStar.Color(R.color.black)
-        }
-    }*/
 }

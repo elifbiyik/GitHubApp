@@ -41,7 +41,6 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
     suspend fun getAllRepositories(context: Context): List<Repositories>? {
 
         var x = repository.getAllRepositories(context)
-
         var list: List<Repositories>? = null
         if (x != null) {
             list = x
@@ -54,7 +53,6 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
 
         var firebase = repository.getAllUsersFromFirebase()
         var api = repository.getAllUsersFromApi(context)
-
         var response: List<User>? = null
         if (api != null) {
             response = api + firebase
@@ -70,16 +68,12 @@ class HomePageViewModel @Inject constructor(var repository: HomePageRepository) 
     suspend fun filterRepositories(search: String, context: Context) {
 
         var x = repository.getAllRepositories(context)
-
         var response: List<Repositories>? = null
         if(x != null) {
             response = x
         }
-
         var responseBody =
             response?.filter { (it.name?.contains(search, ignoreCase = true) ?: null) as Boolean }
-
-        Log.d("HomeVMresponseBody", responseBody.toString())
         filteredRepositoriesMutableLiveData.value = responseBody
     }
 }

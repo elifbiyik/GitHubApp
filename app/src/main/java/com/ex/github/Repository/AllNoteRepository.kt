@@ -29,7 +29,6 @@ class AllNoteRepository @Inject constructor(private var database: FirebaseDataba
                 } else if (isUserOrRepository == "Repository") {
                     databaseReference = databaseReferenceNoteForRepository
                 }else {
-                    // Eğer isUserOrRepo ne "User" ne de "Repository" değilse; hata
                     continuation.resumeWithException(IllegalArgumentException("Invalid value for isUserOrRepo"))
                     return@suspendCoroutine
                 }

@@ -25,12 +25,6 @@ class FavoriteUserFragment : Fragment() {
     private val viewModel: FavoriteUserViewModel by viewModels()
     private lateinit var adapter: FavoriteUserAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,8 +38,6 @@ class FavoriteUserFragment : Fragment() {
             var currentUser = viewModel.currentUser()
             var loginUser = currentUser[0]
             var list = viewModel.showFavoriteUser(loginUser)
-
-            Log.d("xFavUser", list.toString())
 
             adapter = FavoriteUserAdapter(list) {
                 var clickedFavUser = it.favLogin.toString()

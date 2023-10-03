@@ -98,7 +98,6 @@ class HomePageFragment : Fragment() {
                                     putString("clickedUserNumber", it.phoneNumber)
                                     putString("clickedUserAvatarUrl", it.storage?.toString())
                                     putString("isFirebase", it.isFirebase.toString())
-
                                     putString("loginPhone", loginPhone)
                                 }
                             }

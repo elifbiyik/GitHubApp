@@ -96,8 +96,6 @@ class FavoriteUserRepository @Inject constructor(
         }
     }
 
-
-
     suspend fun showFavoriteUserApi(loginUser: String): ArrayList<User> {
         return withContext(Dispatchers.IO) {
             val userList: ArrayList<User> = ArrayList()
@@ -127,9 +125,6 @@ class FavoriteUserRepository @Inject constructor(
             return@withContext userList
         }
     }
-
-
-
 
     suspend fun showFavoriteUserApi1(
         loginUser: String,

@@ -20,7 +20,6 @@ class FavoriteUserAdapter(var list: List<User>, private val onClick : (User) -> 
         fun bind(favUsersList: User) {
             with(binding) {
                 tvName.text = favUsersList.favLogin
-                Log.d("FavUSerAdapter", favUsersList.toString())
 
                 if(favUsersList.html_url == "null") {
                     tvLogin.visibility = View.GONE

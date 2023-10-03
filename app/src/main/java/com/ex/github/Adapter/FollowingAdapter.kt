@@ -1,6 +1,5 @@
 package com.ex.github.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,14 +12,10 @@ class FollowingAdapter(var list : List<User>, var clickedUserisFirebase : Boolea
 
     inner class ViewHolder (var binding : FragmentPageFollowingItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-
-        //  false api
         fun bind(followingList: User) {
             with(binding) {
 
-                Log.d("xxxxxxxxxxfavLogin", followingList.toString())
-
-                if(clickedUserisFirebase == false) { // Apiden gelenler
+                if(clickedUserisFirebase == false) {
                     tvName.text = followingList.login
                     if(followingList.html_url == "null") {
                         tvLogin.text = ""
@@ -36,11 +31,7 @@ class FollowingAdapter(var list : List<User>, var clickedUserisFirebase : Boolea
                     }
                 }
 
-
-
-
                 imageView.ImageLoad(followingList.avatar_url.toString())
-
                 root.setOnClickListener {onClick(followingList) }
             }
         }

@@ -9,8 +9,6 @@ object CONSTANT {
     const val ALL_REPOSITORIES = "/repositories"
 
 
-
-
 // doctocat/repos
 // https://api.github.com/users/mojombo
 // https://api.github.com/users/mojombo/followers

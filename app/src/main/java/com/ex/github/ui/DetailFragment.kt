@@ -30,11 +30,6 @@ class DetailFragment @Inject constructor() : Fragment() {
     private lateinit var viewPager: ViewPager2
     private lateinit var adapter: ViewPagerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
@@ -52,8 +47,6 @@ class DetailFragment @Inject constructor() : Fragment() {
 
         var clickedRepoName = arguments?.getString("clickedRepoName")
         var clickedRepoIsWhose = arguments?.getString("clickedRepoIsWhose")
-
-
 
         lifecycleScope.launch {
             if (!clickedUserLogin.isNullOrEmpty()) {

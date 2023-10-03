@@ -3,10 +3,12 @@ package com.ex.github.Repository
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.ex.github.Api.ApiServise
 import com.ex.github.R
 import com.ex.github.User
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -49,7 +51,6 @@ class PageFollowersRepository @Inject constructor(
         alertDialog.show()
     }
 
-
     // try içi çalıştığı halde hata veriyor crash oluyor ??
     suspend fun getShowUserFollowersApi(clickedUserLogin: String, context: Context): List<User> {
         try {
@@ -59,14 +60,12 @@ class PageFollowersRepository @Inject constructor(
             Log.d("getShowUserFollowersApiCatch", e.message.toString())
             showAlertDialog(context)
         }
-
         return apiServise.getShowUserFollowers(clickedUserLogin)
     }
 
-    suspend fun getShowUserFollowersFromFirebasee(clickedUserLogin: String): List<User> {
+    suspend fun getShowUserFollowersFromFirebase(clickedUserLogin: String): List<User> {
         return suspendCoroutine { continuation ->
             try {
-                //    val userInfoList: ArrayList<User> = ArrayList()
                 val getData = object : ValueEventListener {
                     @SuppressLint("SuspiciousIndentation")
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -86,31 +85,30 @@ class PageFollowersRepository @Inject constructor(
                                         i.child("loginPhone").getValue(String::class.java)
                                     //           var phoneNumber = i.child("phoneNumber")?.value?.toString()
 
+                                    val storageReference = FirebaseStorage.getInstance()
+                                    var storageRef =
+                                        storageReference.reference.child("+90$loginPhone.jpg")
 
-                                    val userDeferred = GlobalScope.async {
-                                        try {
-                                            if (clickedUserLogin == favLogin) {
-                                                val storageReference = FirebaseStorage.getInstance()
-                                                var storageRef =
-                                                    storageReference.reference.child("+90$loginPhone.jpg")
+                                    if (clickedUserLogin == favLogin) {
+                                        val userDeferred = GlobalScope.async {
+                                            try {
+
                                                 val downloadUrl = storageRef.downloadUrl.await()
                                                 User(
                                                     userLogin,
                                                     favLogin = favLogin,
-                                                    //      login_avatar_url = downloadUrl,
+                                                    login_avatar_url = downloadUrl,
                                                     html_url = userHtml,
                                                     avatar_url = avatarUrl,
                                                     //                 phoneNumber = phoneNumber
                                                 )
-                                            } else {
-                                                User()
+                                            } catch (e: Exception) {
+                                                Log.e("Hata", e.message.toString())
+                                                null
                                             }
-                                        } catch (e: Exception) {
-                                            Log.e("Hata", e.message.toString())
-                                            null
                                         }
+                                        userPromises.add(userDeferred)
                                     }
-                                    userPromises.add(userDeferred)
                                 }
                             }
                             GlobalScope.launch(Dispatchers.Main) {
@@ -133,174 +131,15 @@ class PageFollowersRepository @Inject constructor(
             }
         }
     }
-
-    suspend fun getShowUserFollowersFromFirebaseee(clickedUserLogin: String): List<User> {
-        return suspendCoroutine { continuation ->
-            try {
-                val userInfoList: ArrayList<User> = ArrayList()
-                val getData = object : ValueEventListener {
-                    @SuppressLint("SuspiciousIndentation")
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            for (j in snapshot.children) {
-                                for (i in j.children) {
-                                    var userLogin =
-                                        i.child("login").getValue(String::class.java)
-                                    var userHtml =
-                                        i.child("html_url").getValue(String::class.java)
-                                    var favLogin = i.child("favLogin").getValue(String::class.java)
-                                    var avatarUrl =
-                                        i.child("avatar_url").getValue(String::class.java)
-                                    var loginPhone =
-                                        i.child("loginPhone").getValue(String::class.java)
-                                    //           var phoneNumber = i.child("phoneNumber")?.value?.toString()
-
-
-                                    val storageReference = FirebaseStorage.getInstance()
-                                    var storageRef =
-                                        storageReference.reference.child("+90$loginPhone.jpg")
-
-                                    storageRef.downloadUrl.addOnCompleteListener {
-                                        if (it.isSuccessful) {
-                                            val downUrl = it.result
-                                            if (clickedUserLogin == favLogin) {
-                                                userInfoList.add(
-                                                    User(
-                                                        userLogin,
-                                                        favLogin = favLogin,
-                                                        //                login_avatar_url = downUrl,
-                                                        html_url = userHtml,
-                                                        avatar_url = avatarUrl
-                                                    )
-                                                )
-                                            }
-                                            continuation.resume(userInfoList)
-                                        } else {
-                                            continuation.resumeWithException(
-                                                it.exception ?: Exception("Unknown error")
-                                            )
-                                        }
-                                    }
-
-
-                                    /* var downloadUrl = storageRef.downloadUrl.await()
-
-                                     if (clickedUserLogin == favLogin) {
-                                         userInfoList.add(
-                                             User(
-                                                 userLogin,
-                                                 favLogin = favLogin,
-                                                 login_avatar_url = downloadUrl,
-                                                 html_url = userHtml,
-                                                 avatar_url = avatarUrl,
-                                                 //                 phoneNumber = phoneNumber
-                                             )
-                                         )
-                                     }*/
-                                }
-                            }
-                        }
-                        //          continuation.resume(userInfoList)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        continuation.resumeWithException(error.toException())
-                    }
-                }
-                Log.d("xxxxxxxxxcxc", userInfoList.toString())
-                databaseReference.addListenerForSingleValueEvent(getData)
-            } catch (e: Exception) {
-                Log.d("Hata", e.message.toString())
-                continuation.resumeWithException(e)
-            }
-        }
-    }
-
-    suspend fun getShowUserFollowersFromFirebase(clickedUserLogin: String): List<User> {
-        return suspendCoroutine { continuation ->
-            try {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val userInfoList: ArrayList<User> = ArrayList()
-                    val getData = object : ValueEventListener {
-                        @SuppressLint("SuspiciousIndentation")
-                        override fun onDataChange(snapshot: DataSnapshot) {
-
-                            if (snapshot.exists()) {
-                                for (j in snapshot.children) {
-                                    for (i in j.children) {
-                                        var userLogin =
-                                            i.child("login").getValue(String::class.java)
-                                        var userHtml =
-                                            i.child("html_url").getValue(String::class.java)
-                                        var favLogin =
-                                            i.child("favLogin").getValue(String::class.java)
-                                        var avatarUrl =
-                                            i.child("avatar_url").getValue(String::class.java)
-                                        var loginPhone =
-                                            i.child("loginPhone").getValue(String::class.java)
-                                        //           var phoneNumber = i.child("phoneNumber")?.value?.toString()
-
-                                        if (clickedUserLogin == favLogin) {
-/*                                            val storageRef = FirebaseStorage.getInstance().reference
-                                            val photoRef = storageRef.child("+90$loginPhone.jpg")
-                                            photoRef.downloadUrl.addOnSuccessListener {
-                                                userInfoList.add(
-                                                    User(
-                                                        userLogin,
-                                                        favLogin = favLogin,
-                                                        login_avatar_url = it,
-                                                        html_url = userHtml,
-                                                        avatar_url = avatarUrl,
-                                                        //                 phoneNumber = phoneNumber
-                                                    )
-                                                )
-                                                Log.d("xxxxxxxcxcxcAAAA", it.toString())
-                                                Log.d("xxxxxxxcxcxcAAAAA", userInfoList.toString())
-                                            }.addOnFailureListener {
-                                              */  userInfoList.add(
-                                                    User(
-                                                        userLogin,
-                                                        favLogin = favLogin,
-                                                        html_url = userHtml,
-                                                        avatar_url = avatarUrl,
-                                                        //                 phoneNumber = phoneNumber
-                                                    )
-                                                )
-                                //            }
-                                        }
-                                    }
-                                }
-                                continuation.resume(userInfoList)
-
-                            } else {
-                                continuation.resume(ArrayList())
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            continuation.resumeWithException(error.toException())
-                        }
-                    }
-                    databaseReference.addListenerForSingleValueEvent(getData)
-                }
-            } catch (e: Exception) {
-                Log.d("Hata", e.message.toString())
-                continuation.resumeWithException(e)
-            }
-        }
-    }
-
-
-    suspend fun photo(loginPhone: String) {
-        val list: ArrayList<User> = ArrayList()
-        val storageReference = FirebaseStorage.getInstance()
-        val storageRef = storageReference.reference.child("+90$loginPhone.jpg")
-
-        var photo = storageRef.downloadUrl.await()
-
-
-    }
-
-
 }
 
+
+/*
+int x -> primitive
+x : Int -> object
+
+
+        String char dizisi o yüzden String yazılıt string değil (S büyük)
+
+
+        */

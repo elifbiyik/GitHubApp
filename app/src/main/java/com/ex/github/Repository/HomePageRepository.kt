@@ -161,7 +161,6 @@ class HomePageRepository @Inject constructor(
                                     phoneNumber = currentUserPhone,
                                 )
                             )
-
                             continuation.resume(userInfoList)
                         }
                     }

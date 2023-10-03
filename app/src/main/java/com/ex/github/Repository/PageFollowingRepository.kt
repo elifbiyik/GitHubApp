@@ -24,7 +24,6 @@ class PageFollowingRepository @Inject constructor(
 
     private val databaseReferenceUser = database.getReference("Favorite User")
 
-
     private fun showAlertDialog(context: Context) {
         val alertDialogBuilder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Error")
@@ -33,14 +32,12 @@ class PageFollowingRepository @Inject constructor(
         alertDialogBuilder.setPositiveButton("OK") { dialog, which ->
             dialog.dismiss()
         }
-
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
 
 
     suspend fun getShowUserFollowing(clickedUserLogin: String, context: Context): List<User> {
-
         try {
             var x = apiServise.getShowUserFollowing(clickedUserLogin)
             Log.d("getShowUserFollowing", x.toString())
@@ -92,6 +89,4 @@ class PageFollowingRepository @Inject constructor(
             }
         }
     }
-
-
 }

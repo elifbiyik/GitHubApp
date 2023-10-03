@@ -18,7 +18,6 @@ class AccountAllNoteRepository @Inject constructor(
     private var database: FirebaseDatabase,
     var auth: FirebaseAuth
 ) {
-
     private val databaseReferenceNoteForUser = database.getReference("Note/Favorite User")
     suspend fun getAllNote(loginUser: String): ArrayList<Note> {
         return suspendCoroutine { continuation ->

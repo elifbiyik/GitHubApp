@@ -44,15 +44,13 @@ class DetailRepository @Inject constructor(
     suspend fun getShowUserFromApi(clickedUserLogin: String, context: Context): User {
 
         try {
-            var x = apiServise.getShowUser(clickedUserLogin)
-            Log.d("getShowUser", x.toString())
+            apiServise.getShowUser(clickedUserLogin)
         } catch (e: Exception) {
             Log.d("getShowUserCatch", e.message.toString())
             showAlertDialog(context)
         }
         return apiServise.getShowUser(clickedUserLogin)
     }
-
 
     suspend fun getShowUserFromFirebase(clickedUserPhoneNumber: String): User {
         return suspendCoroutine { continuation ->
@@ -90,7 +88,6 @@ class DetailRepository @Inject constructor(
             }
         }
     }
-
 
     suspend fun currentUser(): List<String> {
         var currentUserPhone = auth.currentUser?.phoneNumber.toString()
@@ -208,7 +205,6 @@ class DetailRepository @Inject constructor(
                     }
                 }
 
-
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(context, "You can't ! ", Toast.LENGTH_SHORT).show()
                 }
@@ -228,7 +224,6 @@ class DetailRepository @Inject constructor(
     ) {
         databaseReferenceUser.child(loginUser).child(favUser).removeValue()
     }
-
 
     suspend fun followersListForSize(clickUserLogin: String): ArrayList<String> {
         return suspendCoroutine { continuation ->
@@ -256,7 +251,6 @@ class DetailRepository @Inject constructor(
             databaseReferenceUser.addListenerForSingleValueEvent(getData)
         }
     }
-
 
     suspend fun followingListForSize(clickUserLogin: String): ArrayList<String> {
         val databaseReference = databaseReferenceUser.child(clickUserLogin)

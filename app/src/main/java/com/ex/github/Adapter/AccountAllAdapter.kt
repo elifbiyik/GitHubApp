@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.Note
 import com.ex.github.databinding.FragmentAccountAllNoteItemBinding
-import com.ex.github.databinding.FragmentAccountMyNoteItemBinding
-
 
 class AccountAllAdapter(var list : List<Note> ) : RecyclerView.Adapter<AccountAllAdapter.ViewHolder> () {
 

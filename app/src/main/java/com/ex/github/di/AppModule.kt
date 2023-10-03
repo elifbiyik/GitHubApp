@@ -14,7 +14,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModuleAppModule {
@@ -25,10 +24,6 @@ object AppModuleAppModule {
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder().build()
     }
-
-
-
-    var requestCount: Int = 0
 
   /*  @Provides
     @Singleton
@@ -43,9 +38,6 @@ object AppModuleAppModule {
           .build()
     }*/
 
-
-
-
     @Provides
     @Singleton
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
@@ -59,8 +51,6 @@ object AppModuleAppModule {
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiServise {
-        requestCount += 1
-        Log.d("****** count: ", requestCount.toString())
         return retrofit.create(ApiServise::class.java)
     }
 

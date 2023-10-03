@@ -20,8 +20,6 @@ class FavoriteUserViewModel @Inject constructor(var repository: FavoriteUserRepo
         var usersApi = repository.showFavoriteUserApi(loginUser)
         var users = usersFirebase + usersApi
 
-        Log.d("FavUserVM", users.toString())
-
         currentUserFavoriteUserMutableLiveData.value = users
         return users
     }

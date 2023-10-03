@@ -24,11 +24,6 @@ class UserNoteFragment : Fragment() {
     private lateinit var adapter: ViewPagerNoteAdapter
     private val viewModel: UserNoteViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +65,6 @@ class UserNoteFragment : Fragment() {
                 else -> tab.text = "Undefined"
             }
         }.attach()
-
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {

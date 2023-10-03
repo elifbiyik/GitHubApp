@@ -19,5 +19,4 @@ data class User(
     var phoneNumber: String? = null,
     var storage: Uri? = null,
     var isFirebase: Boolean? = false
-
 )

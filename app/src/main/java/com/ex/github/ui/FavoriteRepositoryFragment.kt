@@ -23,12 +23,6 @@ class FavoriteRepositoryFragment : Fragment() {
     private val viewModel: FavoriteRepositoryViewModel by viewModels()
     private lateinit var adapter : FavoriteRepositoryAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

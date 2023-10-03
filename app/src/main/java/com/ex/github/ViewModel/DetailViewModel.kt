@@ -23,7 +23,6 @@ class DetailViewModel @Inject constructor(var repository: DetailRepository) : Vi
 
     suspend fun getShowUserFromFirebase(clickedUserPhoneNumber: String): User {
         var user = repository.getShowUserFromFirebase("+90$clickedUserPhoneNumber")
-        Log.d("xxxxxx", user.toString())
         firebaseUserMutableLiveData.value = user
         return user
     }

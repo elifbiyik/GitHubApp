@@ -23,12 +23,6 @@ class AccountAllNoteFragment : Fragment() {
     private val viewModel: AccountAllNoteViewModel by viewModels()
     private lateinit var adapter : AccountAllAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +46,7 @@ class AccountAllNoteFragment : Fragment() {
                             adapter.list = it
                             adapter.notifyDataSetChanged()
                         } else {
-                            Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
+                        //    Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
                         }
                     })
             }

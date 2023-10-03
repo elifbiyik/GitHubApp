@@ -28,7 +28,6 @@ class PageRepositoryRepository @Inject constructor(
     private val databaseReferenceRepository =
         database.getReference("Favorite Repository")
 
-
     private fun showAlertDialog(context: Context) {
         val alertDialogBuilder = AlertDialog.Builder(context, R.style.CustomAlertDialog)
         alertDialogBuilder.setTitle("Error")
@@ -41,7 +40,6 @@ class PageRepositoryRepository @Inject constructor(
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
-
 
     suspend fun getShowUserRepository(
         clickedUserLogin: String,
@@ -99,9 +97,7 @@ class PageRepositoryRepository @Inject constructor(
                 continuation.resumeWithException(e)
             }
         }
-
     }
-
 
     suspend fun addFavoriteRepository(
         loginUser: String,

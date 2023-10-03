@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.ex.github.R
 import com.ex.github.ViewModel.SignInViewModel
+import com.ex.github.databinding.ActivityMainBinding
+import com.ex.github.databinding.FragmentMyNoteBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -15,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: SignInViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 loadFragment(SignInFragment())
             }, 2000)
-
     }
 
     fun loadFragment(fragment: Fragment) {

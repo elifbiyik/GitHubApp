@@ -45,7 +45,6 @@ class PageFollowersFragment() : Fragment() {
                     list = clickedUserLogin?.let { viewModel.getShowUserFollowersApi(it, requireContext()) }
                 } else {
                     list = clickedUserLogin?.let { viewModel.getShowUserFollowersFromFirebase(it) }
-                    Log.d("****List", list.toString())
                 }
 
                 if (list != null) {
@@ -67,7 +66,6 @@ class PageFollowersFragment() : Fragment() {
                     binding.recyclerview.adapter = adapter
                     binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-           //         if (view != null) {
                         viewModel.currentUserFollowersMutableLiveData.observe(
                             viewLifecycleOwner,
                             Observer {
@@ -76,9 +74,7 @@ class PageFollowersFragment() : Fragment() {
                                     adapter.notifyDataSetChanged()
                                 }
                             })
-   //                 }
 
-   //                 if (view != null) {
                         viewModel.currentUserFollowersFromfirebaseMutableLiveData.observe(
                             viewLifecycleOwner,
                             Observer {
@@ -87,7 +83,6 @@ class PageFollowersFragment() : Fragment() {
                                     adapter.notifyDataSetChanged()
                                 }
                             })
-          //          }
                 }
             }
         return binding.root

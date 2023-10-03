@@ -17,15 +17,18 @@ class FollowerAdapter(var list: List<User>, private val onClick: (User) -> Unit)
             with(binding) {
                 tvName.text = followerList.login
 
-                if(followerList.html_url == "null") {
+                if (followerList.html_url == "null") {
                     tvLogin.text = followerList.phoneNumber
                 } else {
                     tvLogin.text = followerList.html_url
                 }
 
-                binding.imageView.ImageLoad(followerList.avatar_url.toString())
-
-                root.setOnClickListener {onClick(followerList)}
+                if (followerList.login_avatar_url == null) {
+                    binding.imageView.ImageLoad(followerList.avatar_url.toString())
+                } else {
+                    binding.imageView.ImageLoad(followerList.login_avatar_url.toString())
+                }
+                root.setOnClickListener { onClick(followerList) }
             }
         }
     }

@@ -77,34 +77,18 @@
                             app:layout_constraintTop_toBottomOf="@+id/acc_nameSurname" />
 
 
-                        <TextView
-                            android:id="@+id/edit"
-                            android:layout_width="38dp"
-                            android:layout_height="24dp"
-                            android:layout_marginStart="360dp"
-                            android:layout_marginTop="16dp"
-                            android:text="Edit"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="MissingConstraints" />
-
                         <ImageView
                             android:id="@+id/editImage"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:layout_marginStart="370dp"
-                            android:layout_marginEnd="16dp"
                             android:src="@drawable/edit"
-                            android:visibility="invisible"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/edit"
-                            app:layout_constraintVertical_bias="0.933" />
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="@+id/acc_im"
+                            app:layout_constraintEnd_toEndOf="@+id/acc_im"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="@+id/acc_im"
+                            app:layout_constraintTop_toTopOf="@+id/acc_im"
+                            app:layout_constraintVertical_bias="1.0" />
 
                         <ImageView
                             android:id="@+id/signOut"

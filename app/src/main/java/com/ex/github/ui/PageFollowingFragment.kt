@@ -26,13 +26,6 @@ class PageFollowingFragment : Fragment() {
     private val viewModel: PageFollowingViewModel by viewModels()
     private lateinit var adapter: FollowingAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
-
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +36,6 @@ class PageFollowingFragment : Fragment() {
 
         var clickedUserLogin = arguments?.getString("clickedUserLogin")
         val clickedUserisFirebase = arguments?.getBoolean("isFirebase")
-
 
         lifecycleScope.launch {
             var list: List<User>? = null
@@ -73,7 +65,7 @@ class PageFollowingFragment : Fragment() {
                 binding.recyclerview.adapter = adapter
                 binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-                if (view != null) {
+            //    if (view != null) {
                     viewModel.currentUserFollowingMutableLiveData.observe(
                         viewLifecycleOwner,
                         Observer {
@@ -82,9 +74,9 @@ class PageFollowingFragment : Fragment() {
                                 adapter.notifyDataSetChanged()
                             }
                         })
-                }
+          //      }
 
-                if (view != null) {
+         //       if (view != null) {
                     viewModel.currentUserFollowingFromFirebaseMutableLiveData.observe(
                         viewLifecycleOwner,
                         Observer {
@@ -93,7 +85,7 @@ class PageFollowingFragment : Fragment() {
                                 adapter.notifyDataSetChanged()
                             }
                         })
-                }
+         //       }
             }
         }
         return binding.root

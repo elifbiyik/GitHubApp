@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ex.github.Note
 import com.ex.github.databinding.FragmentAccountMyNoteItemBinding
 
-
 class AccountMyAdapter(var list : List<Note> ) : RecyclerView.Adapter<AccountMyAdapter.ViewHolder> () {
 
     inner class ViewHolder (var binding : FragmentAccountMyNoteItemBinding) : RecyclerView.ViewHolder(binding.root) {
