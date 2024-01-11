@@ -32,9 +32,7 @@ Search :
 
 Detail : 
 
-<img src="[Screenshots/UserDetail.jpeg]" width=200 height=433>
-<img src="[Screenshots/UserDetail2.jpeg]" width=200 height=433>
-<img src="[Screenshots/UserDetail3.jpeg]" width=200 height=433>
+<img src="[Screenshots/UserDetail.jpeg]" width=200 height=433><img src="[Screenshots/UserDetail2.jpeg]" width=200 height=433><img src="[Screenshots/UserDetail3.jpeg]" width=200 height=433>
 
 
 Favori User : 
@@ -44,8 +42,7 @@ Favori User :
 
 Favrori User for Note (My note and all notes): 
 
-<img src="[Screenshots/FavoriteUser-MyNote.jpeg]" width=200 height=433>
-<img src="[Screenshots/FavoriteUser-AllNote.jpeg]" width=200 height=433>
+<img src="[Screenshots/FavoriteUser-MyNote.jpeg]" width=200 height=433><img src="[Screenshots/FavoriteUser-AllNote.jpeg]" width=200 height=433>
 
 
 Favori Repository :
@@ -54,14 +51,12 @@ Favori Repository :
 
 Favrori Repository for Note (My note and all notes) : 
 
-<img src="[Screenshots/FavoriteRepository-MyNote.jpeg]" width=200 height=433>
-<img src="[Screenshots/FavoriteRepository-AllNote.jpeg]" width=200 height=433>
+<img src="[Screenshots/FavoriteRepository-MyNote.jpeg]" width=200 height=433><img src="[Screenshots/FavoriteRepository-AllNote.jpeg]" width=200 height=433>
 
 
 Account : 
 
-<img src="[Screenshots/Account.jpeg]" width=200 height=433>
-<img src="[Screenshots/Account-AllNote.jpeg]" width=200 height=433>
+<img src="[Screenshots/Account.jpeg]" width=200 height=433><img src="[Screenshots/Account-AllNote.jpeg]" width=200 height=433>
 
 
 You can change profile photo : 
