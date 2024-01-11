@@ -56,7 +56,7 @@ Favrori Repository for Note (My note and all notes) :
 
 Account : 
 
-<img src="[Screenshots/Account.jpeg]" width=200 height=433><img src="[Screenshots/Account-AllNote.jpeg]" width=200 height=433>
+<img src="[Screenshots/Account.jpeg]" width=200 height=433><img src="[Screenshots/Account-AllNote.png]" width=200 height=433>
 
 
 You can change profile photo : 
