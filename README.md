@@ -18,7 +18,9 @@ https://api.github.com/
 - Firebase for database
 - Glide for loading images
 
-<img src="Screenshots/Home.png" width=200 height=433> <img src="Screenshots/Detail.png" width=200 height=433>
+<img src="Screenshots/Home.png" width=200 height=433> 
+
+<img src="[Screenshots/Detail.png](https://github.com/elifbiyik/GitHubApp/assets/106388763/22223d57-90bf-4d72-bb5c-03f402f3e187)" width=200 height=433>
 
 
 ![](https://github.com/elifbiyik/GitHubApp/assets/106388763/22223d57-90bf-4d72-bb5c-03f402f3e187)
