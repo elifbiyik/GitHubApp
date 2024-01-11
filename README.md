@@ -19,7 +19,7 @@ https://api.github.com/
 - Glide for loading images
 
 
-![WhatsApp Image 2024-01-11 at 09 50 21](https://github.com/elifbiyik/GitHubApp/assets/106388763/22223d57-90bf-4d72-bb5c-03f402f3e187 = 200x400)
+![](https://github.com/elifbiyik/GitHubApp/assets/106388763/22223d57-90bf-4d72-bb5c-03f402f3e187)
 
 Home Page : 
 ![WhatsApp Image 2024-01-11 at 09 49 01](https://github.com/elifbiyik/GitHubApp/assets/106388763/31ff7eaf-5caa-4178-9457-bc25fdcfac25)
