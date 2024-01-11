@@ -20,8 +20,6 @@ import com.ex.github.replace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.log
-
 
 @AndroidEntryPoint
 class HomePageFragment : Fragment() {

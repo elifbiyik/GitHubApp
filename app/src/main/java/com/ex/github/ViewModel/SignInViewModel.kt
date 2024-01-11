@@ -2,7 +2,6 @@ package com.ex.github.ViewModel
 
 import android.app.Activity
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ex.github.Repository.SignInRepository
 import com.google.firebase.auth.PhoneAuthCredential

@@ -18,6 +18,7 @@ class HomePageAdapter(var list: List<Any>?, private val onClick: (Any) -> Unit) 
         private const val VIEW_TYPE_REPOSITORIES = 2
     }
 
+//Farklı türde öğeleri görüntülemek ve bağlamak için kullanılan görünümleri (views) içerir.
     inner class RepositoryViewHolder(var binding: FragmentHomePageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(repoList: Repositories) {
@@ -53,6 +54,7 @@ class HomePageAdapter(var list: List<Any>?, private val onClick: (Any) -> Unit) 
         }
     }
 
+// Verinin türüne göre öğelerin görünüm türünü belirler. Eğer öğe bir User ise VIEW_TYPE_USER, eğer bir Repositories ise VIEW_TYPE_REPOSITORIES döner.
     override fun getItemViewType(position: Int): Int {
         return when (list?.get(position)) {
             is User -> VIEW_TYPE_USER
@@ -61,6 +63,7 @@ class HomePageAdapter(var list: List<Any>?, private val onClick: (Any) -> Unit) 
         }
     }
 
+    // Her bir görünüm türü için ayrı bir FragmentHomePageItemBinding nesnesi oluşturulur
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
@@ -81,6 +84,7 @@ class HomePageAdapter(var list: List<Any>?, private val onClick: (Any) -> Unit) 
         return list?.size ?: 0
     }
 
+    // belirtilen pozisyonda bulunan öğeyi bağlar.
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             VIEW_TYPE_USER -> {

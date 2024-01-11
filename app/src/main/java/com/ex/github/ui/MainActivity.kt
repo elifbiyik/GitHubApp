@@ -4,13 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.ex.github.R
 import com.ex.github.ViewModel.SignInViewModel
 import com.ex.github.databinding.ActivityMainBinding
-import com.ex.github.databinding.FragmentMyNoteBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
