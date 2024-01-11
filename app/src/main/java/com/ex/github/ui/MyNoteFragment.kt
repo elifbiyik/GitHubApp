@@ -48,8 +48,6 @@ class MyNoteFragment : Fragment() {
                     if (it.isNotEmpty()) {
                         adapter.list = it
                         adapter.notifyDataSetChanged()
-                    } else {
-                        Toast.makeText(context, "...", Toast.LENGTH_SHORT).show()
                     }
                 })
             }

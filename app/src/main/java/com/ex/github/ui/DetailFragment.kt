@@ -120,7 +120,6 @@ class DetailFragment @Inject constructor() : Fragment() {
                 }
 
                 binding.ivFav.setOnClickListener {
-                    Toast.makeText(context, "Click", Toast.LENGTH_SHORT).show()
                     lifecycleScope.launch {
                         var listFavUsers = viewModel.showFavoriteUser(
                             loginUser,
