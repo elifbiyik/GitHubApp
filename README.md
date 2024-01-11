@@ -20,9 +20,7 @@ https://api.github.com/
 
 Login : 
 
-<img src="[Screenshots/SignUp.jpeg]" width=200 height=433>
-<img src="[Screenshots/SignIn.jpeg]" width=200 height=433>
-<img src="[Screenshots/VerificationCodeAlertDialog.jpeg]" width=200 height=433>
+<img src="[Screenshots/SignUp.jpeg]" width=200 height=433><img src="[Screenshots/SignIn.jpeg]" width=200 height=433><img src="[Screenshots/VerificationCodeAlertDialog.jpeg]" width=200 height=433>
 
 Home Page : 
 
