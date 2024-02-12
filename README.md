@@ -1,7 +1,6 @@
 
 # API
-(https://compras.com.tr/swagger/index.html)
-
+https://api.github.com/
 
 # TECHNOLOGIES
 - Kotlin 
@@ -15,8 +14,7 @@
 - MutableLiveData
 - OkHttp and Retrofit for network operations
 - Glide for loading images
-- Lottie Animated for animation
-- Paging3 for pagination
+- ViewPager2 for swipe
 
 
 Login : 
