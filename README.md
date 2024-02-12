@@ -1,3 +1,4 @@
+A simple project using Github Api based on Kotlin MVVM architecture and material designs.
 
 # API
 https://api.github.com/
@@ -11,10 +12,11 @@ https://api.github.com/
     - ViewBinding 
 
 - Coroutines for asynchronous operations
+- ViewPager2 for swipe
 - MutableLiveData
 - OkHttp and Retrofit for network operations
+- Firebase for database
 - Glide for loading images
-- ViewPager2 for swipe
 
 
 Login : 
